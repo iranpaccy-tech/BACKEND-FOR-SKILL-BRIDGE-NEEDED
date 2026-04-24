@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | SkillBridge - Connect, Learn, Grow</title>
+
+    <!-- Meta Tags -->
+    <meta name="description"
+        content="Learn about SkillBridge - our mission to transform untapped potential into thriving digital opportunities.">
+    <meta name="keywords" content="about, SkillBridge, learn, mentor, mission, vision">
+    <meta name="theme-color" content="#00A79D">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%2300A79D'>🎓</text></svg>">
+
+    <style>
+        /* === Base Styles === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #fff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Button utilities */
+        .btn {
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(180deg, #FF6EA0 0%, #FF3366 100%);
+            color: #fff;
+            padding: 0.6rem 1.25rem;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+            min-width: 120px;
+            font-weight: 800;
+            text-decoration: none;
+            border: none;
+            box-shadow: 0 8px 18px rgba(255, 51, 102, 0.18), inset 0 2px 0 rgba(255, 255, 255, 0.08);
+            text-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
+            transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            filter: brightness(0.98);
+        }
+
+        /* === Navigation === */
+        .plp-nav {
+            background: #00A79D;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .plp-nav .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            height: 50px;
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        .plp-nav .links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .plp-nav .links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .plp-nav .links a:hover {
+            text-decoration: underline;
+            opacity: 0.9;
+        }
+
+        .plp-nav .buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .plp-nav .buttons a {
+            background: linear-gradient(180deg, #FF6EA0 0%, #FF3366 100%);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.18s, filter 0.18s;
+            box-shadow: 0 6px 16px rgba(255, 51, 102, 0.15);
+            text-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
+        }
+
+        .plp-nav .buttons a:hover {
+            transform: translateY(-2px);
+            filter: brightness(0.98);
+        }
+
+        /* === Hero Section === */
+        .plp-hero {
+            position: relative;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 2rem;
+            background-size: cover;
+            background-position: center;
+            background: linear-gradient(135deg, #00A79D 0%, #008B80 100%);
+        }
+
+        .plp-hero .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .plp-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .plp-hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .plp-hero .btn {
+            background: var(--gradient-primary);
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+            display: inline-block;
+            transition: filter 0.3s;
+        }
+
+        .plp-hero .btn:hover {
+            filter: brightness(0.9);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* === About Content Section === */
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 3rem;
+        }
+
+        .about-section {
+            margin-bottom: 4rem;
+        }
+
+        .about-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #00A79D;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .about-section h2 i {
+            color: #FF3366;
+        }
+
+        .about-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        /* === Values Grid === */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .value-card {
+            background: #fff;
+            border: 2px solid #e0f7fa;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: #00A79D;
+        }
+
+        .value-card i {
+            font-size: 2.5rem;
+            color: #00A79D;
+            margin-bottom: 1rem;
+        }
+
+        .value-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .value-card p {
+            color: #666;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* === Team/Leaders Section === */
+        .plp-leaders {
+            padding: 5rem 2rem;
+            background: #00A79D;
+            color: #fff;
+            text-align: center;
+        }
+
+        .plp-leaders h2 {
+            color: #fff;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+        }
+
+        .plp-leaders .leader-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .plp-leader {
+            flex: 1 1 250px;
+            background: #fff;
+            color: #000;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            transition: all 0.3s;
+        }
+
+        .plp-leader:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .plp-leader img {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+
+        .plp-leader h4 {
+            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+            color: #00A79D;
+        }
+
+        .plp-leader p {
+            color: #666;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* === Footer === */
+        .plp-footer {
+            background: #004d40;
+            color: #fff;
+            padding: 4rem 2rem;
+        }
+
+        .plp-footer h4 {
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .plp-footer a {
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .plp-footer a:hover {
+            text-decoration: underline;
+            color: #FF3366;
+        }
+
+        .plp-footer li {
+            margin-bottom: 0.75rem;
+            list-style: none;
+        }
+
+        .plp-footer li:hover {
+            color: #FF3366;
+        }
+
+        .plp-footer img {
+            transition: transform 0.3s;
+            height: 70px;
+            width: auto;
+        }
+
+        .plp-footer img:hover {
+            transform: scale(1.05);
+        }
+
+        /* === Responsive === */
+        @media (max-width: 768px) {
+            .plp-nav {
+                justify-content: center;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .plp-nav .links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .plp-nav .buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .plp-nav .buttons a {
+                width: 100%;
+                text-align: center;
+            }
+
+            .plp-hero h1 {
+                font-size: 2rem;
+            }
+
+            .about-content {
+                padding: 2rem 1rem;
+            }
+
+            .about-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .plp-leaders .leader-container {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .plp-hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .plp-hero p {
+                font-size: 1rem;
+            }
+
+            .about-section h2 {
+                font-size: 1.2rem;
+            }
+
+            .value-card {
+                padding: 1rem;
+            }
+
+            .value-card h3 {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <header class="plp-nav">
+        <a href="index.html" class="logo"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png"
+                alt="SkillBridge" class="logo-img"></a>
+        <div class="links">
+            <a href="index.html">Home</a>
+            <a href="courses.html">Courses</a>
+            <a href="jobs.html">Jobs</a>
+            <a href="challenges.html">Challenges</a>
+            <a href="about.html">About Us</a>
+        </div>
+        <div class="buttons">
+            <a href="register.html" class="btn-primary">Apply Now</a>
+            <a href="login.html" class="btn-primary">Login</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="plp-hero" style="background-image:url('asset/HBoLdmbXwAAwNNn.svg');">
+        <div class="overlay"></div>
+        <div class="hero-content">
+            <h1>About SkillBridge</h1>
+            <p>Transforming untapped potential into thriving digital opportunities</p>
+        </div>
+    </section>
+
+    <!-- About Content -->
+    <section class="about-content">
+        <!-- Mission Section -->
+        <div class="about-section">
+            <h2><i class="fas fa-bullseye"></i> Our Mission</h2>
+            <p>We are on a mission to transform the untapped potential of learners worldwide into a thriving digital
+                space. We believe that everyone deserves access to quality education and career opportunities,
+                regardless of their background or location.</p>
+            <p>SkillBridge connects learners with experienced mentors, provides practical courses, and opens doors to
+                amazing career opportunities. We're committed to empowering the next generation of tech leaders and
+                shaping a brighter future through technology.</p>
+        </div>
+
+        <!-- Vision Section -->
+        <div class="about-section">
+            <h2><i class="fas fa-eye"></i> Our Vision</h2>
+            <p>We envision a world where talent is recognized, skills are developed, and opportunities are accessible to
+                everyone. Our goal is to create a global community where learning, mentoring, and career growth happen
+                seamlessly in one platform.</p>
+        </div>
+
+        <!-- Core Values -->
+        <div class="about-section">
+            <h2><i class="fas fa-heart"></i> Our Core Values</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Empowerment</h3>
+                    <p>We believe in empowering individuals with knowledge and skills to achieve their dreams.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Community</h3>
+                    <p>We foster a supportive community where learners and mentors grow together.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Innovation</h3>
+                    <p>We continuously innovate to provide the best learning and career experiences.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Integrity</h3>
+                    <p>We maintain the highest standards of integrity in all our interactions.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-globe"></i>
+                    <h3>Accessibility</h3>
+                    <p>We are committed to making quality education accessible to everyone globally.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Growth</h3>
+                    <p>We support continuous growth and development for all our community members.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- What We Offer -->
+        <div class="about-section">
+            <h2><i class="fas fa-star"></i> What We Offer</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <i class="fas fa-book-open"></i>
+                    <h3>Expert Courses</h3>
+                    <p>Learn from industry experts with carefully curated courses covering the latest skills and
+                        technologies.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-user-tie"></i>
+                    <h3>Mentorship</h3>
+                    <p>Get guidance from experienced professionals who are passionate about sharing their knowledge.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-briefcase"></i>
+                    <h3>Job Opportunities</h3>
+                    <p>Connect with leading companies and land your dream job through our opportunities portal.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-certificate"></i>
+                    <h3>Certifications</h3>
+                    <p>Earn recognized certifications to validate your skills and stand out to employers.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-users-slash"></i>
+                    <h3>Networking</h3>
+                    <p>Build meaningful connections with peers, mentors, and industry professionals worldwide.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Challenges</h3>
+                    <p>Participate in exciting challenges to test your skills and win amazing prizes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Leaders Section -->
+    <section class="plp-leaders">
+        <div class="leader-container">
+            <div class="plp-leader">
+                <img src="asset/ceo.png" alt="Leader1" />
+                <h4>Pacifique IRANKUNDA</h4>
+                <p>Executive Director, SkillBridge</p>
+            </div>
+            <div class="plp-leader">
+                <img src="asset/aaron.png" alt="Leader2" />
+                <h4>Aaron MBONYUMUKUNZI</h4>
+                <p>Chair of the Governing Council</p>
+            </div>
+            <div class="plp-leader">
+                <img src="asset/bwiza.png" alt="Leader3" />
+                <h4>Diandra BWIZA</h4>
+                <p>Executive Director, SkillBridge</p>
+            </div>
+            <div class="plp-leader">
+                <img src="asset/kelly.png" alt="Leader4" />
+                <h4>Ross Kelly SHIMWA</h4>
+                <p>Chair of the Governing Council</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="plp-footer">
+        <div
+            style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;">
+            <a href="index.html"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge"></a>
+            <div>
+                <h4>About Us</h4>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Our Programs</h4>
+                <ul>
+                    <li><a href="courses.html">All Courses</a></li>
+                    <li><a href="#">Mentorship</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Community</h4>
+                <ul>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Events</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Social</h4>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:2rem;color:#9CA3AF;">© 2026 SkillBridge. All rights reserved.</div>
+    </footer>
+</body>
+
+</html>

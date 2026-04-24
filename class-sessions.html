@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Sessions - SkillBridge Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .sessions-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            padding: 0 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .sidebar-logo img {
+            height: 40px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin: 0.5rem 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 2rem;
+        }
+
+        .sidebar-nav a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid white;
+            padding-left: 1.25rem;
+        }
+
+        .sidebar-nav i {
+            width: 24px;
+            text-align: center;
+        }
+
+        /* === MAIN CONTENT === */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 2rem;
+        }
+
+        /* === TOP HEADER === */
+        .sessions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #222;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-btn:hover {
+            color: #00897B;
+        }
+
+        .sessions-header h1 {
+            font-size: 1.75rem;
+            color: #222;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #f0f0f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .notification-icon:hover {
+            background: #e0e0e0;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 1rem;
+            background: #f0f0f0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: #222;
+        }
+
+        /* === CALENDAR CONTAINER === */
+        .calendar-controls {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #00897B;
+            padding: 0.5rem 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            color: #005f50;
+            transform: scale(1.2);
+        }
+
+        .nav-btn:disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .month-year {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #222;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .calendar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .today-btn {
+            background: #00897B;
+            color: white;
+            border: 2px solid #00897B;
+            padding: 0.5rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .today-btn:hover {
+            background: #005f50;
+            border-color: #005f50;
+        }
+
+        .view-selector {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #222;
+            transition: all 0.3s;
+        }
+
+        .view-selector:hover {
+            border-color: #00897B;
+            color: #00897B;
+        }
+
+        /* === CALENDAR GRID === */
+        .calendar-wrapper {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-weight: 600;
+            color: #666;
+            padding: 1rem 0;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+            min-height: 500px;
+        }
+
+        .calendar-date {
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            min-height: 100px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendar-date:hover {
+            border-color: #00897B;
+            box-shadow: 0 4px 12px rgba(0, 137, 123, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .calendar-date.other-month {
+            background: #f5f5f5;
+            opacity: 0.5;
+        }
+
+        .calendar-date.today {
+            background: linear-gradient(135deg, rgba(0, 137, 123, 0.1) 0%, rgba(0, 137, 123, 0.05) 100%);
+            border-color: #00897B;
+            font-weight: 600;
+        }
+
+        .calendar-date.today .date-number {
+            background: #00897B;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .date-number {
+            font-weight: 600;
+            color: #222;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .date-events {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .date-event-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #00897B;
+            border-radius: 50%;
+            margin-right: 0.25rem;
+        }
+
+        /* === EMPTY STATE === */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #999;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* === AUX ICONS === */
+        .aux-icons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 1rem;
+            flex-direction: column;
+        }
+
+        .aux-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .aux-btn.red { background: #EF4444; }
+        .aux-btn.teal { background: #00897B; }
+        .aux-btn:hover { opacity: 0.85; transform: scale(1.05); }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1400px) {
+            .calendar-grid {
+                gap: 0.75rem;
+            }
+            .calendar-date {
+                padding: 0.75rem;
+                min-height: 90px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                padding: 1.5rem;
+            }
+            .calendar-controls {
+                padding: 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .calendar-wrapper {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                height: 100vh;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar-logo {
+                padding: 0 1.5rem 1.5rem;
+            }
+
+            .sidebar-nav a {
+                padding: 0.75rem 1.5rem;
+                justify-content: flex-start;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .sessions-header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+                align-items: flex-start;
+            }
+
+            .header-left {
+                width: 100%;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+                gap: 1rem;
+            }
+
+            .language-selector {
+                display: none;
+            }
+
+            .profile-section {
+                padding: 0.4rem 0.6rem;
+            }
+
+            .profile-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+
+            .profile-name {
+                display: none;
+            }
+
+            .calendar-controls {
+                padding: 1rem;
+                gap: 0.75rem;
+            }
+
+            .calendar-nav {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .month-year {
+                flex: 1;
+            }
+
+            .calendar-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .calendar-wrapper {
+                padding: 1rem;
+            }
+
+            .calendar-grid {
+                gap: 0.5rem;
+                min-height: auto;
+            }
+
+            .calendar-date {
+                padding: 0.5rem;
+                min-height: 80px;
+                font-size: 0.9rem;
+            }
+
+            .date-number {
+                font-size: 0.95rem;
+            }
+
+            .date-events {
+                font-size: 0.8rem;
+            }
+
+            .view-selector {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .today-btn {
+                padding: 0.4rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 280px;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                padding: 0.5rem;
+            }
+
+            .mobile-menu-btn {
+                font-size: 1.25rem;
+            }
+
+            .sessions-header {
+                padding: 0.75rem;
+                gap: 0.5rem;
+            }
+
+            .sessions-header h1 {
+                font-size: 1.25rem;
+            }
+
+            .header-right {
+                gap: 0.5rem;
+            }
+
+            .notification-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+
+            .calendar-controls {
+                padding: 0.75rem;
+                gap: 0.5rem;
+            }
+
+            .calendar-wrapper {
+                padding: 0.75rem;
+            }
+
+            .calendar-header {
+                gap: 0.25rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .calendar-day-header {
+                font-size: 0.8rem;
+                padding: 0.5rem 0;
+            }
+
+            .calendar-grid {
+                gap: 0.25rem;
+                min-height: auto;
+            }
+
+            .calendar-date {
+                padding: 0.4rem;
+                min-height: 60px;
+            }
+
+            .date-number {
+                font-size: 0.85rem;
+                margin-bottom: 0.25rem;
+            }
+
+            .date-events {
+                font-size: 0.7rem;
+            }
+
+            .month-year {
+                min-width: auto;
+                font-size: 1rem;
+            }
+
+            .view-selector {
+                display: none;
+            }
+
+            .nav-btn {
+                padding: 0.4rem 0.5rem;
+                font-size: 1.25rem;
+            }
+
+            .today-btn {
+                padding: 0.35rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .aux-icons {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .aux-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <a href="index.html"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge"></a>
+        </div>
+
+        <nav class="sidebar-nav">
+            <li><a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+            <li><a href="explore-courses.html"><i class="fas fa-book"></i> Explore Courses</a></li>
+            <li><a href="class-sessions.html" class="active"><i class="fas fa-calendar-check"></i> Class Sessions</a></li>
+            <li><a href="submissions.html"><i class="fas fa-file-check"></i> Submissions</a></li>
+            <li><a href="groups.html"><i class="fas fa-users"></i> Groups</a></li>
+            <li><a href="community.html"><i class="fas fa-comments"></i> Community</a></li>
+            <li><a href="power-ai.html"><i class="fas fa-bolt"></i> Power AI</a></li>
+            <li><a href="certificates.html"><i class="fas fa-certificate"></i> Certificates</a></li>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="sessions-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="sidebarToggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Class Sessions</h1>
+            </div>
+            <div class="header-right">
+                <div class="language-selector">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23012169' width='32' height='32'/%3E%3Cpath fill='%23FFF' d='M0 0h32v32H0z'/%3E%3C/svg%3E" alt="EN" style="width:20px;height:13px;border-radius:2px;">
+                    English
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="notification-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="profile-section">
+                    <div class="profile-avatar">M</div>
+                    <span class="profile-name">Mugisha</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar Controls -->
+        <div class="calendar-controls">
+            <div class="calendar-nav">
+                <button class="nav-btn" id="prevBtn" onclick="previousMonth()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="month-year" id="monthYear">February 2026</span>
+                <button class="nav-btn" id="nextBtn" onclick="nextMonth()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="calendar-actions">
+                <button class="today-btn" onclick="goToToday()">TODAY</button>
+                <select class="view-selector" id="viewSelector" onchange="changeView(this.value)">
+                    <option value="month" selected>MONTH</option>
+                    <option value="week">WEEK</option>
+                    <option value="day">DAY</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Calendar -->
+        <div class="calendar-wrapper">
+            <div class="calendar-header" id="dayHeaders">
+                <!-- Generated by JS -->
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Generated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Aux Icons -->
+    <div class="aux-icons">
+        <a href="#" class="aux-btn red" title="Help"><i class="fas fa-question"></i></a>
+        <a href="#" class="aux-btn red" title="Chat"><i class="fas fa-comments"></i></a>
+        <a href="#" class="aux-btn teal" title="Accessibility"><i class="fas fa-universal-access"></i></a>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let currentDate = new Date();
+        const today = new Date();
+
+        // Sample class sessions data
+        const classSessions = {
+            '2026-02-05': ['JavaScript Basics 10:00 AM', 'React Fundamentals 2:00 PM'],
+            '2026-02-10': ['HTML & CSS 9:00 AM'],
+            '2026-02-15': ['TypeScript Advanced 11:00 AM'],
+            '2026-02-20': ['Python Data Science 3:00 PM'],
+            '2026-02-27': ['SQL Masterclass 10:00 AM', 'UI/UX Design 1:00 PM'],
+            '2026-03-05': ['iOS Development 2:00 PM'],
+            '2026-03-12': ['AWS Cloud 10:00 AM']
+        };
+
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            // Update month-year display
+            document.getElementById('monthYear').textContent = `${months[month].toUpperCase()} ${year}`;
+
+            // Render day headers
+            const dayHeaders = document.getElementById('dayHeaders');
+            dayHeaders.innerHTML = dayNames.map(day => 
+                `<div class="calendar-day-header">${day}</div>`
+            ).join('');
+
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            const calendarGrid = document.getElementById('calendarGrid');
+            let html = '';
+
+            // Previous month days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const day = daysInPrevMonth - i;
+                html += `<div class="calendar-date other-month">
+                    <div class="date-number">${day}</div>
+                </div>`;
+            }
+
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isToday = date.toDateString() === today.toDateString();
+                const sessions = classSessions[dateStr] || [];
+
+                html += `<div class="calendar-date ${isToday ? 'today' : ''}">
+                    <div class="date-number">${day}</div>
+                    ${sessions.length > 0 ? `<div class="date-events">${sessions.length} session${sessions.length > 1 ? 's' : ''}</div>` : ''}
+                </div>`;
+            }
+
+            // Next month days
+            const totalCells = firstDay + daysInMonth;
+            const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+            for (let day = 1; day <= remainingCells; day++) {
+                html += `<div class="calendar-date other-month">
+                    <div class="date-number">${day}</div>
+                </div>`;
+            }
+
+            calendarGrid.innerHTML = html;
+
+            // Update button states
+            document.getElementById('prevBtn').disabled = false;
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        function goToToday() {
+            currentDate = new Date(today);
+            renderCalendar();
+        }
+
+        function changeView(view) {
+            // Implement different views if needed
+            console.log('View changed to:', view);
+        }
+
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+
+        // Highlight active link based on URL
+        function markActiveLink() {
+            const links = document.querySelectorAll('.sidebar-nav a');
+            links.forEach(link => {
+                if (link.getAttribute('href') === window.location.pathname.split('/').pop()) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Close sidebar when clicking on a link
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCalendar();
+
+            const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        document.querySelector('.sidebar').classList.remove('active');
+                    }
+                });
+            });
+
+            // mark active
+            markActiveLink();
+
+            // Update profile
+            const user = JSON.parse(localStorage.getItem('skillbridge_user') || 'null');
+            if (user && user.name) {
+                document.querySelector('.profile-avatar').textContent = user.name.charAt(0).toUpperCase();
+                document.querySelector('.profile-name').textContent = user.name;
+            }
+        });
+    </script>
+</body>
+</html>

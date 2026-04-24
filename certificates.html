@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificates - SkillBridge Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            padding: 0 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .sidebar-logo img {
+            height: 40px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin: 0.5rem 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 2rem;
+        }
+
+        .sidebar-nav a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid white;
+            padding-left: 1.25rem;
+        }
+
+        .sidebar-nav i {
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-support-card {
+            margin: 2rem 1.5rem 0;
+            padding: 1.25rem;
+            border-radius: 16px;
+            background: #C2185B;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .sidebar-support-card .support-card-title {
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .sidebar-support-card .support-card-text {
+            opacity: 0.95;
+        }
+
+        .collapse-link {
+            margin-top: 2rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* === MAIN CONTENT === */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 2rem;
+        }
+
+        /* === TOP HEADER === */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left h1 {
+            font-size: 1.75rem;
+            color: #222;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #f0f0f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .notification-icon:hover {
+            background: #e0e0e0;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 1rem;
+            background: #f0f0f0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: #222;
+        }
+
+        /* === MOBILE HAMBURGER MENU === */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #222;
+            padding: 0.5rem;
+            margin-right: 1rem;
+        }
+
+        .mobile-menu-btn:hover {
+            color: #00897B;
+        }
+
+        /* === CERTIFICATES SECTION === */
+        .certificates-section {
+            margin-bottom: 2rem;
+        }
+
+        .certificates-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 1rem;
+        }
+
+        .certificates-intro {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .certificates-intro p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            min-height: calc(100vh - 320px);
+            align-items: center;
+        }
+
+        .no-certificates {
+            background: white;
+            border-radius: 18px;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 2px 24px rgba(0, 0, 0, 0.08);
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .no-certificates-icon {
+            font-size: 4rem;
+            color: #00897B;
+            margin-bottom: 1rem;
+        }
+
+        .no-certificates h2 {
+            font-size: 1.75rem;
+            margin-bottom: 0.75rem;
+            color: #222;
+        }
+
+        .no-certificates p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .certificate-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .certificate-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .certificate-header {
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            padding: 2rem;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .certificate-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .certificate-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .certificate-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .certificate-body {
+            padding: 1.5rem;
+        }
+
+        .certificate-detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .certificate-detail:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .certificate-label {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .certificate-value {
+            color: #222;
+            font-weight: 600;
+        }
+
+        .certificate-status {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .certificate-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .download-btn {
+            flex: 1;
+            background: linear-gradient(180deg, #FF6EA0 0%, #FF3366 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 51, 102, 0.3);
+        }
+
+        .share-btn {
+            background: #f0f0f0;
+            color: #666;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .share-btn:hover {
+            background: #e0e0e0;
+            color: #222;
+        }
+
+        /* === AUX ICONS === */
+        .aux-icons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .aux-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .aux-btn.red {
+            background: #C2185B;
+        }
+
+        .aux-btn.teal {
+            background: #00897B;
+        }
+
+        .aux-btn:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1200px) {
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .certificates-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+                padding: 1rem 0;
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                height: 100vh;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar-logo {
+                padding: 0 1.5rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .sidebar-nav a {
+                padding: 0.75rem 1.5rem;
+                justify-content: flex-start;
+            }
+
+            .sidebar-nav span {
+                display: inline;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 0.75rem;
+            }
+
+            .certificates-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 280px;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0.5rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                font-size: 1.25rem;
+            }
+
+            .dashboard-header {
+                padding: 0.75rem 0.5rem;
+                gap: 0.5rem;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .header-left {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .header-left h1 {
+                font-size: 1.25rem;
+            }
+
+            .header-right {
+                gap: 1rem;
+            }
+
+            .language-selector {
+                display: none;
+            }
+
+            .notification-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+
+            .profile-section {
+                padding: 0.4rem 0.6rem;
+            }
+
+            .profile-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+
+            .profile-name {
+                display: none;
+            }
+
+            .certificate-footer {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .download-btn,
+            .share-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <a href="index.html"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge"></a>
+        </div>
+
+        <nav class="sidebar-nav">
+            <li><a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+            <li><a href="explore-courses.html"><i class="fas fa-book"></i> Explore Courses</a></li>
+            <li><a href="class-sessions.html"><i class="fas fa-calendar-check"></i> Class Sessions</a></li>
+            <li><a href="submissions.html"><i class="fas fa-file-check"></i> Submissions</a></li>
+            <li><a href="groups.html"><i class="fas fa-users"></i> Groups</a></li>
+            <li><a href="community.html"><i class="fas fa-comments"></i> Community</a></li>
+            <li><a href="power-ai.html"><i class="fas fa-bolt"></i> Power AI</a></li>
+            <li><a href="certificates.html" class="active"><i class="fas fa-certificate"></i> Certificates</a></li>
+            <li><a href="#" class="collapse-link"><i class="fas fa-chevron-left"></i> Collapse</a></li>
+        </nav>
+        <div class="sidebar-support-card">
+            <div class="support-card-title">Default Cohort Support Channel</div>
+            <div class="support-card-text">Join our support channel for real-time assistance, peer collaboration, and exclusive resources tailored to your cohort.</div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="sidebarToggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Certificates</h1>
+            </div>
+            <div class="header-right">
+                <div class="language-selector">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23012169' width='32' height='32'/%3E%3Cpath fill='%23FFF' d='M0 0h32v32H0z'/%3E%3C/svg%3E"
+                        alt="EN" style="width:20px;height:13px;border-radius:2px;">
+                    English
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="notification-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="profile-section">
+                    <div class="profile-avatar">IP</div>
+                    <span class="profile-name">Iran Paccy</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificates Section -->
+        <div class="certificates-section">
+            <div class="certificates-grid" id="certificatesGrid"></div>
+        </div>
+    </div>
+
+    <!-- Aux Icons -->
+    <div class="aux-icons">
+        <a href="#" class="aux-btn red" title="Help"><i class="fas fa-question"></i></a>
+        <a href="#" class="aux-btn red" title="Chat"><i class="fas fa-comments"></i></a>
+        <a href="#" class="aux-btn teal" title="Accessibility"><i class="fas fa-universal-access"></i></a>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        // Certificates data matching courses
+        const certificatesData = [
+            {
+                title: 'HTML & CSS Masterclass',
+                issueDate: 'Apr 22, 2026',
+                completionDate: 'Apr 22, 2026',
+                icon: '🎨',
+                credentialId: 'HTC-2026-0001'
+            }
+        ];
+
+
+        // Render certificates
+        function renderCertificates() {
+            const container = document.getElementById('certificatesGrid');
+            if (!certificatesData.length) {
+                container.innerHTML = `
+                    <div class="no-certificates">
+                        <div class="no-certificates-icon">📄</div>
+                        <h2>No Certificate</h2>
+                        <p>You will be able to view your certificate once you graduate.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = certificatesData.map((cert, index) => `
+                <div class="certificate-card">
+                    <div class="certificate-header">
+                        <div class="certificate-icon">${cert.icon}</div>
+                        <div class="certificate-name">${cert.title}</div>
+                    </div>
+                    <div class="certificate-body">
+                        <div class="certificate-status">✓ Completed</div>
+                        <div class="certificate-detail">
+                            <span class="certificate-label">Issue Date:</span>
+                            <span class="certificate-value">${cert.issueDate}</span>
+                        </div>
+                        <div class="certificate-detail">
+                            <span class="certificate-label">Completed:</span>
+                            <span class="certificate-value">${cert.completionDate}</span>
+                        </div>
+                        <div class="certificate-detail">
+                            <span class="certificate-label">Credential ID:</span>
+                            <span class="certificate-value" style="font-size: 0.85rem;">${cert.credentialId}</span>
+                        </div>
+                    </div>
+                    <div class="certificate-footer">
+                        <button class="download-btn" onclick="downloadCertificate('${cert.title}', '${cert.credentialId}')">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                        <button class="share-btn" onclick="shareCertificate('${cert.title}')"><i class="fas fa-share-alt"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Download certificate
+        function downloadCertificate(title, credentialId) {
+            // Create a PDF certificate
+            const certificateHTML = `
+                <div style="width: 800px; height: 600px; background: white; border: 2px solid #00897B; border-radius: 20px; padding: 40px; font-family: 'Times New Roman', serif; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(0, 137, 123, 0.1); border-radius: 50%;"></div>
+                    
+                    <div style="text-align: center; margin-bottom: 40px;">
+                        <h1 style="color: #00897B; font-size: 36px; margin-bottom: 10px; font-weight: bold;">SKILLBRIDGE ACADEMY</h1>
+                        <h2 style="color: #333; font-size: 24px; margin-bottom: 20px;">Certificate of Completion</h2>
+                        <div style="width: 100px; height: 4px; background: #00897B; margin: 0 auto;"></div>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 60px 0;">
+                        <p style="font-size: 18px; color: #666; margin-bottom: 20px;">This is to certify that</p>
+                        <h3 style="font-size: 32px; color: #00897B; margin-bottom: 20px; font-weight: bold;">${document.querySelector('.profile-name')?.textContent || 'Learner'}</h3>
+                        <p style="font-size: 18px; color: #666; margin-bottom: 20px;">has successfully completed the course</p>
+                        <h4 style="font-size: 28px; color: #333; margin-bottom: 30px; font-style: italic;">"${title}"</h4>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; margin-top: 80px; padding: 0 40px;">
+                        <div style="text-align: center;">
+                            <p style="font-size: 14px; color: #666; margin-bottom: 5px;">Credential ID</p>
+                            <p style="font-size: 16px; color: #333; font-weight: bold;">${credentialId}</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="font-size: 14px; color: #666; margin-bottom: 5px;">Date Issued</p>
+                            <p style="font-size: 16px; color: #333; font-weight: bold;">${new Date().toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                    
+                    <div style="position: absolute; bottom: 40px; left: 40px; right: 40px; text-align: center;">
+                        <div style="width: 200px; height: 2px; background: #00897B; margin: 0 auto 20px;"></div>
+                        <p style="font-size: 14px; color: #666;">SkillBridge Academy • Empowering Africa's Future Developers</p>
+                    </div>
+                </div>
+            `;
+
+            // Create temporary element
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = certificateHTML;
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.left = '-9999px';
+            document.body.appendChild(tempDiv);
+
+            // Configure PDF options
+            const options = {
+                margin: 0.5,
+                filename: title.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '_certificate.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
+            };
+
+            // Generate and download PDF
+            html2pdf().set(options).from(tempDiv).save().then(() => {
+                document.body.removeChild(tempDiv);
+            });
+        }
+
+        // Share certificate\n        function shareCertificate(title) {\n            const shareText = `I just completed the \"${title}\" course on SkillBridge Academy! 🎉`;\n            if (navigator.share) {\n                navigator.share({\n                    title: 'SkillBridge Certificate',\n                    text: shareText,\n                    url: window.location.href\n                }).catch(err => console.log('Error sharing:', err));\n            } else {\n                alert('Share: ' + shareText);\n            }\n        }\n\n        // Highlight active link\n        function markActiveLink() {\n            const links = document.querySelectorAll('.sidebar-nav a');\n            links.forEach(link => {\n                if (link.getAttribute('href') === window.location.pathname.split('/').pop()) {\n                    link.classList.add('active');\n                }\n            });\n        }\n\n        // Check if user is logged in\n        document.addEventListener('DOMContentLoaded', function () {\n            const user = JSON.parse(localStorage.getItem('skillbridge_user') || 'null');\n            if (user && user.name) {\n                document.querySelector('.profile-avatar').textContent = user.name.charAt(0).toUpperCase();\n                document.querySelector('.profile-name').textContent = user.name;\n            }\n            renderCertificates();\n            markActiveLink();\n        });\n\n        // Toggle sidebar on mobile\n        function toggleSidebar() {\n            document.querySelector('.sidebar').classList.toggle('active');\n        }\n\n        // Close sidebar when clicking on a link\n        document.addEventListener('DOMContentLoaded', function () {\n            const sidebarLinks = document.querySelectorAll('.sidebar-nav a');\n            sidebarLinks.forEach(link => {\n                link.addEventListener('click', function () {\n                    if (window.innerWidth <= 768) {\n                        document.querySelector('.sidebar').classList.remove('active');\n                    }\n                });\n            });\n        });\n    </script>
+</body>
+
+</html>

@@ -1,0 +1,2614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackathons - SkillBridge | Build, Compete, Win</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* ===== DARK MODE VARIABLES ===== */
+        :root {
+            /* Light Mode Colors */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #2c3e50;
+            --text-secondary: #6c757d;
+            --text-muted: #95a5a6;
+            --card-bg: #ffffff;
+            --card-border: #e9ecef;
+            --input-bg: #ffffff;
+            --input-border: #e9ecef;
+            --navbar-bg: #ffffff;
+            --navbar-border: #e9ecef;
+            --footer-bg: #0B1120;
+            --footer-text: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-bg: #f8f9fa;
+            
+            /* Accent Colors - Purple theme */
+            --primary: #8B5CF6;
+            --primary-dark: #7C3AED;
+            --primary-light: #A78BFA;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+            --gradient-dark: linear-gradient(135deg, #0B1120, #1E293B);
+            
+            /* Hackathon Specific */
+            --hackathon-accent: #EF4444;
+            --hackathon-prize: #F59E0B;
+        }
+
+        /* Dark Mode */
+        [data-theme="dark"] {
+            --bg-primary: #0B1120;
+            --bg-secondary: #1E293B;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --card-bg: #1E293B;
+            --card-border: #334155;
+            --input-bg: #0B1120;
+            --input-border: #334155;
+            --navbar-bg: #050A18;
+            --navbar-border: #334155;
+            --footer-bg: #050A18;
+            --footer-text: #F8FAFC;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --hover-bg: #2D3A4F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Info Icon Styles */
+        .info-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            margin-left: 6px;
+            cursor: help;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .info-icon:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1);
+        }
+
+        .info-icon.large {
+            width: 22px;
+            height: 22px;
+            font-size: 14px;
+        }
+
+        .info-icon.small {
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+        }
+
+        .info-tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 150%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+            z-index: 100;
+            pointer-events: none;
+            font-weight: normal;
+        }
+
+        .info-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--card-border) transparent transparent transparent;
+        }
+
+        .info-icon:hover .info-tooltip {
+            visibility: visible;
+            opacity: 1;
+            bottom: 180%;
+        }
+
+        .info-tooltip.wide {
+            white-space: normal;
+            width: 200px;
+            text-align: center;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--navbar-bg);
+            border-bottom: 1px solid var(--navbar-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--primary);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s;
+        }
+
+        .nav-menu a:hover::after,
+        .nav-menu a.active::after {
+            width: 100%;
+        }
+
+        .nav-auth {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-outline {
+            padding: 0.6rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 30px;
+            background: transparent;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            background: var(--gradient-primary);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Header */
+        .hackathon-header {
+            background: var(--gradient-primary);
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+
+        .hackathon-header::before {
+            content: '🏆';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hackathon-header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hackathon-header p {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Stats */
+        .hackathon-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px var(--shadow-color);
+            text-align: center;
+            min-width: 200px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+        }
+
+        .stat-card .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-card .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Filters */
+        .hackathon-filters {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-select {
+            padding: 0.75rem 2rem;
+            border: 2px solid var(--input-border);
+            border-radius: 40px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            cursor: pointer;
+            min-width: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:hover {
+            border-color: var(--primary);
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--input-border);
+            border-radius: 40px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Hackathon Grid */
+        .hackathon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Hackathon Card */
+        .hackathon-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .hackathon-card:nth-child(1) { animation-delay: 0.1s; }
+        .hackathon-card:nth-child(2) { animation-delay: 0.2s; }
+        .hackathon-card:nth-child(3) { animation-delay: 0.3s; }
+        .hackathon-card:nth-child(4) { animation-delay: 0.4s; }
+        .hackathon-card:nth-child(5) { animation-delay: 0.5s; }
+        .hackathon-card:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hackathon-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 30px 50px rgba(139, 92, 246, 0.3);
+        }
+
+        .hackathon-card.featured {
+            border: 3px solid var(--primary);
+        }
+
+        .hackathon-image {
+            height: 180px;
+            background: var(--gradient-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hackathon-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .hackathon-card:hover .hackathon-image::after {
+            opacity: 1;
+        }
+
+        .hackathon-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .badge-featured {
+            background: var(--warning);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .badge-live {
+            background: var(--danger);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        .badge-remote {
+            background: var(--info);
+            color: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        .hackathon-content {
+            padding: 2rem;
+        }
+
+        .hackathon-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .hackathon-organizer {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hackathon-organizer i {
+            color: var(--primary);
+        }
+
+        .hackathon-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .hackathon-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding: 1rem 0;
+            border-top: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .prize-pool {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--warning);
+            margin-bottom: 1rem;
+            animation: prizePulse 2s infinite;
+        }
+
+        @keyframes prizePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hackathon-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .team-avatars {
+            display: flex;
+            align-items: center;
+        }
+
+        .team-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            border: 2px solid var(--card-bg);
+            margin-left: -8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .team-avatar:first-child {
+            margin-left: 0;
+        }
+
+        .team-count {
+            margin-left: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .register-btn {
+            padding: 0.75rem 2rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .register-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Live Now Banner */
+        .live-now-banner {
+            background: linear-gradient(135deg, var(--danger), #c0392b);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin: 2rem auto;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .live-now-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .live-dot {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+
+        .watch-live-btn {
+            padding: 1rem 2.5rem;
+            background: white;
+            color: var(--danger);
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .watch-live-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Results Info */
+        .results-info {
+            max-width: 1400px;
+            margin: 1rem auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-count {
+            color: var(--text-secondary);
+        }
+
+        /* Video Call Container (Google Meet Style) */
+        .hackathon-video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            z-index: 2000;
+            display: none;
+        }
+
+        .hackathon-video-container.active {
+            display: block;
+        }
+
+        .video-main {
+            display: flex;
+            height: 100%;
+        }
+
+        .video-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding: 1rem;
+            height: calc(100vh - 100px);
+        }
+
+        .video-participant {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .video-participant.speaking {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+        }
+
+        .video-participant video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .participant-info {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .participant-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .participant-status.online { background: var(--success); }
+        .participant-status.speaking { background: var(--primary); animation: pulse 1s infinite; }
+        .participant-status.muted { background: var(--danger); }
+
+        .video-controls {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            display: flex;
+            gap: 1rem;
+            z-index: 2001;
+            border: 1px solid var(--card-border);
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .control-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .control-btn.danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .control-btn.danger:hover {
+            background: #c0392b;
+        }
+
+        /* Chat Sidebar */
+        .hackathon-chat {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: var(--card-bg);
+            border-left: 1px solid var(--card-border);
+            box-shadow: -5px 0 25px var(--shadow-color);
+            transition: right 0.3s ease;
+            z-index: 2002;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hackathon-chat.active {
+            right: 0;
+        }
+
+        .chat-header {
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            color: white;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .close-btn:hover {
+            opacity: 1;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: var(--bg-secondary);
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .chat-message.sent {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            background: var(--card-bg);
+            padding: 0.75rem;
+            border-radius: 15px;
+            max-width: 70%;
+            color: var(--text-primary);
+        }
+
+        .message-content strong {
+            color: var(--primary);
+        }
+
+        .chat-message.sent .message-content {
+            background: var(--primary);
+            color: white;
+        }
+
+        .chat-message.sent .message-content strong {
+            color: white;
+        }
+
+        .chat-message small {
+            display: block;
+            font-size: 0.65rem;
+            margin-top: 0.2rem;
+            color: var(--text-secondary);
+        }
+
+        .chat-message.sent small {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            gap: 0.5rem;
+            background: var(--card-bg);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--input-border);
+            border-radius: 30px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .chat-send-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chat-send-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Team Dashboard */
+        .team-dashboard {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: var(--card-bg);
+            border-left: 1px solid var(--card-border);
+            box-shadow: -5px 0 25px var(--shadow-color);
+            transition: right 0.3s ease;
+            z-index: 2002;
+            overflow-y: auto;
+        }
+
+        .team-dashboard.active {
+            right: 0;
+        }
+
+        .team-header {
+            padding: 1rem;
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .team-header h3 {
+            color: white;
+        }
+
+        .team-header p {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .team-member {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .member-role {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .member-status {
+            margin-left: auto;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .member-status.online { background: var(--success); }
+        .member-status.away { background: var(--warning); }
+        .member-status.offline { background: var(--text-muted); }
+
+        hr {
+            border: none;
+            border-top: 1px solid var(--card-border);
+            margin: 1rem 0;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 24px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 20px 40px var(--shadow-color);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--danger);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 1rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--input-border);
+            border-radius: 12px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .file-upload {
+            border: 2px dashed var(--input-border);
+            padding: 2rem;
+            text-align: center;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--input-bg);
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .file-upload i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .file-upload p {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload small {
+            color: var(--text-secondary);
+        }
+
+        select[multiple] {
+            background: var(--input-bg);
+            color: var(--text-primary);
+        }
+
+        select[multiple] option {
+            padding: 0.5rem;
+        }
+
+        select[multiple] option:checked {
+            background: var(--primary) linear-gradient(0deg, var(--primary) 0%, var(--primary) 100%);
+            color: white;
+        }
+
+        /* Toast Container */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            animation: slideIn 0.3s;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: 1px solid var(--card-border);
+        }
+
+        .toast.success {
+            border-left-color: var(--success);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .footer-section a {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-section i {
+            margin-right: 0.5rem;
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--card-border);
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .hackathon-chat,
+            .team-dashboard {
+                width: 100%;
+                right: -100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hackathon-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .live-now-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hackathon-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .results-info {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .hackathon-stats {
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1.5rem 2rem;
+            }
+
+            .hackathon-filters {
+                flex-direction: column;
+            }
+
+            .filter-select,
+            .search-input {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stat-card .stat-number {
+                font-size: 2rem;
+            }
+
+            .hackathon-title {
+                font-size: 1.3rem;
+            }
+
+            .hackathon-footer {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .register-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <header class="plp-nav">
+        <a href="index.html" class="logo"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge" class="logo-img"></a>
+        <div class="links">
+            <a href="index.html">Home</a>
+            <a href="courses.html">Courses</a>
+            <a href="jobs.html">Jobs</a>
+            <a href="mentors.html">Mentors</a>
+            <a href="study-groups.html">Study Groups</a>
+            <a href="challenges.html">Challenges</a>
+            <a href="marketplace.html">Marketplace</a>
+        </div>
+        <div class="buttons">
+            <a href="register.html">Sign Up</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+    </header>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="hackathon-header">
+        <h1>Hackathons</h1>
+        <p>Build innovative solutions, compete with teams, and win amazing prizes</p>
+        
+        <div class="hackathon-stats">
+            <div class="stat-card">
+                <div class="stat-number">24</div>
+                <div class="stat-label">Active Hackathons</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">5.2K</div>
+                <div class="stat-label">Participants</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">$250K</div>
+                <div class="stat-label">Total Prizes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">156</div>
+                <div class="stat-label">Projects Built</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Now Banner -->
+    <div class="live-now-banner">
+        <div class="live-now-content">
+            <div class="live-indicator">
+                <span class="live-dot"></span>
+                <span>LIVE NOW</span>
+            </div>
+            <h3>AI Innovation Challenge 2026</h3>
+            <p>Final presentations happening now!</p>
+        </div>
+        <button class="watch-live-btn" onclick="joinHackathonLive('AI Innovation Challenge')">
+            <i class="fas fa-video"></i> Watch Live
+        </button>
+    </div>
+
+    <!-- Filters -->
+    <div class="hackathon-filters">
+        <select id="categoryFilter" class="filter-select">
+            <option value="all">All Categories</option>
+            <option value="ai">AI/ML</option>
+            <option value="web3">Web3</option>
+            <option value="mobile">Mobile</option>
+            <option value="iot">IoT</option>
+            <option value="social">Social Impact</option>
+        </select>
+        
+        <select id="formatFilter" class="filter-select">
+            <option value="all">All Formats</option>
+            <option value="online">Online</option>
+            <option value="in-person">In-Person</option>
+            <option value="hybrid">Hybrid</option>
+        </select>
+        
+        <select id="prizeFilter" class="filter-select">
+            <option value="all">Any Prize</option>
+            <option value="5000">$5k+</option>
+            <option value="10000">$10k+</option>
+            <option value="25000">$25k+</option>
+            <option value="50000">$50k+</option>
+        </select>
+        
+        <input type="text" id="searchInput" class="search-input" placeholder="Search hackathons...">
+        
+        <button class="btn-primary" onclick="showHostModal()">
+            <i class="fas fa-plus"></i> Host Hackathon
+        </button>
+    </div>
+
+    <!-- Results Info -->
+    <div class="results-info">
+        <span class="results-count" id="resultsCount">Showing 8 of 24 hackathons</span>
+        <select id="sortFilter" class="filter-select" style="width:auto">
+            <option value="recent">Most Recent</option>
+            <option value="prize">Highest Prize</option>
+            <option value="ending">Ending Soon</option>
+        </select>
+    </div>
+
+    <!-- Hackathon Grid -->
+    <div id="hackathonGrid" class="hackathon-grid"></div>
+
+    <!-- Load More -->
+    <div style="text-align:center;margin:3rem 0">
+        <button id="loadMoreBtn" class="btn-outline" onclick="loadMoreHackathons()">Load More Hackathons</button>
+    </div>
+
+    <!-- ===== HACKATHON VIDEO CONTAINER (Google Meet Style) ===== -->
+    <div id="hackathonVideoContainer" class="hackathon-video-container">
+        <div class="video-main">
+            <div class="video-grid" id="videoGrid">
+                <!-- Speaker -->
+                <div class="video-participant speaking">
+                    <video autoplay muted></video>
+                    <div class="participant-info">
+                        <span class="participant-status speaking"></span>
+                        <span>Sarah Johnson (Speaker)</span>
+                    </div>
+                </div>
+                
+                <!-- Participant 1 -->
+                <div class="video-participant">
+                    <div style="width:100%;height:100%;background:var(--bg-secondary);display:flex;align-items:center;justify-content:center;flex-direction:column">
+                        <div style="width:80px;height:80px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:2rem;color:white;margin-bottom:1rem">
+                            MC
+                        </div>
+                        <div style="color:var(--text-primary)">Michael Chen</div>
+                    </div>
+                    <div class="participant-info">
+                        <span class="participant-status online"></span>
+                        <span>Michael Chen</span>
+                    </div>
+                </div>
+                
+                <!-- Participant 2 -->
+                <div class="video-participant">
+                    <div style="width:100%;height:100%;background:var(--bg-secondary);display:flex;align-items:center;justify-content:center;flex-direction:column">
+                        <div style="width:80px;height:80px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:2rem;color:white;margin-bottom:1rem">
+                            PP
+                        </div>
+                        <div style="color:var(--text-primary)">Priya Patel</div>
+                    </div>
+                    <div class="participant-info">
+                        <span class="participant-status online"></span>
+                        <span>Priya Patel</span>
+                    </div>
+                </div>
+                
+                <!-- Participant 3 -->
+                <div class="video-participant">
+                    <div style="width:100%;height:100%;background:var(--bg-secondary);display:flex;align-items:center;justify-content:center;flex-direction:column">
+                        <div style="width:80px;height:80px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:2rem;color:white;margin-bottom:1rem">
+                            DK
+                        </div>
+                        <div style="color:var(--text-primary)">David Kim</div>
+                    </div>
+                    <div class="participant-info">
+                        <span class="participant-status muted"></span>
+                        <span>David Kim (Muted)</span>
+                    </div>
+                </div>
+                
+                <!-- Participant 4 -->
+                <div class="video-participant">
+                    <div style="width:100%;height:100%;background:var(--bg-secondary);display:flex;align-items:center;justify-content:center;flex-direction:column">
+                        <div style="width:80px;height:80px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:2rem;color:white;margin-bottom:1rem">
+                            ER
+                        </div>
+                        <div style="color:var(--text-primary)">Emma Rodriguez</div>
+                    </div>
+                    <div class="participant-info">
+                        <span class="participant-status online"></span>
+                        <span>Emma Rodriguez</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Video Controls -->
+            <div class="video-controls">
+                <button class="control-btn active" onclick="toggleHackathonMute()">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="control-btn active" onclick="toggleHackathonVideo()">
+                    <i class="fas fa-video"></i>
+                </button>
+                <button class="control-btn" onclick="toggleHackathonChat()">
+                    <i class="fas fa-comment"></i>
+                </button>
+                <button class="control-btn" onclick="toggleTeamDashboard()">
+                    <i class="fas fa-users"></i>
+                </button>
+                <button class="control-btn" onclick="shareScreen()">
+                    <i class="fas fa-desktop"></i>
+                </button>
+                <button class="control-btn" onclick="recordHackathon()">
+                    <i class="fas fa-circle"></i>
+                </button>
+                <button class="control-btn danger" onclick="leaveHackathonCall()">
+                    <i class="fas fa-phone-slash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== HACKATHON CHAT SIDEBAR ===== -->
+    <div id="hackathonChat" class="hackathon-chat">
+        <div class="chat-header">
+            <h3><i class="fas fa-comments"></i> Hackathon Chat</h3>
+            <button class="close-btn" onclick="toggleHackathonChat()">✕</button>
+        </div>
+        
+        <div class="chat-messages" id="hackathonChatMessages">
+            <div class="chat-message">
+                <div class="message-avatar">S</div>
+                <div class="message-content">
+                    <strong>Sarah Johnson</strong>
+                    <p>Welcome everyone to the AI Innovation Challenge finals!</p>
+                    <small>2 min ago</small>
+                </div>
+            </div>
+            
+            <div class="chat-message">
+                <div class="message-avatar">M</div>
+                <div class="message-content">
+                    <strong>Michael Chen</strong>
+                    <p>Excited to see all the amazing projects!</p>
+                    <small>1 min ago</small>
+                </div>
+            </div>
+            
+            <div class="chat-message sent">
+                <div class="message-avatar">Y</div>
+                <div class="message-content">
+                    <p>Good luck everyone! 🚀</p>
+                    <small>Just now</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-input-area">
+            <input type="text" id="hackathonChatInput" class="chat-input" placeholder="Type a message...">
+            <button class="chat-send-btn" onclick="sendHackathonMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== TEAM DASHBOARD ===== -->
+    <div id="teamDashboard" class="team-dashboard">
+        <div class="team-header">
+            <h3><i class="fas fa-users"></i> Team Innovators</h3>
+            <p>AI Innovation Challenge</p>
+        </div>
+        
+        <div style="padding:1rem">
+            <h4 style="color:var(--text-primary); margin-bottom:1rem;">Team Members (6)</h4>
+            
+            <div class="team-member">
+                <div class="message-avatar">S</div>
+                <div>
+                    <div style="color:var(--text-primary);">Sarah Johnson <span style="color:var(--primary);">(Lead)</span></div>
+                    <div class="member-role">Full Stack Developer</div>
+                </div>
+                <span class="member-status online"></span>
+            </div>
+            
+            <div class="team-member">
+                <div class="message-avatar">M</div>
+                <div>
+                    <div style="color:var(--text-primary);">Michael Chen</div>
+                    <div class="member-role">ML Engineer</div>
+                </div>
+                <span class="member-status online"></span>
+            </div>
+            
+            <div class="team-member">
+                <div class="message-avatar">P</div>
+                <div>
+                    <div style="color:var(--text-primary);">Priya Patel</div>
+                    <div class="member-role">UI/UX Designer</div>
+                </div>
+                <span class="member-status away"></span>
+            </div>
+            
+            <div class="team-member">
+                <div class="message-avatar">D</div>
+                <div>
+                    <div style="color:var(--text-primary);">David Kim</div>
+                    <div class="member-role">Backend Developer</div>
+                </div>
+                <span class="member-status online"></span>
+            </div>
+            
+            <div class="team-member">
+                <div class="message-avatar">E</div>
+                <div>
+                    <div style="color:var(--text-primary);">Emma Rodriguez</div>
+                    <div class="member-role">Data Scientist</div>
+                </div>
+                <span class="member-status offline"></span>
+            </div>
+            
+            <div class="team-member">
+                <div class="message-avatar">Y</div>
+                <div>
+                    <div style="color:var(--text-primary);">You</div>
+                    <div class="member-role">Frontend Developer</div>
+                </div>
+                <span class="member-status online"></span>
+            </div>
+            
+            <hr>
+            
+            <h4 style="color:var(--text-primary); margin-bottom:1rem;">Project Progress</h4>
+            <div style="margin:1rem 0">
+                <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
+                    <span style="color:var(--text-primary);">Frontend</span>
+                    <span style="color:var(--primary);">90%</span>
+                </div>
+                <div style="height:8px;background:var(--bg-secondary);border-radius:4px">
+                    <div style="width:90%;height:100%;background:var(--gradient-primary);border-radius:4px"></div>
+                </div>
+            </div>
+            
+            <div style="margin:1rem 0">
+                <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
+                    <span style="color:var(--text-primary);">Backend</span>
+                    <span style="color:var(--primary);">75%</span>
+                </div>
+                <div style="height:8px;background:var(--bg-secondary);border-radius:4px">
+                    <div style="width:75%;height:100%;background:var(--gradient-primary);border-radius:4px"></div>
+                </div>
+            </div>
+            
+            <div style="margin:1rem 0">
+                <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
+                    <span style="color:var(--text-primary);">ML Model</span>
+                    <span style="color:var(--primary);">60%</span>
+                </div>
+                <div style="height:8px;background:var(--bg-secondary);border-radius:4px">
+                    <div style="width:60%;height:100%;background:var(--gradient-primary);border-radius:4px"></div>
+                </div>
+            </div>
+            
+            <button class="btn-primary" style="width:100%;margin-top:1rem" onclick="showSubmissionModal()">
+                <i class="fas fa-upload"></i> Submit Project
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== HOST HACKATHON MODAL ===== -->
+    <div id="hostModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <h2>Host a Hackathon</h2>
+            
+            <form onsubmit="event.preventDefault(); createHackathon()">
+                <div class="form-group">
+                    <label>Hackathon Name *</label>
+                    <input type="text" id="hackathonName" placeholder="e.g., AI Innovation Challenge" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Description *</label>
+                    <textarea id="hackathonDesc" placeholder="Describe your hackathon..." rows="3" required></textarea>
+                </div>
+                
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="endDate">
+                    </div>
+                </div>
+                
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                    <div class="form-group">
+                        <label>Prize Pool ($)</label>
+                        <input type="number" id="prizePool" placeholder="10000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Format</label>
+                        <select id="hackathonFormat">
+                            <option value="online">Online</option>
+                            <option value="in-person">In-Person</option>
+                            <option value="hybrid">Hybrid</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="hackathonCategory">
+                        <option value="ai">AI/ML</option>
+                        <option value="web3">Web3</option>
+                        <option value="mobile">Mobile</option>
+                        <option value="iot">IoT</option>
+                        <option value="social">Social Impact</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Max Team Size</label>
+                    <input type="number" id="maxTeamSize" value="5" min="1" max="10">
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Create Hackathon</button>
+                    <button type="button" class="btn-outline" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== SUBMISSION MODAL ===== -->
+    <div id="submissionModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <h2>Submit Your Project</h2>
+            
+            <form class="submission-form" onsubmit="event.preventDefault(); submitProject()">
+                <div class="form-group">
+                    <label>Project Name</label>
+                    <input type="text" id="projectName" placeholder="e.g., AI Health Assistant">
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="projectDesc" placeholder="Describe your project..." rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>GitHub Repository</label>
+                    <input type="url" id="githubUrl" placeholder="https://github.com/username/project">
+                </div>
+                
+                <div class="form-group">
+                    <label>Demo URL (Optional)</label>
+                    <input type="url" id="demoUrl" placeholder="https://your-project.com">
+                </div>
+                
+                <div class="file-upload" onclick="document.getElementById('projectFile').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Click to upload project files</p>
+                    <small>ZIP, PDF, or presentation files (Max 100MB)</small>
+                    <input type="file" id="projectFile" style="display:none" multiple>
+                </div>
+                
+                <div class="form-group">
+                    <label>Team Members</label>
+                    <select id="teamMembers" multiple size="3">
+                        <option value="sarah" selected>Sarah Johnson (Lead)</option>
+                        <option value="michael" selected>Michael Chen</option>
+                        <option value="priya" selected>Priya Patel</option>
+                        <option value="david">David Kim</option>
+                    </select>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Submit Project</button>
+                    <button type="button" class="btn-outline" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== REGISTER MODAL ===== -->
+    <div id="registerHackathonModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <h2 id="registerHackathonTitle">Register for Hackathon</h2>
+            
+            <form onsubmit="event.preventDefault(); confirmRegistration()">
+                <div class="form-group">
+                    <label>Team Name</label>
+                    <input type="text" id="teamName" placeholder="Enter your team name">
+                </div>
+                
+                <div class="form-group">
+                    <label>Team Size</label>
+                    <select id="teamSize">
+                        <option value="1">1 (Solo)</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Your Role</label>
+                    <input type="text" id="memberRole" placeholder="e.g., Frontend Developer">
+                </div>
+                
+                <div class="form-group">
+                    <label>Experience Level</label>
+                    <select id="experienceLevel">
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Register Now</button>
+                    <button type="button" class="btn-outline" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content" style="max-width:400px;">
+            <button class="close-modal" onclick="closeLoginModal()">&times;</button>
+            <h2>Sign In</h2>
+            <form onsubmit="event.preventDefault(); loginUser()">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%;">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content" style="max-width:400px;">
+            <button class="close-modal" onclick="closeRegisterModal()">&times;</button>
+            <h2>Create Account</h2>
+            <form onsubmit="event.preventDefault(); registerUser()">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="registerName" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" placeholder="Choose a password" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%;">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>SkillBridge</h4>
+                <p>Where innovation meets opportunity.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="hackathons.html">Browse Hackathons</a>
+                <a href="#" onclick="showHostModal()">Host a Hackathon</a>
+                <a href="winners.html">Past Winners</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p><i class="fas fa-envelope"></i> iranpaccy@gmail.com</p>
+                <p><i class="fas fa-phone"></i> +250 796 908 272</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 SkillBridge. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // ===== THEME TOGGLE =====
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            
+            const icon = document.querySelector('#themeToggle i');
+            if (newTheme === 'dark') {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+            
+            localStorage.setItem('theme', newTheme);
+            showToast(`Switched to ${newTheme} mode`, 'info');
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const icon = document.querySelector('#themeToggle i');
+            if (savedTheme === 'dark') {
+                icon.className = 'fas fa-sun';
+            }
+        }
+
+        // ===== STATE MANAGEMENT =====
+        let allHackathons = [];
+        let displayedHackathons = [];
+        let currentPage = 1;
+        const hackathonsPerPage = 8;
+        let currentHackathon = null;
+
+        // ===== AUTH STATE =====
+        let currentUser = null;
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', async () => {
+            checkAuth();
+            await loadHackathons();
+            
+            // Setup event listeners
+            document.getElementById('categoryFilter').addEventListener('change', filterHackathons);
+            document.getElementById('formatFilter').addEventListener('change', filterHackathons);
+            document.getElementById('prizeFilter').addEventListener('change', filterHackathons);
+            document.getElementById('searchInput').addEventListener('input', filterHackathons);
+            document.getElementById('sortFilter').addEventListener('change', sortHackathons);
+        });
+
+        // ===== AUTH FUNCTIONS =====
+        function checkAuth() {
+            const savedUser = localStorage.getItem('skillbridge_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateNavAuth();
+            }
+        }
+
+        function updateNavAuth() {
+            const navAuth = document.getElementById('navAuth');
+            
+            if (currentUser) {
+                navAuth.innerHTML = `
+                    <span class="user-greeting" style="margin-right:1rem; color:var(--text-primary);">👤 ${currentUser.name}</span>
+                    <button class="btn-outline" onclick="logout()">Logout</button>
+                `;
+            } else {
+                navAuth.innerHTML = `
+                    <button class="btn-outline" onclick="showLoginModal()">Log In</button>
+                    <button class="btn-primary" onclick="showRegisterModal()">Sign Up</button>
+                `;
+            }
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        function showRegisterModal() {
+            document.getElementById('registerModal').classList.add('active');
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').classList.remove('active');
+        }
+
+        function loginUser() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            currentUser = {
+                name: email.split('@')[0],
+                email: email
+            };
+
+            localStorage.setItem('skillbridge_user', JSON.stringify(currentUser));
+            
+            closeLoginModal();
+            updateNavAuth();
+            showToast(`Welcome back, ${currentUser.name}!`, 'success');
+        }
+
+        function registerUser() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (!name || !email || !password) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            currentUser = {
+                name: name,
+                email: email
+            };
+
+            localStorage.setItem('skillbridge_user', JSON.stringify(currentUser));
+            
+            closeRegisterModal();
+            updateNavAuth();
+            showToast(`Welcome, ${name}!`, 'success');
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('skillbridge_user');
+            updateNavAuth();
+            showToast('Logged out successfully', 'info');
+        }
+
+        // ===== LOAD HACKATHONS =====
+        async function loadHackathons() {
+            allHackathons = [
+                {
+                    id: 1,
+                    title: 'AI Innovation Challenge 2026',
+                    organizer: 'TechCorp',
+                    description: 'Build AI-powered solutions for healthcare, education, or climate change. Grand prize includes $10,000 and mentorship from top AI companies.',
+                    prize: 25000,
+                    teams: 342,
+                    participants: 1250,
+                    startDate: '2026-03-15',
+                    endDate: '2026-03-20',
+                    daysLeft: 3,
+                    format: 'online',
+                    category: 'ai',
+                    featured: true,
+                    live: true,
+                    location: 'Global',
+                    prizes: ['1st: $10,000', '2nd: $5,000', '3rd: $2,500'],
+                    sponsors: ['Google AI', 'Microsoft', 'OpenAI'],
+                    teamSize: 4,
+                    skills: ['Python', 'TensorFlow', 'React']
+                },
+                {
+                    id: 2,
+                    title: 'Web3 Buildathon',
+                    organizer: 'Ethereum Foundation',
+                    description: 'Build the next generation of decentralized applications on Ethereum, Solana, or Polygon.',
+                    prize: 15000,
+                    teams: 156,
+                    participants: 620,
+                    startDate: '2026-03-20',
+                    endDate: '2026-03-27',
+                    daysLeft: 8,
+                    format: 'hybrid',
+                    category: 'web3',
+                    featured: false,
+                    live: false,
+                    location: 'Virtual + NYC',
+                    prizes: ['1st: $7,000', '2nd: $3,000', '3rd: $1,500'],
+                    sponsors: ['Ethereum', 'Solana', 'Polygon'],
+                    teamSize: 3,
+                    skills: ['Solidity', 'Web3.js', 'React']
+                },
+                {
+                    id: 3,
+                    title: 'Mobile App Challenge',
+                    organizer: 'Google for Startups',
+                    description: 'Create innovative mobile apps for iOS and Android. Focus on user experience and social impact.',
+                    prize: 10000,
+                    teams: 89,
+                    participants: 356,
+                    startDate: '2026-03-18',
+                    endDate: '2026-03-25',
+                    daysLeft: 5,
+                    format: 'in-person',
+                    category: 'mobile',
+                    featured: false,
+                    live: true,
+                    location: 'San Francisco, CA',
+                    prizes: ['1st: $5,000', '2nd: $2,500', '3rd: $1,000'],
+                    sponsors: ['Google', 'Android', 'iOS'],
+                    teamSize: 4,
+                    skills: ['Flutter', 'React Native', 'Swift']
+                },
+                {
+                    id: 4,
+                    title: 'Tech for Good',
+                    organizer: 'UN Tech Innovation',
+                    description: 'Build technology solutions that address social and environmental challenges.',
+                    prize: 8000,
+                    teams: 234,
+                    participants: 936,
+                    startDate: '2026-03-10',
+                    endDate: '2026-03-17',
+                    daysLeft: 2,
+                    format: 'online',
+                    category: 'social',
+                    featured: true,
+                    live: true,
+                    location: 'Global',
+                    prizes: ['1st: $4,000', '2nd: $2,000', '3rd: $1,000'],
+                    sponsors: ['UN', 'World Bank', 'Red Cross'],
+                    teamSize: 5,
+                    skills: ['JavaScript', 'Python', 'Sustainability']
+                },
+                {
+                    id: 5,
+                    title: 'Smart Home Hackathon',
+                    organizer: 'Siemens',
+                    description: 'Build innovative IoT solutions for smart homes using Arduino, Raspberry Pi, and sensors.',
+                    prize: 12000,
+                    teams: 67,
+                    participants: 268,
+                    startDate: '2026-03-25',
+                    endDate: '2026-04-01',
+                    daysLeft: 12,
+                    format: 'in-person',
+                    category: 'iot',
+                    featured: false,
+                    live: false,
+                    location: 'Berlin, Germany',
+                    prizes: ['1st: $6,000', '2nd: $3,000', '3rd: $1,500'],
+                    sponsors: ['Siemens', 'Arduino', 'Raspberry Pi'],
+                    teamSize: 3,
+                    skills: ['Arduino', 'IoT', 'C++']
+                },
+                {
+                    id: 6,
+                    title: 'Game Jam 2026',
+                    organizer: 'Unity Technologies',
+                    description: 'Create a game from scratch in 48 hours. Any engine, any platform.',
+                    prize: 7500,
+                    teams: 412,
+                    participants: 1648,
+                    startDate: '2026-03-22',
+                    endDate: '2026-03-24',
+                    daysLeft: 9,
+                    format: 'online',
+                    category: 'gaming',
+                    featured: false,
+                    live: false,
+                    location: 'Global',
+                    prizes: ['1st: $3,500', '2nd: $2,000', '3rd: $1,000'],
+                    sponsors: ['Unity', 'Unreal Engine', 'Godot'],
+                    teamSize: 4,
+                    skills: ['Unity', 'C#', 'Game Design']
+                },
+                {
+                    id: 7,
+                    title: 'FinTech Innovation',
+                    organizer: 'Stripe',
+                    description: 'Build solutions for banking, payments, or personal finance.',
+                    prize: 20000,
+                    teams: 178,
+                    participants: 712,
+                    startDate: '2026-03-28',
+                    endDate: '2026-04-04',
+                    daysLeft: 15,
+                    format: 'hybrid',
+                    category: 'fintech',
+                    featured: true,
+                    live: false,
+                    location: 'London + Virtual',
+                    prizes: ['1st: $10,000', '2nd: $5,000', '3rd: $2,500'],
+                    sponsors: ['Stripe', 'Visa', 'Mastercard'],
+                    teamSize: 4,
+                    skills: ['Python', 'Blockchain', 'Finance']
+                },
+                {
+                    id: 8,
+                    title: 'HealthTech Challenge',
+                    organizer: 'Johnson & Johnson',
+                    description: 'Create innovative solutions for healthcare and wellness.',
+                    prize: 18000,
+                    teams: 145,
+                    participants: 580,
+                    startDate: '2026-03-19',
+                    endDate: '2026-03-26',
+                    daysLeft: 6,
+                    format: 'hybrid',
+                    category: 'health',
+                    featured: false,
+                    live: true,
+                    location: 'Boston + Virtual',
+                    prizes: ['1st: $9,000', '2nd: $4,500', '3rd: $2,000'],
+                    sponsors: ['J&J', 'Pfizer', 'Mayo Clinic'],
+                    teamSize: 4,
+                    skills: ['Python', 'Healthcare', 'ML']
+                }
+            ];
+            
+            displayedHackathons = [...allHackathons];
+            displayHackathons(displayedHackathons.slice(0, hackathonsPerPage));
+            updateResultsCount();
+        }
+
+        // ===== DISPLAY HACKATHONS =====
+        function displayHackathons(hackathons) {
+            const container = document.getElementById('hackathonGrid');
+            if (!container) return;
+            
+            container.innerHTML = hackathons.map(h => `
+                <div class="hackathon-card ${h.featured ? 'featured' : ''}" onclick="viewHackathon(${h.id})">
+                    <div class="hackathon-image">
+                        ${h.featured ? '<span class="hackathon-badge badge-featured">🔥 FEATURED</span>' : ''}
+                        ${h.live ? '<span class="hackathon-badge badge-live">🔴 LIVE</span>' : ''}
+                        <span class="hackathon-badge badge-remote" style="left:1rem;right:auto">${h.format}</span>
+                    </div>
+                    
+                    <div class="hackathon-content">
+                        <h3 class="hackathon-title">${h.title}</h3>
+                        <div class="hackathon-organizer">
+                            <i class="fas fa-building"></i> by ${h.organizer}
+                        </div>
+                        
+                        <p class="hackathon-description">${h.description}</p>
+                        
+                        <div class="hackathon-details">
+                            <div class="detail-item">
+                                <div class="detail-value">$${(h.prize/1000).toFixed(1)}k</div>
+                                <div class="detail-label">Prize</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-value">${h.teams}</div>
+                                <div class="detail-label">Teams</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-value">${h.daysLeft}d</div>
+                                <div class="detail-label">Left</div>
+                            </div>
+                        </div>
+                        
+                        <div class="hackathon-footer">
+                            <div class="team-avatars">
+                                ${[1,2,3,4].slice(0, Math.min(4, h.teamSize)).map(i => `
+                                    <div class="team-avatar">${String.fromCharCode(65 + i)}</div>
+                                `).join('')}
+                                <span class="team-count">+${h.participants}</span>
+                            </div>
+                            
+                            <button class="register-btn" onclick="event.stopPropagation(); registerForHackathon('${h.title}')">
+                                Register Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== FILTER FUNCTIONS =====
+        function filterHackathons() {
+            const category = document.getElementById('categoryFilter').value;
+            const format = document.getElementById('formatFilter').value;
+            const prize = parseInt(document.getElementById('prizeFilter').value) || 0;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+
+            displayedHackathons = allHackathons.filter(h => {
+                const matchesCategory = category === 'all' || h.category === category;
+                const matchesFormat = format === 'all' || h.format === format;
+                const matchesPrize = prize === 0 || h.prize >= prize;
+                const matchesSearch = h.title.toLowerCase().includes(search) ||
+                                     h.organizer.toLowerCase().includes(search) ||
+                                     h.description.toLowerCase().includes(search);
+                
+                return matchesCategory && matchesFormat && matchesPrize && matchesSearch;
+            });
+
+            currentPage = 1;
+            displayHackathons(displayedHackathons.slice(0, hackathonsPerPage));
+            updateResultsCount();
+        }
+
+        function sortHackathons() {
+            const sortBy = document.getElementById('sortFilter').value;
+            
+            switch(sortBy) {
+                case 'prize':
+                    displayedHackathons.sort((a, b) => b.prize - a.prize);
+                    break;
+                case 'ending':
+                    displayedHackathons.sort((a, b) => a.daysLeft - b.daysLeft);
+                    break;
+                default: // recent
+                    displayedHackathons.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+            }
+            
+            displayHackathons(displayedHackathons.slice(0, hackathonsPerPage));
+        }
+
+        function loadMoreHackathons() {
+            currentPage++;
+            const start = (currentPage - 1) * hackathonsPerPage;
+            const end = currentPage * hackathonsPerPage;
+            const more = displayedHackathons.slice(start, end);
+            
+            const container = document.getElementById('hackathonGrid');
+            const html = more.map(h => `
+                <div class="hackathon-card ${h.featured ? 'featured' : ''}" onclick="viewHackathon(${h.id})">
+                    <div class="hackathon-image">
+                        ${h.featured ? '<span class="hackathon-badge badge-featured">🔥 FEATURED</span>' : ''}
+                        ${h.live ? '<span class="hackathon-badge badge-live">🔴 LIVE</span>' : ''}
+                        <span class="hackathon-badge badge-remote" style="left:1rem;right:auto">${h.format}</span>
+                    </div>
+                    
+                    <div class="hackathon-content">
+                        <h3 class="hackathon-title">${h.title}</h3>
+                        <div class="hackathon-organizer">
+                            <i class="fas fa-building"></i> by ${h.organizer}
+                        </div>
+                        
+                        <p class="hackathon-description">${h.description}</p>
+                        
+                        <div class="hackathon-details">
+                            <div class="detail-item">
+                                <div class="detail-value">$${(h.prize/1000).toFixed(1)}k</div>
+                                <div class="detail-label">Prize</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-value">${h.teams}</div>
+                                <div class="detail-label">Teams</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-value">${h.daysLeft}d</div>
+                                <div class="detail-label">Left</div>
+                            </div>
+                        </div>
+                        
+                        <div class="hackathon-footer">
+                            <div class="team-avatars">
+                                ${[1,2,3,4].slice(0, Math.min(4, h.teamSize)).map(i => `
+                                    <div class="team-avatar">${String.fromCharCode(65 + i)}</div>
+                                `).join('')}
+                                <span class="team-count">+${h.participants}</span>
+                            </div>
+                            
+                            <button class="register-btn" onclick="event.stopPropagation(); registerForHackathon('${h.title}')">
+                                Register Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.insertAdjacentHTML('beforeend', html);
+            updateResultsCount();
+        }
+
+        function updateResultsCount() {
+            const count = displayedHackathons.length;
+            const showing = Math.min(currentPage * hackathonsPerPage, count);
+            document.getElementById('resultsCount').textContent = `Showing ${showing} of ${count} hackathons`;
+            
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            if (currentPage * hackathonsPerPage >= count) {
+                loadMoreBtn.style.display = 'none';
+            } else {
+                loadMoreBtn.style.display = 'inline-block';
+            }
+        }
+
+        // ===== HACKATHON VIDEO CALL FUNCTIONS =====
+        function joinHackathonLive(hackathonName) {
+            if (!currentUser) {
+                showToast('Please sign in to join live events', 'warning');
+                showLoginModal();
+                return;
+            }
+            
+            currentHackathon = hackathonName;
+            document.getElementById('hackathonVideoContainer').classList.add('active');
+            showToast(`Joined ${hackathonName} live stream`, 'success');
+        }
+
+        function toggleHackathonMute() {
+            const btn = event.currentTarget;
+            btn.classList.toggle('active');
+            const icon = btn.querySelector('i');
+            if (btn.classList.contains('active')) {
+                icon.className = 'fas fa-microphone';
+                showToast('Microphone unmuted', 'info');
+            } else {
+                icon.className = 'fas fa-microphone-slash';
+                showToast('Microphone muted', 'info');
+            }
+        }
+
+        function toggleHackathonVideo() {
+            const btn = event.currentTarget;
+            btn.classList.toggle('active');
+            const icon = btn.querySelector('i');
+            if (btn.classList.contains('active')) {
+                icon.className = 'fas fa-video';
+                showToast('Camera turned on', 'info');
+            } else {
+                icon.className = 'fas fa-video-slash';
+                showToast('Camera turned off', 'info');
+            }
+        }
+
+        function toggleHackathonChat() {
+            document.getElementById('hackathonChat').classList.toggle('active');
+        }
+
+        function toggleTeamDashboard() {
+            document.getElementById('teamDashboard').classList.toggle('active');
+        }
+
+        function shareScreen() {
+            showToast('Screen sharing started', 'info');
+        }
+
+        function recordHackathon() {
+            showToast('Recording started', 'info');
+        }
+
+        function leaveHackathonCall() {
+            document.getElementById('hackathonVideoContainer').classList.remove('active');
+            document.getElementById('hackathonChat').classList.remove('active');
+            document.getElementById('teamDashboard').classList.remove('active');
+            showToast('Left the call', 'info');
+        }
+
+        function sendHackathonMessage() {
+            const input = document.getElementById('hackathonChatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            const container = document.getElementById('hackathonChatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message sent';
+            messageDiv.innerHTML = `
+                <div class="message-avatar">Y</div>
+                <div class="message-content">
+                    <p>${message}</p>
+                    <small>Just now</small>
+                </div>
+            `;
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+            input.value = '';
+        }
+
+        // ===== REGISTRATION FUNCTIONS =====
+        function registerForHackathon(title) {
+            if (!currentUser) {
+                showToast('Please sign in to register', 'warning');
+                showLoginModal();
+                return;
+            }
+            
+            document.getElementById('registerHackathonTitle').textContent = `Register for ${title}`;
+            document.getElementById('registerHackathonModal').classList.add('active');
+        }
+
+        function confirmRegistration() {
+            showToast('Successfully registered for hackathon!', 'success');
+            closeModal();
+        }
+
+        // ===== HOST FUNCTIONS =====
+        function showHostModal() {
+            if (!currentUser) {
+                showToast('Please sign in to host a hackathon', 'warning');
+                showLoginModal();
+                return;
+            }
+            document.getElementById('hostModal').classList.add('active');
+        }
+
+        function createHackathon() {
+            const name = document.getElementById('hackathonName').value;
+            if (!name) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            showToast(`Hackathon "${name}" created successfully!`, 'success');
+            closeModal();
+        }
+
+        // ===== SUBMISSION FUNCTIONS =====
+        function showSubmissionModal() {
+            document.getElementById('submissionModal').classList.add('active');
+        }
+
+        function submitProject() {
+            showToast('Project submitted successfully! Good luck! 🍀', 'success');
+            closeModal();
+        }
+
+        // ===== VIEW HACKATHON DETAILS =====
+        function viewHackathon(id) {
+            window.location.href = `hackathon-detail.html?id=${id}`;
+        }
+
+        // ===== UTILITY FUNCTIONS =====
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            toast.className = `toast ${type}`;
+            
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            if (type === 'error') icon = 'fa-exclamation-circle';
+            
+            toast.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details - SkillBridge | Find Your Dream Job</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #87CEEB;
+            --primary-dark: #5f9ea0;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-600: #6c757d;
+            --gray-800: #343a40;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-100);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--dark);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 10px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--primary-dark);
+        }
+
+        .nav-auth {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-outline {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 30px;
+            background: transparent;
+            color: var(--primary-dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .btn-primary {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            background: var(--primary);
+            color: var(--dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+            transform: translateX(-5px);
+        }
+
+        .job-detail-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Main Content */
+        .job-main {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .company-logo-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .job-title-section h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .company-name {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+        }
+
+        .company-name i {
+            color: var(--primary);
+        }
+
+        .job-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .job-badge {
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-fulltime {
+            background: rgba(46, 204, 113, 0.1);
+            color: #27ae60;
+        }
+
+        .badge-parttime {
+            background: rgba(52, 152, 219, 0.1);
+            color: #2980b9;
+        }
+
+        .badge-remote {
+            background: rgba(155, 89, 182, 0.1);
+            color: #8e44ad;
+        }
+
+        .badge-urgent {
+            background: rgba(231, 76, 60, 0.1);
+            color: #c0392b;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .job-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--gray-100);
+            border-radius: 16px;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-label {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+            margin-bottom: 0.3rem;
+        }
+
+        .meta-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .job-description {
+            color: var(--gray-600);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .requirements-list,
+        .benefits-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .requirements-list li,
+        .benefits-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            color: var(--gray-600);
+        }
+
+        .requirements-list li i {
+            color: var(--success);
+        }
+
+        .benefits-list li i {
+            color: var(--primary);
+        }
+
+        .skills-required {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0 2rem;
+        }
+
+        .skill-tag {
+            background: rgba(135,206,235,0.1);
+            color: var(--primary-dark);
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Sidebar */
+        .job-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-card h3 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-card h3 i {
+            color: var(--primary);
+        }
+
+        .company-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .company-logo-medium {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .company-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 1rem 0;
+        }
+
+        .company-stat {
+            text-align: center;
+        }
+
+        .company-stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .company-stat-label {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+        }
+
+        .application-form {
+            margin-top: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(135,206,235,0.2);
+        }
+
+        .file-upload {
+            border: 2px dashed var(--gray-300);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: rgba(135,206,235,0.05);
+        }
+
+        .file-upload i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload p {
+            color: var(--gray-600);
+        }
+
+        .file-upload small {
+            color: var(--gray-500);
+        }
+
+        .similar-job-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-200);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .similar-job-item:hover {
+            transform: translateX(5px);
+        }
+
+        .similar-job-item:last-child {
+            border-bottom: none;
+        }
+
+        .similar-job-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .similar-job-info {
+            flex: 1;
+        }
+
+        .similar-job-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .similar-job-company {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        .similar-job-salary {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .share-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .share-btn.linkedin {
+            background: #0077b5;
+            color: white;
+        }
+
+        .share-btn.twitter {
+            background: #1da1f2;
+            color: white;
+        }
+
+        .share-btn.facebook {
+            background: #4267B2;
+            color: white;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* Application Modal */
+        .application-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .application-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-600);
+        }
+
+        .close-modal:hover {
+            color: var(--danger);
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .modal-subtitle {
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+        }
+
+        /* Success Modal */
+        .success-modal {
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--success);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .success-title {
+            font-size: 2rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+
+        .success-message {
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+        }
+
+        /* Toast Container */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background: white;
+            color: var(--dark);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+
+        .toast.success {
+            border-left-color: var(--success);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .footer-section a {
+            display: block;
+            color: var(--gray-200);
+            text-decoration: none;
+            margin: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #444;
+            color: var(--gray-200);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .job-detail-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .job-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .job-meta-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .share-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="plp-nav">
+        <a href="index.html" class="logo"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge" class="logo-img"></a>
+        <div class="links">
+            <a href="index.html">Home</a>
+            <a href="courses.html">Courses</a>
+            <a href="jobs.html">Jobs</a>
+            <a href="mentors.html">Mentors</a>
+            <a href="study-groups.html">Study Groups</a>
+            <a href="challenges.html">Challenges</a>
+            <a href="marketplace.html">Marketplace</a>
+        </div>
+        <div class="buttons">
+            <a href="register.html">Sign Up</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+    </header>
+
+    <div class="job-detail-container" id="jobDetailContainer">
+        <!-- Main Content -->
+        <div class="job-main" id="jobMain">
+            <!-- Content loaded dynamically -->
+        </div>
+
+        <!-- Sidebar -->
+        <div class="job-sidebar" id="jobSidebar">
+            <!-- Sidebar loaded dynamically -->
+        </div>
+    </div>
+
+    <!-- Application Modal -->
+    <div id="applicationModal" class="application-modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeApplicationModal()">&times;</button>
+            <h2 class="modal-title" id="applicationJobTitle">Apply for Position</h2>
+            <p class="modal-subtitle" id="applicationCompany">Complete the form below to apply</p>
+            
+            <form id="applicationForm" onsubmit="submitApplication(event)">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="applicantName" placeholder="John Doe" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" id="applicantEmail" placeholder="john@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="applicantPhone" placeholder="+1 234 567 890">
+                </div>
+                
+                <div class="form-group">
+                    <label>Resume/CV *</label>
+                    <div class="file-upload" onclick="document.getElementById('resumeFile').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload your resume</p>
+                        <small>PDF, DOC, DOCX (Max 5MB)</small>
+                        <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" style="display: none;" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Cover Letter</label>
+                    <textarea id="coverLetter" rows="4" placeholder="Tell us why you're a great fit for this position..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Expected Salary</label>
+                    <input type="text" id="expectedSalary" placeholder="e.g., $80,000">
+                </div>
+                
+                <div class="form-group">
+                    <label>When can you start?</label>
+                    <select id="startDate">
+                        <option value="immediate">Immediately</option>
+                        <option value="2weeks">2 weeks notice</option>
+                        <option value="1month">1 month notice</option>
+                        <option value="negotiable">Negotiable</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="termsAgree" required>
+                        I confirm that the information provided is accurate
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn-primary btn-large" style="width: 100%;">Submit Application</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="application-modal">
+        <div class="modal-content success-modal">
+            <button class="close-modal" onclick="closeSuccessModal()">&times;</button>
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 class="success-title">Application Submitted!</h2>
+            <p class="success-message">Your application has been successfully sent. The employer will review your application and contact you soon.</p>
+            <button class="btn-primary" onclick="closeSuccessModal()" style="padding: 1rem 3rem;">Done</button>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>SkillBridge</h4>
+                <p>Connecting talent with opportunities.</p>
+            </div>
+            <div class="footer-section">
+                <h4>For Job Seekers</h4>
+                <a href="jobs.html">Browse Jobs</a>
+                <a href="#">Career Advice</a>
+                <a href="#">Interview Tips</a>
+            </div>
+            <div class="footer-section">
+                <h4>For Employers</h4>
+                <a href="#">Post a Job</a>
+                <a href="#">Search Candidates</a>
+                <a href="#">Pricing</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p><i class="fas fa-envelope"></i> iranpaccy@gmail.com</p>
+                <p><i class="fas fa-phone"></i> +250 796 908 272</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 SkillBridge. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // ===== JOB DATA =====
+        const allJobs = [
+            // Tech Jobs
+            { 
+                id: 1, 
+                title: 'Senior Frontend Developer', 
+                company: 'Google', 
+                location: 'Mountain View, CA', 
+                type: 'fulltime', 
+                salary: '$150k - $200k', 
+                posted: '2026-02-10', 
+                experience: '5+ years',
+                education: "Bachelor's in CS or equivalent",
+                category: 'technology',
+                urgency: 'high',
+                description: 'We are looking for a Senior Frontend Developer to join our Google Maps team. You will be responsible for building responsive and performant user interfaces that millions of people use every day.',
+                responsibilities: [
+                    'Lead frontend development for Google Maps web application',
+                    'Collaborate with UX designers to implement pixel-perfect interfaces',
+                    'Optimize application performance and load times',
+                    'Mentor junior developers and conduct code reviews',
+                    'Implement new features and improve existing ones'
+                ],
+                requirements: [
+                    '5+ years of experience with React and modern JavaScript',
+                    'Strong understanding of web performance optimization',
+                    'Experience with TypeScript and state management libraries',
+                    'Knowledge of browser APIs and cross-browser compatibility',
+                    'Excellent problem-solving and communication skills'
+                ],
+                benefits: [
+                    'Competitive salary and equity package',
+                    'Health, dental, and vision insurance',
+                    'Free meals and snacks',
+                    'Gym membership',
+                    'Professional development budget',
+                    'Flexible work hours'
+                ],
+                skills: ['React', 'TypeScript', 'JavaScript', 'HTML5', 'CSS3', 'Web Performance'],
+                applications: 45,
+                views: 2340,
+                companySize: '10,000+',
+                founded: 1998,
+                industry: 'Technology',
+                logo: 'G'
+            },
+            { 
+                id: 2, 
+                title: 'Backend Engineer', 
+                company: 'Microsoft', 
+                location: 'Redmond, WA', 
+                type: 'fulltime', 
+                salary: '$140k - $180k', 
+                posted: '2026-02-08', 
+                experience: '3+ years',
+                education: "Bachelor's in CS or equivalent",
+                category: 'technology',
+                urgency: 'medium',
+                description: 'Join our Azure cloud services team to build scalable and reliable backend systems that power millions of businesses worldwide.',
+                responsibilities: [
+                    'Design and implement microservices for Azure',
+                    'Optimize database queries and API performance',
+                    'Write clean, maintainable, and testable code',
+                    'Collaborate with cross-functional teams',
+                    'Participate in on-call rotation'
+                ],
+                requirements: [
+                    '3+ years of experience with C# or Java',
+                    'Experience with cloud platforms (Azure preferred)',
+                    'Knowledge of microservices architecture',
+                    'Understanding of RESTful APIs',
+                    'Experience with SQL and NoSQL databases'
+                ],
+                benefits: [
+                    'Competitive salary and bonuses',
+                    'Comprehensive health benefits',
+                    'Employee stock purchase plan',
+                    'Tuition reimbursement',
+                    'Flexible work arrangements',
+                    'Parental leave'
+                ],
+                skills: ['C#', 'Java', 'Azure', 'Microservices', 'SQL', 'NoSQL'],
+                applications: 67,
+                views: 1890,
+                companySize: '10,000+',
+                founded: 1975,
+                industry: 'Technology',
+                logo: 'M'
+            },
+            { 
+                id: 3, 
+                title: 'Data Scientist', 
+                company: 'Amazon', 
+                location: 'Seattle, WA', 
+                type: 'fulltime', 
+                salary: '$130k - $170k', 
+                posted: '2026-02-09', 
+                experience: '2+ years',
+                education: "Master's or PhD preferred",
+                category: 'data',
+                urgency: 'high',
+                description: 'We are seeking a Data Scientist to join our personalization team. You will work on recommendation algorithms that impact millions of customers.',
+                responsibilities: [
+                    'Build machine learning models for product recommendations',
+                    'Analyze large datasets to extract insights',
+                    'Collaborate with engineering teams to deploy models',
+                    'Experiment with new algorithms and techniques',
+                    'Present findings to stakeholders'
+                ],
+                requirements: [
+                    '2+ years of experience in data science',
+                    'Strong Python programming skills',
+                    'Experience with machine learning frameworks',
+                    'Knowledge of SQL and big data technologies',
+                    'Excellent analytical and communication skills'
+                ],
+                benefits: [
+                    'Competitive compensation',
+                    'Health benefits from day one',
+                    '401(k) with company match',
+                    'Career development programs',
+                    'Employee discounts',
+                    'Relocation assistance'
+                ],
+                skills: ['Python', 'Machine Learning', 'SQL', 'TensorFlow', 'PyTorch', 'Statistics'],
+                applications: 89,
+                views: 2150,
+                companySize: '10,000+',
+                founded: 1994,
+                industry: 'Technology',
+                logo: 'A'
+            },
+            { 
+                id: 4, 
+                title: 'DevOps Engineer', 
+                company: 'Netflix', 
+                location: 'Los Gatos, CA', 
+                type: 'fulltime', 
+                salary: '$160k - $210k', 
+                posted: '2026-02-07', 
+                experience: '4+ years',
+                education: "Bachelor's in CS or equivalent",
+                category: 'technology',
+                urgency: 'medium',
+                description: 'Join our streaming infrastructure team to build and maintain the systems that deliver content to millions of viewers worldwide.',
+                responsibilities: [
+                    'Design and maintain CI/CD pipelines',
+                    'Manage cloud infrastructure on AWS',
+                    'Implement monitoring and alerting systems',
+                    'Automate deployment processes',
+                    'Respond to incidents and perform root cause analysis'
+                ],
+                requirements: [
+                    '4+ years of DevOps experience',
+                    'Strong knowledge of AWS services',
+                    'Experience with Docker and Kubernetes',
+                    'Proficiency in scripting languages',
+                    'Understanding of networking concepts'
+                ],
+                benefits: [
+                    'Top-tier compensation',
+                    'Unlimited vacation policy',
+                    'Health and wellness benefits',
+                    'Stock options',
+                    'Learning and development budget',
+                    'Free meals'
+                ],
+                skills: ['AWS', 'Docker', 'Kubernetes', 'Python', 'CI/CD', 'Terraform'],
+                applications: 34,
+                views: 1670,
+                companySize: '10,000+',
+                founded: 1997,
+                industry: 'Entertainment',
+                logo: 'N'
+            },
+            { 
+                id: 5, 
+                title: 'Mobile Developer (iOS)', 
+                company: 'Apple', 
+                location: 'Cupertino, CA', 
+                type: 'fulltime', 
+                salary: '$145k - $190k', 
+                posted: '2026-02-11', 
+                experience: '3+ years',
+                education: "Bachelor's in CS or equivalent",
+                category: 'mobile',
+                urgency: 'high',
+                description: 'Join the iOS Apps team to develop innovative applications for iPhone and iPad. You will work on apps that millions of people use daily.',
+                responsibilities: [
+                    'Develop iOS applications using Swift and SwiftUI',
+                    'Collaborate with design and product teams',
+                    'Optimize app performance and user experience',
+                    'Write unit and UI tests',
+                    'Stay up-to-date with Apple platforms'
+                ],
+                requirements: [
+                    '3+ years of iOS development experience',
+                    'Strong Swift and SwiftUI skills',
+                    'Experience with iOS frameworks',
+                    'Understanding of Apple design guidelines',
+                    'Knowledge of Git and CI/CD'
+                ],
+                benefits: [
+                    'Competitive salary and stock options',
+                    'Health and wellness programs',
+                    'Employee discount on Apple products',
+                    'Professional development',
+                    'On-site gym and cafes',
+                    'Relocation assistance'
+                ],
+                skills: ['Swift', 'SwiftUI', 'iOS SDK', 'Core Data', 'Combine', 'Git'],
+                applications: 56,
+                views: 1980,
+                companySize: '10,000+',
+                founded: 1976,
+                industry: 'Technology',
+                logo: 'A'
+            },
+            { 
+                id: 6, 
+                title: 'Frontend Developer', 
+                company: 'Meta', 
+                location: 'Menlo Park, CA', 
+                type: 'fulltime', 
+                salary: '$140k - $185k', 
+                posted: '2026-02-06', 
+                experience: '2+ years',
+                education: "Bachelor's in CS or equivalent",
+                category: 'technology',
+                urgency: 'medium',
+                description: 'Join the Facebook web team to build features that connect billions of people around the world.',
+                responsibilities: [
+                    'Develop user interfaces for Facebook features',
+                    'Optimize applications for performance',
+                    'Collaborate with product managers and designers',
+                    'Write clean, maintainable code',
+                    'Participate in code reviews'
+                ],
+                requirements: [
+                    '2+ years of experience with React',
+                    'Strong JavaScript and TypeScript skills',
+                    'Experience with state management libraries',
+                    'Understanding of web performance',
+                    'Knowledge of testing frameworks'
+                ],
+                benefits: [
+                    'Competitive salary and bonuses',
+                    'Comprehensive health coverage',
+                    'Free meals and snacks',
+                    'Wellness programs',
+                    'Professional development',
+                    'Parental leave'
+                ],
+                skills: ['React', 'TypeScript', 'JavaScript', 'Redux', 'Jest', 'Webpack'],
+                applications: 78,
+                views: 2340,
+                companySize: '10,000+',
+                founded: 2004,
+                industry: 'Technology',
+                logo: 'M'
+            }
+        ];
+
+        let currentJob = null;
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const jobId = urlParams.get('id');
+            
+            if (jobId) {
+                loadJobDetails(jobId);
+            } else {
+                showToast('Job not found', 'error');
+                setTimeout(() => {
+                    window.location.href = 'jobs.html';
+                }, 2000);
+            }
+        });
+
+        // ===== LOAD JOB DETAILS =====
+        function loadJobDetails(jobId) {
+            currentJob = allJobs.find(j => j.id == jobId);
+            
+            if (currentJob) {
+                displayJobDetails();
+                displaySimilarJobs();
+            } else {
+                document.getElementById('jobMain').innerHTML = '<p style="text-align: center; padding: 3rem;">Job not found</p>';
+            }
+        }
+
+        // ===== DISPLAY JOB DETAILS =====
+        function displayJobDetails() {
+            const job = currentJob;
+            const postedDate = new Date(job.posted).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            
+            document.getElementById('jobMain').innerHTML = `
+                <div class="job-header">
+                    <div style="display: flex; gap: 1.5rem;">
+                        <div class="company-logo-large">${job.logo}</div>
+                        <div class="job-title-section">
+                            <h1>${job.title}</h1>
+                            <div class="company-name">
+                                <i class="fas fa-building"></i>
+                                <span>${job.company}</span>
+                                <i class="fas fa-map-marker-alt" style="margin-left: 1rem;"></i>
+                                <span>${job.location}</span>
+                            </div>
+                            <div class="job-badges">
+                                <span class="job-badge badge-${job.type}">${job.type}</span>
+                                <span class="job-badge badge-remote">Remote Eligible</span>
+                                ${job.urgency === 'high' ? '<span class="job-badge badge-urgent">Urgent</span>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-large" onclick="openApplicationModal()">
+                        Apply Now
+                    </button>
+                </div>
+
+                <div class="job-meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">Salary</div>
+                        <div class="meta-value">${job.salary}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Experience</div>
+                        <div class="meta-value">${job.experience}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Posted</div>
+                        <div class="meta-value">${postedDate}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Applicants</div>
+                        <div class="meta-value">${job.applications}</div>
+                    </div>
+                </div>
+
+                <h3 class="section-title">
+                    <i class="fas fa-file-alt"></i> Job Description
+                </h3>
+                <p class="job-description">${job.description}</p>
+
+                <h3 class="section-title">
+                    <i class="fas fa-tasks"></i> Responsibilities
+                </h3>
+                <ul class="requirements-list">
+                    ${job.responsibilities.map(item => `
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            ${item}
+                        </li>
+                    `).join('')}
+                </ul>
+
+                <h3 class="section-title">
+                    <i class="fas fa-clipboard-list"></i> Requirements
+                </h3>
+                <ul class="requirements-list">
+                    ${job.requirements.map(item => `
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            ${item}
+                        </li>
+                    `).join('')}
+                </ul>
+
+                <h3 class="section-title">
+                    <i class="fas fa-gift"></i> Benefits
+                </h3>
+                <ul class="benefits-list">
+                    ${job.benefits.map(item => `
+                        <li>
+                            <i class="fas fa-star"></i>
+                            ${item}
+                        </li>
+                    `).join('')}
+                </ul>
+
+                <h3 class="section-title">
+                    <i class="fas fa-code"></i> Required Skills
+                </h3>
+                <div class="skills-required">
+                    ${job.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                </div>
+            `;
+
+            document.getElementById('jobSidebar').innerHTML = `
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-building"></i> About ${job.company}</h3>
+                    <div class="company-info">
+                        <div class="company-logo-medium">${job.logo}</div>
+                        <h4>${job.company}</h4>
+                        <p style="color: var(--gray-600); text-align: center; margin: 0.5rem 0;">
+                            ${job.industry} • Founded ${job.founded}
+                        </p>
+                        <div class="company-stats">
+                            <div class="company-stat">
+                                <div class="company-stat-value">${job.companySize}</div>
+                                <div class="company-stat-label">Employees</div>
+                            </div>
+                            <div class="company-stat">
+                                <div class="company-stat-value">${job.views}</div>
+                                <div class="company-stat-label">Views</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-share-alt"></i> Share this job</h3>
+                    <div class="share-buttons">
+                        <button class="share-btn linkedin" onclick="shareJob('linkedin')">
+                            <i class="fab fa-linkedin-in"></i> LinkedIn
+                        </button>
+                        <button class="share-btn twitter" onclick="shareJob('twitter')">
+                            <i class="fab fa-twitter"></i> Twitter
+                        </button>
+                        <button class="share-btn facebook" onclick="shareJob('facebook')">
+                            <i class="fab fa-facebook-f"></i> Facebook
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ===== DISPLAY SIMILAR JOBS =====
+        function displaySimilarJobs() {
+            const similarJobs = allJobs
+                .filter(j => j.id !== currentJob.id && j.category === currentJob.category)
+                .slice(0, 3);
+
+            const sidebar = document.getElementById('jobSidebar');
+            
+            const similarJobsHTML = `
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-briefcase"></i> Similar Jobs</h3>
+                    ${similarJobs.map(job => `
+                        <div class="similar-job-item" onclick="viewJob(${job.id})">
+                            <div class="similar-job-logo">${job.logo}</div>
+                            <div class="similar-job-info">
+                                <div class="similar-job-title">${job.title}</div>
+                                <div class="similar-job-company">${job.company}</div>
+                            </div>
+                            <div class="similar-job-salary">${job.salary}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            sidebar.insertAdjacentHTML('beforeend', similarJobsHTML);
+        }
+
+        // ===== APPLICATION FUNCTIONS =====
+        function openApplicationModal() {
+            document.getElementById('applicationJobTitle').textContent = `Apply for ${currentJob.title}`;
+            document.getElementById('applicationCompany').textContent = currentJob.company;
+            document.getElementById('applicationModal').classList.add('active');
+        }
+
+        function closeApplicationModal() {
+            document.getElementById('applicationModal').classList.remove('active');
+            document.getElementById('applicationForm').reset();
+        }
+
+        function submitApplication(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('applicantName').value;
+            
+            closeApplicationModal();
+            
+            // Show success modal
+            document.getElementById('successModal').classList.add('active');
+            
+            // Increment application count
+            currentJob.applications++;
+            
+            showToast(`Application submitted successfully!`, 'success');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+
+        // ===== SHARE FUNCTIONS =====
+        function shareJob(platform) {
+            const url = window.location.href;
+            const text = `Check out this job: ${currentJob.title} at ${currentJob.company}`;
+            
+            let shareUrl = '';
+            
+            switch(platform) {
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+                    break;
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+                    break;
+            }
+            
+            window.open(shareUrl, '_blank');
+            showToast(`Shared on ${platform}`, 'success');
+        }
+
+        // ===== NAVIGATION FUNCTIONS =====
+        function viewJob(jobId) {
+            window.location.href = `job-detail.html?id=${jobId}`;
+        }
+
+        // ===== TOAST FUNCTION =====
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            toast.className = `toast ${type}`;
+            
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            if (type === 'error') icon = 'fa-exclamation-circle';
+            
+            toast.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

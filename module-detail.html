@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module - SkillBridge Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .module-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            padding: 0 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .sidebar-logo img {
+            height: 40px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin: 0.5rem 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 2rem;
+        }
+
+        .sidebar-nav a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid white;
+            padding-left: 1.25rem;
+        }
+
+        .sidebar-nav i {
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-footer .course-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .sidebar-footer .course-card h4 {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .sidebar-footer .qr-code {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        /* === MAIN CONTENT === */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+        }
+
+        /* === MOBILE HAMBURGER MENU === */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #222;
+            padding: 0.5rem;
+            margin-right: 1rem;
+        }
+
+        .mobile-menu-btn:hover {
+            color: #00897B;
+        }
+
+        /* === BREADCRUMB === */
+        .breadcrumb {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .breadcrumb a {
+            color: #0087AF;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-separator {
+            color: #999;
+            margin: 0 0.5rem;
+        }
+
+        .breadcrumb-current {
+            color: #666;
+        }
+
+        /* === HERO SECTION === */
+        .hero {
+            background: linear-gradient(135deg, #226B63 0%, #1A5F5A 100%);
+            color: white;
+            padding: 3rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            margin: 2rem;
+            border-radius: 12px;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .hero-meta i {
+            font-size: 1.2rem;
+        }
+
+        .continue-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #C73866;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .continue-btn:hover {
+            background: #B1275C;
+            transform: translateY(-2px);
+        }
+
+        .hero-video {
+            position: relative;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-video img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-button {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #C73866;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        /* === TABS === */
+        .tabs-container {
+            padding: 0 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            position: relative;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            color: #222;
+        }
+
+        .tab.active {
+            color: #00897B;
+            border-bottom: 3px solid #00897B;
+        }
+
+        /* === TAB CONTENT === */
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            margin: 0 2rem 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* === OVERVIEW SECTION === */
+        .overview-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+
+        .overview-main h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #222;
+        }
+
+        .overview-main p {
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        /* === SIDEBAR === */
+        .course-sidebar {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .course-sidebar h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #222;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            color: #666;
+        }
+
+        .sidebar-item i {
+            color: #00897B;
+            font-size: 1.1rem;
+            min-width: 20px;
+        }
+
+        .sidebar-item strong {
+            color: #222;
+        }
+
+        /* === CURRICULUM === */
+        .curriculum-module {
+            background: #f9f9f9;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .curriculum-module:hover {
+            background: #f0f0f0;
+            transform: translateX(4px);
+        }
+
+        .curriculum-module-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 0.5rem;
+        }
+
+        .curriculum-module-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #00897B;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .curriculum-module-lessons {
+            margin-left: 2.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* === INSTRUCTOR === */
+        .instructor-card {
+            background: #f9f9f9;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .instructor-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+        }
+
+        .instructor-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 0.5rem;
+        }
+
+        .instructor-title {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .instructor-bio {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* === AUX ICONS === */
+        .aux-icons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .aux-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .aux-btn.red { background: #C2185B; }
+        .aux-btn.teal { background: #00897B; }
+        .aux-btn:hover { opacity: 0.85; transform: scale(1.05); }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1200px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .overview-wrapper {
+                grid-template-columns: 1fr;
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+                padding: 1rem 0;
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                height: 100vh;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar-logo {
+                padding: 0 1.5rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .sidebar-nav a {
+                padding: 0.75rem 1.5rem;
+                justify-content: flex-start;
+            }
+
+            .sidebar-nav span {
+                display: inline;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .breadcrumb {
+                padding: 0.75rem 1rem;
+                overflow-x: auto;
+            }
+
+            .hero {
+                padding: 1.5rem;
+                margin: 1rem 0;
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero-content p {
+                font-size: 0.95rem;
+            }
+
+            .continue-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.95rem;
+            }
+
+            .tabs-container {
+                padding: 0 1rem;
+                margin: 0 0 1.5rem 0;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .tab-content {
+                padding: 1.5rem 1rem;
+                margin: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 280px;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0.5rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                font-size: 1.25rem;
+            }
+
+            .breadcrumb {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+                gap: 0.25rem;
+            }
+
+            .hero {
+                padding: 1rem;
+                margin: 0.5rem 0;
+            }
+
+            .hero-content h1 {
+                font-size: 1.2rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .hero-content p {
+                font-size: 0.9rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .continue-btn {
+                width: 100%;
+                padding: 0.65rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+            }
+
+            .tab {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+
+            .tab-content {
+                padding: 1rem 0.75rem;
+            }
+
+            .course-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge">
+        </div>
+
+        <nav class="sidebar-nav">
+            <li><a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+            <li><a href="explore-courses.html"><i class="fas fa-book"></i> Explore Courses</a></li>
+            <li><a href="class-sessions.html"><i class="fas fa-calendar-check"></i> Class Sessions</a></li>
+            <li><a href="#"><i class="fas fa-file-check"></i> Submissions</a></li>
+            <li><a href="groups.html"><i class="fas fa-users"></i> Groups</a></li>
+            <li><a href="community.html"><i class="fas fa-comments"></i> Community</a></li>
+            <li><a href="#"><i class="fas fa-bolt"></i> Power AI</a></li>
+            <li><a href="certificates.html"><i class="fas fa-certificate"></i> Certificates</a></li>
+            <li><a href="#" style="margin-top: 2rem; color: rgba(255,255,255,0.6);"><i class="fas fa-chevron-left"></i> Collapse</a></li>
+        </nav>
+
+        <!-- <div class="sidebar-footer">
+            <div class="course-card">
+                <h4>SkillBridge Development</h4>
+                <p>Join our support channel for assistance and collab</p>
+                <div class="qr-code"><i class="fas fa-qrcode"></i></div>
+            </div>
+        </div> -->
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <button class="mobile-menu-btn" id="sidebarToggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="dashboard.html">Dashboard</a>
+            <span class="breadcrumb-separator">•</span>
+            <span class="breadcrumb-current" id="breadcrumbTitle">Load Module...</span>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-content">
+                <h1 id="moduleTitle">Loading...</h1>
+                <p id="moduleDescription">Loading module description...</p>
+                <div class="hero-meta">
+                    <i class="fas fa-globe"></i>
+                    <span>Language: <span id="moduleLanguage">English</span></span>
+                </div>
+                <button class="continue-btn" onclick="startLearning()">
+                    Continue Learning <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            <div class="hero-video">
+                <img id="moduleImage" src="asset/modules/maxresdefault.jpg" alt="Module">
+                <div class="play-button">🎬</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab(event, 'overview')">Overview</button>
+                <button class="tab" onclick="switchTab(event, 'curriculum')">Curriculum</button>
+                <button class="tab" onclick="switchTab(event, 'instructor')">Instructor</button>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="overview" class="tab-content active">
+            <div class="overview-wrapper">
+                <div class="overview-main">
+                    <h3>About this course</h3>
+                    <p id="aboutText">This course provides comprehensive training in the module. Learn from industry experts and gain hands-on experience with real-world projects.</p>
+                    <h3 style="margin-top: 2rem;">What you'll learn</h3>
+                    <ul style="margin-left: 1.5rem; color: #666; line-height: 2;">
+                        <li>Master core concepts and fundamentals</li>
+                        <li>Real-world project experience</li>
+                        <li>Industry best practices and standards</li>
+                        <li>Problem-solving and critical thinking</li>
+                    </ul>
+                </div>
+                <div class="course-sidebar">
+                    <h3>Course Overview</h3>
+                    <div class="sidebar-item">
+                        <i class="fas fa-graduation-cap"></i>
+                        <div><strong>Skill Level</strong></div>
+                    </div>
+                    <p style="margin-left: 2rem; color: #666; font-size: 0.9rem;">Beginner to Intermediate</p>
+                    
+                    <div class="sidebar-item">
+                        <i class="fas fa-clock"></i>
+                        <div><strong>Duration</strong></div>
+                    </div>
+                    <p style="margin-left: 2rem; color: #666; font-size: 0.9rem;">8 weeks</p>
+                    
+                    <div class="sidebar-item">
+                        <i class="fas fa-book"></i>
+                        <div><strong>Lessons</strong></div>
+                    </div>
+                    <p style="margin-left: 2rem; color: #666; font-size: 0.9rem;">24 lessons</p>
+
+                    <div class="sidebar-item">
+                        <i class="fas fa-video"></i>
+                        <div><strong>Learning Mode</strong></div>
+                    </div>
+                    <p style="margin-left: 2rem; color: #666; font-size: 0.9rem;">Online</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="curriculum" class="tab-content">
+            <h3>Course Curriculum</h3>
+            <div style="margin-top: 1.5rem;">
+                <div class="curriculum-module">
+                    <div class="curriculum-module-header">
+                        <div class="curriculum-module-icon">1</div>
+                        <span>Module 1: Introduction to Concepts</span>
+                    </div>
+                    <div class="curriculum-module-lessons">5 lessons • 2 hours</div>
+                </div>
+                <div class="curriculum-module">
+                    <div class="curriculum-module-header">
+                        <div class="curriculum-module-icon">2</div>
+                        <span>Module 2: Practical Fundamentals</span>
+                    </div>
+                    <div class="curriculum-module-lessons">6 lessons • 2.5 hours</div>
+                </div>
+                <div class="curriculum-module">
+                    <div class="curriculum-module-header">
+                        <div class="curriculum-module-icon">3</div>
+                        <span>Module 3: Advanced Techniques</span>
+                    </div>
+                    <div class="curriculum-module-lessons">5 lessons • 2 hours</div>
+                </div>
+                <div class="curriculum-module">
+                    <div class="curriculum-module-header">
+                        <div class="curriculum-module-icon">4</div>
+                        <span>Module 4: Real-World Projects</span>
+                    </div>
+                    <div class="curriculum-module-lessons">8 lessons • 3.5 hours</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="instructor" class="tab-content">
+            <h3>Instructor</h3>
+            <div class="instructor-card" style="margin-top: 1.5rem; max-width: 400px;">
+                <div class="instructor-avatar">👨‍🏫</div>
+                <div class="instructor-name">Expert Instructor</div>
+                <div class="instructor-title">Lead Trainer & Course Designer</div>
+                <div class="instructor-bio">
+                    With over 10 years of industry experience, our instructor brings real-world knowledge and practical insights to every lesson. Passionate about helping learners succeed and achieve their goals.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aux Icons -->
+    <div class="aux-icons">
+        <a href="#" class="aux-btn red" title="Help"><i class="fas fa-question"></i></a>
+        <a href="#" class="aux-btn red" title="Chat"><i class="fas fa-comments"></i></a>
+        <a href="#" class="aux-btn teal" title="Accessibility"><i class="fas fa-universal-access"></i></a>
+    </div>
+
+    <script>
+        // Get course data from query parameter or localStorage
+        const queryParams = new URLSearchParams(window.location.search);
+        const courseId = queryParams.get('id');
+
+        const sampleCourses = [
+            { id: 0, title: 'JavaScript Fundamentals', description: 'Master JavaScript from scratch with hands-on projects. This comprehensive course covers all core JavaScript concepts, ES6 features, async programming, and DOM manipulation.', image: 'asset/modules/maxresdefault.jpg' },
+            { id: 1, title: 'HTML & CSS Masterclass', description: 'Build beautiful responsive websites with modern HTML5 & CSS3. Learn semantic HTML, flexbox, CSS Grid, animations, and best practices for responsive design.', image: 'asset/modules/maxresdefault (1).jpg' },
+            { id: 2, title: 'React - The Complete Guide', description: 'Build powerful React applications with hooks and Redux. Master component design, state management, and advanced patterns.', image: 'asset/modules/react-with-bootstrap.png' },
+            { id: 3, title: 'TypeScript Masterclass', description: 'Learn TypeScript and build type-safe applications. Understand interfaces, generics, decorators, and advanced type systems.', image: 'asset/modules/maxresdefault (2).jpg' },
+            { id: 4, title: 'Python for Data Science', description: 'Learn Python for analysis, visualization, and ML. Work with pandas, numpy, matplotlib, and scikit-learn.', image: 'asset/modules/Python_for_Data_Science.png' },
+            { id: 5, title: 'SQL for Data Science', description: 'Master SQL queries, joins, and optimizations. Learn window functions, CTEs, and performance tuning.', image: 'asset/modules/learning-sql-for-data-science-analytix-labs.webp' },
+            { id: 6, title: 'UI/UX Design Fundamentals', description: 'Master Figma, wireframing, and prototyping. Design user-centered interfaces with accessibility in mind.', image: 'asset/modules/UI-UX Design Fundamentals.png' },
+            { id: 7, title: 'iOS Development with Swift', description: 'Build iOS apps with Swift and SwiftUI. Create modern, responsive mobile applications.', image: 'asset/modules/Swift-Development-for-iOS.jpg' },
+            { id: 8, title: 'AWS Certified Cloud Practitioner', description: 'Prepare for the AWS Cloud Practitioner exam. Learn core AWS services, architecture, and best practices.', image: 'asset/modules/OIP.webp' }
+        ];
+
+        function loadModule() {
+            const id = courseId ? parseInt(courseId) : 0;
+            const course = sampleCourses[id] || sampleCourses[0];
+
+            document.getElementById('moduleTitle').textContent = course.title;
+            document.getElementById('moduleDescription').textContent = course.description;
+            document.getElementById('breadcrumbTitle').textContent = course.title;
+            document.getElementById('moduleImage').src = course.image;
+            document.getElementById('aboutText').textContent = course.description;
+        }
+
+        function switchTab(event, tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function startLearning() {
+            const courseId = new URLSearchParams(window.location.search).get('id') || 0;
+            window.location.href = `lesson.html?id=${courseId}`;
+        }
+
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+
+        // Close sidebar when clicking on a link
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        document.querySelector('.sidebar').classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadModule);
+    </script>
+</body>
+</html>

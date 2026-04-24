@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillBridge - Create Account</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* register page custom layout */
+        body.register-page {
+            display: flex;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .register-image {
+            flex: 1;
+            background: url('asset/HBoLdmbXwAAwNNn.svg') center/cover no-repeat;
+            position: relative;
+        }
+        .register-form-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-primary);
+            padding: 2rem;
+        }
+        .register-form {
+            width: 100%;
+            max-width: 400px;
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+        .register-form h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+            color: var(--text-primary);
+            text-align: center;
+        }
+        .register-form .form-group {
+            margin-bottom: 1.25rem;
+        }
+        .register-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        .register-form input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-sm);
+            background: #e3f2fd; /* light blue as in screenshot */
+            font-size: 1rem;
+            position: relative;
+        }
+        .register-form .password-wrapper {
+            position: relative;
+        }
+        .register-form .password-wrapper i.eye-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--gray-600);
+        }
+        .register-form .btn-register {
+            width: 100%;
+            padding: 0.75rem;
+            background: #00BFA5; /* teal button color from screenshot */
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .register-form .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,191,165,0.3);
+        }
+        .register-form .extra-link {
+            display: block;
+            margin-top: 1rem;
+            text-align: center;
+            color: #009688;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .register-form .extra-link:hover {
+            text-decoration: underline;
+        }
+        header.register-header {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+        }
+        header.register-header .logo-img {
+            height: 50px;
+        }
+        @media (max-width: 1024px) {
+            body.register-page {
+                flex-direction: column-reverse;
+            }
+            .register-image {
+                height: 35vh;
+                min-height: 250px;
+            }
+            .register-form-container {
+                padding: 1.5rem;
+            }
+            .register-form {
+                padding: 2rem;
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body.register-page {
+                flex-direction: column;
+            }
+            .register-image {
+                height: 30vh;
+                min-height: 200px;
+            }
+            .register-form-container {
+                padding: 1rem;
+            }
+            .register-form {
+                padding: 1.5rem;
+                max-width: 100%;
+            }
+            .register-form h2 {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+            header.register-header {
+                top: 15px;
+                left: 15px;
+            }
+            header.register-header .logo-img {
+                height: 40px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body.register-page {
+                overflow-y: auto;
+            }
+            .register-image {
+                height: 25vh;
+                min-height: 180px;
+            }
+            .register-form-container {
+                padding: 1rem;
+                min-height: auto;
+            }
+            .register-form {
+                padding: 1.25rem;
+            }
+            .register-form h2 {
+                font-size: 1.3rem;
+            }
+            .register-form .form-group {
+                margin-bottom: 0.9rem;
+            }
+            .register-form .btn-register {
+                padding: 0.65rem;
+                font-size: 0.95rem;
+            }
+            .aux-icons {
+                bottom: 10px;
+                right: 10px;
+            }
+            .aux-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+        }
+        .aux-icons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+        .aux-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+        }
+        .aux-btn.red { background: #C2185B; }
+        .aux-btn.teal { background: #009688; }
+        .aux-btn:hover { opacity: 0.85; }
+    </style>
+</head>
+<body class="register-page">
+<!-- include shared scripts for authentication -->
+<script src="js/utils.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/auth.js"></script>
+<script>
+    function togglePasswordVisibility() {
+        const pwd = document.getElementById('registerPassword');
+        const icon = document.querySelector('.eye-toggle');
+        if (pwd.type === 'password') {
+            pwd.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            pwd.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
+    <div class="register-image">
+        <header class="register-header">
+            <a href="index.html"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge" class="logo-img"></a>
+        </header>
+    </div>
+    <div class="register-form-container">
+        <form id="registerForm" class="register-form" onsubmit="return false;">
+            <h2>Join SkillBridge Academy</h2>
+            <div class="form-group">
+                <label for="registerName">Full Name</label>
+                <input type="text" id="registerName" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label for="registerEmail">Email Address</label>
+                <input type="email" id="registerEmail" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group password-wrapper">
+                <label for="registerPassword">Create Password</label>
+                <input type="password" id="registerPassword" placeholder="Create a strong password" required>
+                <i class="fas fa-eye eye-toggle" onclick="togglePasswordVisibility()"></i>
+            </div>
+            <button type="submit" class="btn-register">Create Account</button>
+            <a href="login.html" class="extra-link">Already have an account? Sign In</a>
+        </form>
+    </div>
+    <div class="aux-icons">
+        <a href="#" class="aux-btn red"><i class="fas fa-question"></i></a>
+        <a href="#" class="aux-btn red"><i class="fas fa-comments"></i></a>
+        <a href="#" class="aux-btn teal"><i class="fas fa-universal-access"></i></a>
+    </div>
+
+    <script>
+        function togglePasswordVisibility() {
+            const pwd = document.getElementById('registerPassword');
+            const icon = document.querySelector('.eye-toggle');
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                pwd.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', function(e){
+            e.preventDefault();
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+
+            if(!name || !email || !password){
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // basic email validation
+            if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+                alert('Please enter a valid email');
+                return;
+            }
+
+            // check password strength (at least 6 chars)
+            if(password.length < 6){
+                alert('Password must be at least 6 characters');
+                return;
+            }
+
+            // store user in localStorage (demo mode)
+            const user = { id: Date.now(), name: name, email: email, role: 'student', xp: 100, level: 1 };
+            localStorage.setItem('skillbridge_user', JSON.stringify(user));
+
+            // also store in users list for login lookup
+            let users = JSON.parse(localStorage.getItem('skillbridge_users') || '[]');
+            users = users.filter(u => u.email !== email);
+            users.push({ name, email, created: new Date().toISOString() });
+            localStorage.setItem('skillbridge_users', JSON.stringify(users));
+
+            // update Auth module if available
+            if(typeof Auth !== 'undefined'){
+                Auth.setUser(user);
+            }
+
+            // feedback
+            const btn = document.querySelector('.btn-register');
+            btn.textContent = 'Creating...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                alert('Account created successfully! Welcome to SkillBridge!');
+                // redirect to courses or dashboard
+                const next = new URLSearchParams(window.location.search).get('next') || 'courses.html';
+                window.location.href = next;
+            }, 1200);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+const App={init(){console.log('🚀 SkillBridge loaded');Auth.init()}};document.addEventListener('DOMContentLoaded',()=>App.init());

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groups - SkillBridge Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .groups-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* sidebar copied from other pages */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            padding: 0 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .sidebar-logo img {
+            height: 40px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin: 0.5rem 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 2rem;
+        }
+
+        .sidebar-nav a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid white;
+            padding-left: 1.25rem;
+        }
+
+        .sidebar-nav i {
+            width: 24px;
+            text-align: center;
+        }
+
+        /* main content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .groups-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #222;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-btn:hover {
+            color: #00897B;
+        }
+
+        .groups-header h1 {
+            font-size: 1.75rem;
+            color: #222;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #f0f0f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .notification-icon:hover {
+            background: #e0e0e0;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 1rem;
+            background: #f0f0f0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: #222;
+        }
+
+        /* groups list */
+        .groups-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .group-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .group-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .group-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 0.5rem;
+        }
+
+        .group-desc {
+            color: #666;
+            flex: 1;
+            margin-bottom: 1rem;
+        }
+
+        .group-members {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .team-chart {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 40px);
+            grid-template-rows: repeat(2, 40px);
+            gap: 8px;
+            justify-content: start;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #00897B;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        @media(max-width:768px) {
+            .avatar-grid {
+                grid-template-columns: repeat(3, 30px);
+                grid-template-rows: repeat(2, 30px);
+            }
+
+            .avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media(max-width:480px) {
+            .avatar-grid {
+                grid-template-columns: repeat(3, 25px);
+                grid-template-rows: repeat(2, 25px);
+            }
+
+            .avatar {
+                width: 25px;
+                height: 25px;
+                font-size: 0.7rem;
+            }
+        }
+
+        .group-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #00897B;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #005f50;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #00897B;
+            border: 2px solid #00897B;
+        }
+
+        .btn-outline:hover {
+            background: #00897B;
+            color: white;
+        }
+
+        /* meeting modal */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .modal h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .modal .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        @media(max-width:768px) {
+            .sidebar {
+                width: 280px;
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .groups-header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .language-selector {
+                display: none;
+            }
+
+            .profile-name {
+                display: none;
+            }
+
+            .groups-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width:480px) {
+            .mobile-menu-btn {
+                font-size: 1.25rem;
+            }
+
+            .groups-header h1 {
+                font-size: 1.25rem;
+            }
+
+            .notification-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo"><a href="index.html"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge"></a>
+        </div>
+        <nav class="sidebar-nav">
+            <li><a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+            <li><a href="explore-courses.html"><i class="fas fa-book"></i> Explore Courses</a></li>
+            <li><a href="class-sessions.html"><i class="fas fa-calendar-check"></i> Class Sessions</a></li>
+            <li><a href="submissions.html"><i class="fas fa-file-check"></i> Submissions</a></li>
+            <li><a href="groups.html" class="active"><i class="fas fa-users"></i> Groups</a></li>
+            <li><a href="community.html"><i class="fas fa-comments"></i> Community</a></li>
+            <li><a href="power-ai.html"><i class="fas fa-bolt"></i> Power AI</a></li>
+            <li><a href="certificates.html"><i class="fas fa-certificate"></i> Certificates</a></li>
+        </nav>
+    </aside>
+    <div class="main-content">
+        <div class="groups-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="sidebarToggle" onclick="toggleSidebar()"><i
+                        class="fas fa-bars"></i></button>
+                <h1>Groups</h1>
+            </div>
+            <div class="header-right">
+                <div class="language-selector"><img
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23012169' width='32' height='32'/%3E%3Cpath fill='%23FFF' d='M0 0h32v32H0z'/%3E%3C/svg%3E"
+                        alt="EN" style="width:20px;height:13px;border-radius:2px;">English<i
+                        class="fas fa-chevron-down"></i></div>
+                <div class="notification-icon"><i class="fas fa-bell"></i></div>
+                <div class="profile-section">
+                    <div class="profile-avatar">M</div><span class="profile-name">Mugisha</span><i
+                        class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+        <div class="groups-section" id="groupsSection"></div>
+    </div>
+    <!-- meeting scheduling modal remains -->
+    <div class="modal-backdrop" id="meetingModal">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            <h2>Schedule Meeting</h2>
+            <p id="modalGroupName"></p>
+            <input type="datetime-local" id="meetingTime" style="width:100%;padding:0.5rem;margin:1rem 0;" />
+            <button class="btn btn-primary" onclick="saveMeeting()">Save</button>
+        </div>
+    </div>
+
+    <div class="aux-icons"><a href="#" class="aux-btn red" title="Help"><i class="fas fa-question"></i></a><a href="#"
+            class="aux-btn red" title="Chat"><i class="fas fa-comments"></i></a><a href="#" class="aux-btn teal"
+            title="Accessibility"><i class="fas fa-universal-access"></i></a></div>
+    <script>
+        const groups = [
+            {
+                name: 'JavaScript Fundamentals Study Group',
+                desc: 'Master JavaScript from scratch with hands-on projects and peer support.',
+                members: 12,
+                icon: '📱',
+                certificate: 'JavaScript Fundamentals',
+                team: ['Alice Brown', 'Bob Smith', 'Carol Jones', 'David Lee', 'Eva Green', 'Frank Hill']
+            },
+            {
+                name: 'HTML & CSS Masterclass Group',
+                desc: 'Build beautiful responsive websites with modern HTML5 & CSS3 together.',
+                members: 14,
+                icon: '🎨',
+                certificate: 'HTML & CSS Masterclass',
+                team: ['George King', 'Helen Ford', 'Ian Clark', 'Jane Doe', 'Karl Otto', 'Laura Day']
+            },
+            {
+                name: 'React - Complete Guide Squad',
+                desc: 'Build powerful React applications with hooks and Redux in this group.',
+                members: 8,
+                icon: '⚛️',
+                certificate: 'React - The Complete Guide',
+                team: ['Mike Pine', 'Nina Hart', 'Oscar Bell', 'Pam Drew', 'Quinn Scott', 'Rita Lane']
+            },
+            {
+                name: 'Python for Data Science Group',
+                desc: 'Learn Python for analysis, visualization, and machine learning projects.',
+                members: 15,
+                icon: '🐍',
+                certificate: 'Python for Data Science',
+                team: ['Mia White', 'Nate Long', 'Olga Reed', 'Pete Moss', 'Quinn Hale', 'Rita Snow']
+            },
+            {
+                name: 'SQL for Data Science Crew',
+                desc: 'Master SQL queries, joins, and optimizations with real-world datasets.',
+                members: 10,
+                icon: '🗄️',
+                certificate: 'SQL for Data Science',
+                team: ['Sam Cole', 'Tina Ray', 'Uma West', 'Vince York', 'Wendy Fox', 'Xander Moon']
+            },
+            {
+                name: 'UI/UX Design Fundamentals Group',
+                desc: 'Master Figma, wireframing, and prototyping with design peers.',
+                members: 9,
+                icon: '🎭',
+                certificate: 'UI/UX Design Fundamentals',
+                team: ['Yara Rose', 'Zack Green', 'Amber Stone', 'Blake Knight', 'Casey Brooks', 'Drew Mason']
+            }
+        ];
+        let joined = JSON.parse(localStorage.getItem('joinedGroups') || '{}');
+        function renderGroups() {
+            const container = document.getElementById('groupsSection');
+            container.innerHTML = groups.map((g, i) => {
+                const isJoined = !!joined[g.name];
+                let teamHtml = '';
+                if (isJoined && g.team) {
+                    const avatars = g.team.map(name => {
+                        const initials = name.split(' ').map(w => w[0]).join('').toUpperCase();
+                        return `<div class="avatar">${initials}</div>`;
+                    }).join('');
+                    teamHtml = `<div class="team-chart"><div class="avatar-grid">${avatars}</div></div>`;
+                }
+                return `<div class="group-card" id="group${i}" onclick="joinGroup(${i})">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="font-size: 2.5rem; background: linear-gradient(135deg, #00897B 0%, #008B82 100%); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">${g.icon}</div>
+                        <div>
+                            <div class="group-title" style="margin-bottom: 0.25rem;">${g.name}</div>
+                            <div style="font-size: 0.8rem; color: #00897B; font-weight: 600;">📜 ${g.certificate}</div>
+                        </div>
+                    </div>
+                    <div class="group-desc">${g.desc}</div>
+                    <div class="group-members">${g.members} members studying together</div>
+                    ${teamHtml}
+                    <div class="group-actions">
+                        <button class="btn btn-outline" id="joinBtn${i}" onclick="event.stopPropagation();joinGroup(${i})">${isJoined ? 'Joined' : 'Join'}</button>
+                        <button class="btn btn-primary" onclick="event.stopPropagation();goToMeeting(${i})">Meet</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+        function joinGroup(i, next) {
+            // simply navigate to the join form; marking occurs on form submit
+            let url = 'join-form.html?group=' + i;
+            if (next) url += '&next=' + next;
+            window.location.href = url;
+        }
+        // meeting open stays
+        let currentIndex = null;
+        function openModal(i) {
+            currentIndex = i;
+            document.getElementById('modalGroupName').textContent = groups[i].name;
+            document.getElementById('meetingModal').style.display = 'flex';
+        }
+        function closeModal() { document.getElementById('meetingModal').style.display = 'none'; }
+        function saveMeeting() { const time = document.getElementById('meetingTime').value; if (time) { alert('Meeting for ' + groups[currentIndex].name + ' set at ' + time); closeModal(); } }
+        // handle join form submission
+        // no longer used in this file; join handled by join-form.html 
+        let postJoinAction = null;
+        function goToMeeting(i) {
+            const isJoined = !!joined[groups[i].name];
+            if (isJoined) {
+                const members = [
+                    { name: 'Alice', img: 'asset/modules/maxresdefault.jpg' },
+                    { name: 'Bob', img: 'asset/modules/react-with-bootstrap.png' },
+                    { name: 'Claire', img: 'asset/modules/maxresdefault (1).jpg' }
+                ];
+                localStorage.setItem('meetingMembers', JSON.stringify(members));
+                localStorage.setItem('meetingGroup', groups[i].name);
+                window.location.href = 'meeting.html';
+            } else {
+                joinGroup(i);
+            }
+        }
+        // removed join modal functions
+        function markActiveLink() { const links = document.querySelectorAll('.sidebar-nav a'); links.forEach(l => { if (l.getAttribute('href') === window.location.pathname.split('/').pop()) l.classList.add('active'); }); }
+        function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('active'); }
+        document.addEventListener('DOMContentLoaded', function () {
+            // load joined flags from storage
+            joined = JSON.parse(localStorage.getItem('joinedGroups') || '{}');
+            renderGroups();
+            markActiveLink();
+            const user = JSON.parse(localStorage.getItem('skillbridge_user') || 'null');
+            if (user && user.name) { document.querySelector('.profile-avatar').textContent = user.name.charAt(0).toUpperCase(); document.querySelector('.profile-name').textContent = user.name; }
+            const sidebarLinks = document.querySelectorAll('.sidebar-nav a'); sidebarLinks.forEach(link => { link.addEventListener('click', function () { if (window.innerWidth <= 768) { document.querySelector('.sidebar').classList.remove('active'); } }); });
+        });
+    </script>
+</body>
+
+</html>

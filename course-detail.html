@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details - SkillBridge | Master Your Skills</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #87CEEB;
+            --primary-dark: #5f9ea0;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-600: #6c757d;
+            --gray-800: #343a40;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-100);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--dark);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 10px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--primary-dark);
+        }
+
+        .nav-auth {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-outline {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 30px;
+            background: transparent;
+            color: var(--primary-dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .btn-primary {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            background: var(--primary);
+            color: var(--dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+            transform: translateX(-5px);
+        }
+
+        /* Course Detail Layout */
+        .course-detail-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .course-header {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        .course-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .course-category-badge {
+            background: rgba(135,206,235,0.1);
+            color: var(--primary-dark);
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .course-title {
+            font-size: 2.5rem;
+            margin: 1rem 0;
+            color: var(--dark);
+        }
+
+        .course-subtitle {
+            font-size: 1.1rem;
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+        }
+
+        .course-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--gray-100);
+            border-radius: 16px;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            color: var(--primary);
+        }
+
+        .meta-label {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+            margin-bottom: 0.3rem;
+        }
+
+        .meta-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .price-tag {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .price-tag.free {
+            color: var(--success);
+        }
+
+        .price-tag small {
+            font-size: 1rem;
+            font-weight: normal;
+            color: var(--gray-600);
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: var(--gray-600);
+            margin-left: 0.5rem;
+        }
+
+        /* Course Layout */
+        .course-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Main Content */
+        .course-main {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .course-description {
+            color: var(--gray-600);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        /* Learning Outcomes */
+        .outcomes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .outcome-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+        }
+
+        .outcome-item i {
+            color: var(--success);
+        }
+
+        /* Curriculum */
+        .curriculum-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .curriculum-header {
+            background: var(--gray-100);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .curriculum-header:hover {
+            background: var(--gray-200);
+        }
+
+        .curriculum-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .curriculum-header i {
+            transition: transform 0.3s;
+        }
+
+        .curriculum-header.active i {
+            transform: rotate(90deg);
+        }
+
+        .curriculum-content {
+            display: none;
+            padding: 1rem;
+        }
+
+        .curriculum-content.active {
+            display: block;
+        }
+
+        .lecture-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .lecture-item:last-child {
+            border-bottom: none;
+        }
+
+        .lecture-item i {
+            color: var(--primary);
+        }
+
+        .lecture-title {
+            flex: 1;
+        }
+
+        .lecture-duration {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .lecture-preview {
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Instructor */
+        .instructor-card {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--gray-100);
+            border-radius: 16px;
+        }
+
+        .instructor-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .instructor-info {
+            flex: 1;
+        }
+
+        .instructor-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .instructor-title {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .instructor-bio {
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+        }
+
+        .instructor-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .instructor-stat {
+            text-align: center;
+        }
+
+        .instructor-stat-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .instructor-stat-label {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+        }
+
+        /* Reviews */
+        .reviews-summary {
+            display: flex;
+            gap: 3rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--gray-100);
+            border-radius: 16px;
+        }
+
+        .average-rating {
+            text-align: center;
+        }
+
+        .average-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--warning);
+        }
+
+        .average-stars {
+            color: var(--warning);
+            margin: 0.5rem 0;
+        }
+
+        .total-reviews {
+            color: var(--gray-600);
+        }
+
+        .rating-bars {
+            flex: 1;
+        }
+
+        .rating-bar-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .rating-label {
+            width: 60px;
+        }
+
+        .rating-bar-container {
+            flex: 1;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .rating-bar-fill {
+            height: 100%;
+            background: var(--warning);
+            border-radius: 4px;
+        }
+
+        .rating-count {
+            width: 40px;
+            color: var(--gray-600);
+        }
+
+        .review-card {
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1.5rem 0;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+        }
+
+        .review-date {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .review-rating {
+            color: var(--warning);
+        }
+
+        .review-text {
+            color: var(--gray-600);
+            margin: 0.5rem 0;
+        }
+
+        .review-helpful {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .helpful-btn {
+            background: none;
+            border: none;
+            color: var(--gray-600);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .helpful-btn:hover {
+            color: var(--primary);
+        }
+
+        /* Sidebar */
+        .course-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-card h3 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-card h3 i {
+            color: var(--primary);
+        }
+
+        .enroll-section {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .enroll-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .money-back {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        .includes-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .includes-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            color: var(--gray-600);
+        }
+
+        .includes-list li i {
+            color: var(--primary);
+        }
+
+        .related-course-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-200);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .related-course-item:hover {
+            transform: translateX(5px);
+        }
+
+        .related-course-item:last-child {
+            border-bottom: none;
+        }
+
+        .related-course-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark);
+        }
+
+        .related-course-info {
+            flex: 1;
+        }
+
+        .related-course-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .related-course-meta {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        .related-course-price {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .related-course-price.free {
+            color: var(--success);
+        }
+
+        /* Toast Container */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background: white;
+            color: var(--dark);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+
+        .toast.success {
+            border-left-color: var(--success);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .footer-section a {
+            display: block;
+            color: var(--gray-200);
+            text-decoration: none;
+            margin: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #444;
+            color: var(--gray-200);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .course-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .outcomes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .course-meta-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .instructor-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .reviews-summary {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .course-header-top {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="plp-nav">
+        <a href="index.html" class="logo"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge" class="logo-img"></a>
+        
+        <div class="links">
+            <a href="index.html">Home</a>
+            <a href="courses.html">Courses</a>
+            <a href="jobs.html">Jobs</a>
+            <a href="mentors.html">Mentors</a>
+            <a href="study-groups.html">Study Groups</a>
+            <a href="challenges.html">Challenges</a>
+            <a href="marketplace.html">Marketplace</a>
+        </div>
+        <div class="buttons">
+            <a href="register.html">Sign Up</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+    </header>
+
+    <div class="course-detail-container" id="courseDetailContainer">
+        <!-- Content loaded dynamically -->
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>SkillBridge</h4>
+                <p>Master skills through expert-led courses.</p>
+            </div>
+            <div class="footer-section">
+                <h4>For Learners</h4>
+                <a href="courses.html">Browse Courses</a>
+                <a href="#">Learning Paths</a>
+                <a href="#">Certificates</a>
+            </div>
+            <div class="footer-section">
+                <h4>For Instructors</h4>
+                <a href="#">Teach on SkillBridge</a>
+                <a href="#">Instructor Community</a>
+                <a href="#">Resources</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p><i class="fas fa-envelope"></i> iranpaccy@gmail.com</p>
+                <p><i class="fas fa-phone"></i> +250 796 908 272</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 SkillBridge. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // ===== COURSE DATA =====
+        const allCourses = [
+            // Web Development Courses
+            {
+                id: 1,
+                title: 'JavaScript: The Complete Guide 2026',
+                category: 'Web Development',
+                level: 'Beginner',
+                duration: '25 hours',
+                lectures: 245,
+                students: 45231,
+                rating: 4.9,
+                reviews: 3245,
+                free: false,
+                price: 49.99,
+                originalPrice: 99.99,
+                description: 'Master JavaScript from basics to advanced concepts with 20+ real-world projects. This comprehensive course covers everything you need to become a professional JavaScript developer.',
+                longDescription: 'This course is designed to take you from absolute beginner to professional JavaScript developer. You\'ll learn modern JavaScript (ES6+), DOM manipulation, asynchronous programming, and how to build real-world applications. With 20+ projects and 200+ exercises, you\'ll get plenty of hands-on experience.',
+                outcomes: [
+                    'Master JavaScript fundamentals and advanced concepts',
+                    'Build 20+ real-world projects',
+                    'Understand asynchronous programming',
+                    'Work with APIs and fetch data',
+                    'Learn modern ES6+ features',
+                    'Debug and test your code effectively'
+                ],
+                curriculum: [
+                    {
+                        section: 'Introduction to JavaScript',
+                        lectures: 12,
+                        duration: '2.5 hours',
+                        items: [
+                            { title: 'What is JavaScript?', duration: '15 min', preview: true },
+                            { title: 'Setting Up Your Development Environment', duration: '20 min', preview: true },
+                            { title: 'Your First JavaScript Program', duration: '25 min', preview: false },
+                            { title: 'JavaScript in the Browser Console', duration: '18 min', preview: false }
+                        ]
+                    },
+                    {
+                        section: 'JavaScript Fundamentals',
+                        lectures: 18,
+                        duration: '4 hours',
+                        items: [
+                            { title: 'Variables and Data Types', duration: '30 min', preview: true },
+                            { title: 'Operators and Expressions', duration: '25 min', preview: false },
+                            { title: 'Control Flow (if/else, switch)', duration: '35 min', preview: false },
+                            { title: 'Loops (for, while, do-while)', duration: '28 min', preview: false }
+                        ]
+                    },
+                    {
+                        section: 'Functions and Scope',
+                        lectures: 15,
+                        duration: '3.5 hours',
+                        items: [
+                            { title: 'Function Declaration and Expression', duration: '22 min', preview: true },
+                            { title: 'Arrow Functions', duration: '18 min', preview: false },
+                            { title: 'Scope and Closures', duration: '32 min', preview: false },
+                            { title: 'Higher-Order Functions', duration: '28 min', preview: false }
+                        ]
+                    }
+                ],
+                instructor: {
+                    name: 'John Smith',
+                    title: 'Senior Developer at Google',
+                    avatar: 'JS',
+                    bio: 'John has over 10 years of experience in web development and has worked at Google for the past 5 years. He loves teaching and has helped over 100,000 students learn JavaScript.',
+                    students: 150000,
+                    courses: 12,
+                    rating: 4.9
+                },
+                requirements: [
+                    'No prior programming experience needed',
+                    'A computer with internet access',
+                    'Passion to learn'
+                ],
+                includes: [
+                    '25 hours on-demand video',
+                    '200+ coding exercises',
+                    '20 downloadable resources',
+                    'Certificate of completion',
+                    'Access on mobile and TV',
+                    'Full lifetime access'
+                ],
+                language: 'English',
+                subtitles: ['English', 'Spanish', 'French', 'German'],
+                certificate: true,
+                updated: 'January 2026'
+            },
+            {
+                id: 2,
+                title: 'React - The Complete Course',
+                category: 'Web Development',
+                level: 'Intermediate',
+                duration: '32 hours',
+                lectures: 312,
+                students: 38900,
+                rating: 4.8,
+                reviews: 2890,
+                free: false,
+                price: 59.99,
+                originalPrice: 119.99,
+                description: 'Build powerful React applications with hooks, context, and Redux. Learn by building real-world projects.',
+                longDescription: 'This course covers everything you need to become a professional React developer. From fundamentals to advanced patterns, you\'ll learn how to build scalable, performant React applications.',
+                outcomes: [
+                    'Build React applications from scratch',
+                    'Master hooks and context API',
+                    'Implement state management with Redux',
+                    'Create reusable components',
+                    'Optimize performance',
+                    'Deploy React applications'
+                ],
+                curriculum: [
+                    {
+                        section: 'React Fundamentals',
+                        lectures: 15,
+                        duration: '3 hours',
+                        items: [
+                            { title: 'What is React?', duration: '20 min', preview: true },
+                            { title: 'Setting Up React', duration: '25 min', preview: true },
+                            { title: 'Components and Props', duration: '35 min', preview: false },
+                            { title: 'State and Lifecycle', duration: '40 min', preview: false }
+                        ]
+                    }
+                ],
+                instructor: {
+                    name: 'Sarah Johnson',
+                    title: 'Lead Frontend Engineer at Meta',
+                    avatar: 'SJ',
+                    bio: 'Sarah leads frontend development at Meta and has been working with React since its early days. She\'s passionate about teaching and building great user experiences.',
+                    students: 85000,
+                    courses: 8,
+                    rating: 4.9
+                },
+                requirements: [
+                    'Basic JavaScript knowledge',
+                    'Understanding of HTML/CSS'
+                ],
+                includes: [
+                    '32 hours on-demand video',
+                    '150+ coding exercises',
+                    '5 full projects',
+                    'Certificate of completion',
+                    'Access on mobile and TV',
+                    'Full lifetime access'
+                ],
+                language: 'English',
+                subtitles: ['English', 'Spanish', 'French'],
+                certificate: true,
+                updated: 'February 2026'
+            },
+            {
+                id: 3,
+                title: 'Python for Data Science',
+                category: 'Data Science',
+                level: 'Beginner',
+                duration: '20 hours',
+                lectures: 180,
+                students: 51200,
+                rating: 4.9,
+                reviews: 4120,
+                free: true,
+                price: 0,
+                description: 'Learn Python for data analysis and visualization. Master pandas, numpy, and matplotlib.',
+                longDescription: 'This comprehensive course introduces you to Python for data science. You\'ll learn essential libraries and techniques for data analysis, visualization, and manipulation.',
+                outcomes: [
+                    'Master Python fundamentals',
+                    'Work with pandas for data analysis',
+                    'Create visualizations with matplotlib',
+                    'Perform numerical computations with numpy',
+                    'Clean and prepare real-world data',
+                    'Build data analysis projects'
+                ],
+                curriculum: [
+                    {
+                        section: 'Python Basics',
+                        lectures: 10,
+                        duration: '2 hours',
+                        items: [
+                            { title: 'Python Installation', duration: '15 min', preview: true },
+                            { title: 'Variables and Data Types', duration: '25 min', preview: true },
+                            { title: 'Control Flow', duration: '30 min', preview: false },
+                            { title: 'Functions', duration: '28 min', preview: false }
+                        ]
+                    }
+                ],
+                instructor: {
+                    name: 'Michael Chen',
+                    title: 'Data Scientist at Microsoft',
+                    avatar: 'MC',
+                    bio: 'Michael has been working in data science for 8 years and currently leads a team at Microsoft. He loves making complex topics accessible to beginners.',
+                    students: 120000,
+                    courses: 15,
+                    rating: 4.8
+                },
+                requirements: [
+                    'Basic computer skills',
+                    'No programming experience needed'
+                ],
+                includes: [
+                    '20 hours on-demand video',
+                    '100+ exercises',
+                    '10 datasets',
+                    'Certificate of completion',
+                    'Access on mobile and TV',
+                    'Full lifetime access'
+                ],
+                language: 'English',
+                subtitles: ['English', 'Spanish', 'Chinese'],
+                certificate: true,
+                updated: 'March 2026'
+            }
+        ];
+
+        let currentCourse = null;
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseId = urlParams.get('id');
+            
+            if (courseId) {
+                loadCourseDetails(courseId);
+            } else {
+                showToast('Course not found', 'error');
+                setTimeout(() => {
+                    window.location.href = 'courses.html';
+                }, 2000);
+            }
+        });
+
+        // ===== LOAD COURSE DETAILS =====
+        function loadCourseDetails(courseId) {
+            currentCourse = allCourses.find(c => c.id == courseId);
+            
+            if (currentCourse) {
+                displayCourseDetails();
+            } else {
+                document.getElementById('courseDetailContainer').innerHTML = '<p style="text-align: center; padding: 3rem;">Course not found</p>';
+            }
+        }
+
+        // ===== DISPLAY COURSE DETAILS =====
+        function displayCourseDetails() {
+            const course = currentCourse;
+            
+            document.getElementById('courseDetailContainer').innerHTML = `
+                <!-- Back Link -->
+                <a href="courses.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to Courses
+                </a>
+
+                <!-- Course Header -->
+                <div class="course-header">
+                    <div class="course-header-top">
+                        <span class="course-category-badge">${course.category}</span>
+                        <span class="course-category-badge" style="background: ${course.free ? 'rgba(46,204,113,0.1)' : 'rgba(243,156,18,0.1)'}; color: ${course.free ? '#27ae60' : '#f39c12'};">
+                            ${course.free ? 'FREE' : 'Premium'}
+                        </span>
+                    </div>
+                    
+                    <h1 class="course-title">${course.title}</h1>
+                    <p class="course-subtitle">${course.description}</p>
+                    
+                    <div class="course-meta-grid">
+                        <div class="meta-item">
+                            <div class="meta-icon"><i class="far fa-clock"></i></div>
+                            <div class="meta-label">Duration</div>
+                            <div class="meta-value">${course.duration}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-icon"><i class="fas fa-signal"></i></div>
+                            <div class="meta-label">Level</div>
+                            <div class="meta-value">${course.level}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-icon"><i class="fas fa-star" style="color: #f39c12;"></i></div>
+                            <div class="meta-label">Rating</div>
+                            <div class="meta-value">${course.rating} (${course.reviews} reviews)</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-icon"><i class="fas fa-users"></i></div>
+                            <div class="meta-label">Students</div>
+                            <div class="meta-value">${course.students.toLocaleString()}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span class="price-tag ${course.free ? 'free' : ''}">
+                                ${course.free ? 'FREE' : '$' + course.price}
+                                ${!course.free ? `<small class="original-price">$${course.originalPrice}</small>` : ''}
+                            </span>
+                            <span style="color: var(--gray-600); margin-left: 1rem;">Updated: ${course.updated}</span>
+                        </div>
+                        <button class="btn-primary btn-large" onclick="enrollCourse()">
+                            ${course.free ? 'Enroll Now - Free' : 'Enroll Now'}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Course Layout -->
+                <div class="course-layout">
+                    <!-- Main Content -->
+                    <div class="course-main">
+                        <!-- What You'll Learn -->
+                        <h3 class="section-title">
+                            <i class="fas fa-graduation-cap"></i> What You'll Learn
+                        </h3>
+                        <div class="outcomes-grid">
+                            ${course.outcomes.map(outcome => `
+                                <div class="outcome-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>${outcome}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Course Description -->
+                        <h3 class="section-title">
+                            <i class="fas fa-file-alt"></i> About This Course
+                        </h3>
+                        <p class="course-description">${course.longDescription}</p>
+
+                        <!-- Requirements -->
+                        <h3 class="section-title">
+                            <i class="fas fa-clipboard-list"></i> Requirements
+                        </h3>
+                        <ul class="includes-list" style="margin-bottom: 2rem;">
+                            ${course.requirements.map(req => `
+                                <li>
+                                    <i class="fas fa-check-circle"></i>
+                                    ${req}
+                                </li>
+                            `).join('')}
+                        </ul>
+
+                        <!-- Curriculum -->
+                        <h3 class="section-title">
+                            <i class="fas fa-book-open"></i> Course Curriculum
+                        </h3>
+                        <div id="curriculum">
+                            ${course.curriculum.map((section, index) => `
+                                <div class="curriculum-section">
+                                    <div class="curriculum-header" onclick="toggleSection(${index})">
+                                        <h3>
+                                            <i class="fas fa-chevron-right"></i>
+                                            ${section.section}
+                                        </h3>
+                                        <span>${section.lectures} lectures • ${section.duration}</span>
+                                    </div>
+                                    <div class="curriculum-content" id="section-${index}">
+                                        ${section.items.map(item => `
+                                            <div class="lecture-item">
+                                                <i class="fas fa-play-circle"></i>
+                                                <span class="lecture-title">${item.title}</span>
+                                                <span class="lecture-duration">${item.duration}</span>
+                                                ${item.preview ? '<span class="lecture-preview" onclick="previewLecture()">Preview</span>' : ''}
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Instructor -->
+                        <h3 class="section-title">
+                            <i class="fas fa-chalkboard-teacher"></i> Your Instructor
+                        </h3>
+                        <div class="instructor-card">
+                            <div class="instructor-avatar">${course.instructor.avatar}</div>
+                            <div class="instructor-info">
+                                <div class="instructor-name">${course.instructor.name}</div>
+                                <div class="instructor-title">${course.instructor.title}</div>
+                                <p class="instructor-bio">${course.instructor.bio}</p>
+                                <div class="instructor-stats">
+                                    <div class="instructor-stat">
+                                        <div class="instructor-stat-value">${course.instructor.students.toLocaleString()}</div>
+                                        <div class="instructor-stat-label">Students</div>
+                                    </div>
+                                    <div class="instructor-stat">
+                                        <div class="instructor-stat-value">${course.instructor.courses}</div>
+                                        <div class="instructor-stat-label">Courses</div>
+                                    </div>
+                                    <div class="instructor-stat">
+                                        <div class="instructor-stat-value">${course.instructor.rating}</div>
+                                        <div class="instructor-stat-label">Rating</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reviews -->
+                        <h3 class="section-title">
+                            <i class="fas fa-star"></i> Student Reviews
+                        </h3>
+                        
+                        <div class="reviews-summary">
+                            <div class="average-rating">
+                                <div class="average-number">${course.rating}</div>
+                                <div class="average-stars">
+                                    ${generateStars(course.rating)}
+                                </div>
+                                <div class="total-reviews">${course.reviews} reviews</div>
+                            </div>
+                            <div class="rating-bars">
+                                ${[5,4,3,2,1].map(star => {
+                                    const percentage = star === 5 ? 70 : star === 4 ? 20 : star === 3 ? 7 : star === 2 ? 2 : 1;
+                                    return `
+                                        <div class="rating-bar-item">
+                                            <span class="rating-label">${star} star</span>
+                                            <div class="rating-bar-container">
+                                                <div class="rating-bar-fill" style="width: ${percentage}%"></div>
+                                            </div>
+                                            <span class="rating-count">${percentage}%</span>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <div class="reviewer-avatar">JD</div>
+                                    <span class="reviewer-name">John Doe</span>
+                                </div>
+                                <div class="review-date">2 weeks ago</div>
+                            </div>
+                            <div class="review-rating">
+                                ${generateStars(5)}
+                            </div>
+                            <p class="review-text">Excellent course! The instructor explains complex concepts clearly and the projects are very practical. Highly recommended for anyone wanting to learn JavaScript.</p>
+                            <div class="review-helpful">
+                                <button class="helpful-btn" onclick="markHelpful(this)">
+                                    <i class="far fa-thumbs-up"></i> Helpful (45)
+                                </button>
+                                <button class="helpful-btn" onclick="markHelpful(this)">
+                                    <i class="far fa-thumbs-down"></i> Not Helpful (3)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="course-sidebar">
+                        <div class="sidebar-card">
+                            <div class="enroll-section">
+                                <span class="price-tag ${course.free ? 'free' : ''}" style="font-size: 2rem;">
+                                    ${course.free ? 'FREE' : '$' + course.price}
+                                </span>
+                                ${!course.free ? `
+                                    <div style="margin: 0.5rem 0;">
+                                        <span class="original-price">$${course.originalPrice}</span>
+                                        <span style="color: var(--success); margin-left: 0.5rem;">Save 50%</span>
+                                    </div>
+                                ` : ''}
+                                <button class="btn-primary enroll-btn" onclick="enrollCourse()">
+                                    ${course.free ? 'Enroll Now - Free' : 'Enroll Now'}
+                                </button>
+                                <p class="money-back">30-Day Money-Back Guarantee</p>
+                            </div>
+
+                            <h3><i class="fas fa-check-circle"></i> This Course Includes:</h3>
+                            <ul class="includes-list">
+                                ${course.includes.map(item => `
+                                    <li>
+                                        <i class="fas fa-check-circle"></i>
+                                        ${item}
+                                    </li>
+                                `).join('')}
+                                <li>
+                                    <i class="fas fa-language"></i>
+                                    Language: ${course.language}
+                                </li>
+                                <li>
+                                    <i class="fas fa-closed-captioning"></i>
+                                    Subtitles: ${course.subtitles.join(', ')}
+                                </li>
+                                ${course.certificate ? `
+                                    <li>
+                                        <i class="fas fa-certificate"></i>
+                                        Certificate of Completion
+                                    </li>
+                                ` : ''}
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h3><i class="fas fa-play-circle"></i> Related Courses</h3>
+                            ${allCourses.filter(c => c.id !== course.id).slice(0, 3).map(related => `
+                                <div class="related-course-item" onclick="viewCourse(${related.id})">
+                                    <div class="related-course-image">
+                                        <i class="fas fa-code"></i>
+                                    </div>
+                                    <div class="related-course-info">
+                                        <div class="related-course-title">${related.title}</div>
+                                        <div class="related-course-meta">${related.level} • ${related.duration}</div>
+                                    </div>
+                                    <div class="related-course-price ${related.free ? 'free' : ''}">
+                                        ${related.free ? 'FREE' : '$' + related.price}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ===== UTILITY FUNCTIONS =====
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<i class="fas fa-star"></i>';
+                } else if (i - 0.5 <= rating) {
+                    stars += '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    stars += '<i class="far fa-star"></i>';
+                }
+            }
+            return stars;
+        }
+
+        function toggleSection(index) {
+            const content = document.getElementById(`section-${index}`);
+            const header = content.previousElementSibling;
+            const icon = header.querySelector('i');
+            
+            content.classList.toggle('active');
+            icon.style.transform = content.classList.contains('active') ? 'rotate(90deg)' : 'rotate(0)';
+        }
+
+        function previewLecture() {
+            showToast('Preview lecture - sign up to access full course!', 'info');
+        }
+
+        function markHelpful(btn) {
+            btn.innerHTML = btn.innerHTML.replace('Helpful', 'Helpful ✓');
+            btn.disabled = true;
+            showToast('Thank you for your feedback!', 'success');
+        }
+
+        function enrollCourse() {
+            if (!isAuthenticated()) {
+                showToast('Please log in to enroll in this course', 'error');
+                return;
+            }
+            
+            showToast(`Successfully enrolled in ${currentCourse.title}!`, 'success');
+        }
+
+        function viewCourse(courseId) {
+            window.location.href = `course-detail.html?id=${courseId}`;
+        }
+
+        function isAuthenticated() {
+            // Simple auth check - replace with your actual auth logic
+            return localStorage.getItem('skillbridge_user') !== null;
+        }
+
+        // ===== TOAST FUNCTION =====
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            toast.className = `toast ${type}`;
+            
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            if (type === 'error') icon = 'fa-exclamation-circle';
+            
+            toast.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
