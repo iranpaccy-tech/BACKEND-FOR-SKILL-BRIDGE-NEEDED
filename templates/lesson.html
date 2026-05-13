@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson - SkillBridge Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .lesson-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            padding: 0 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .sidebar-logo img {
+            height: 40px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin: 0.5rem 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 2rem;
+        }
+
+        .sidebar-nav a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid white;
+            padding-left: 1.25rem;
+        }
+
+        .sidebar-nav i {
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-footer .course-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .sidebar-footer .course-card h4 {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .sidebar-footer .qr-code {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        /* === MAIN CONTENT === */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            display: flex;
+        }
+
+        .lesson-main {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        /* === BREADCRUMB === */
+        .breadcrumb {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .breadcrumb a {
+            color: #0087AF;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-separator {
+            color: #999;
+            margin: 0 0.5rem;
+        }
+
+        .breadcrumb-current {
+            color: #666;
+        }
+
+        /* === MOBILE HAMBURGER MENU === */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #222;
+            padding: 0.5rem;
+            margin-right: 1rem;
+        }
+
+        .mobile-menu-btn:hover {
+            color: #00897B;
+        }
+
+        /* === TABS === */
+        .tabs-wrapper {
+            background: white;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 2rem;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            color: #222;
+        }
+
+        .tab.active {
+            color: #00897B;
+            border-bottom: 3px solid #00897B;
+        }
+
+        .download-btn {
+            padding: 0.5rem 1.5rem;
+            background: white;
+            border: 2px solid #00897B;
+            color: #00897B;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .download-btn:hover {
+            background: #f0f0f0;
+        }
+
+        /* === VIDEO PLAYER === */
+        .video-container {
+            background: #E0F7F6;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+            margin-bottom: 2rem;
+            font-size: 4rem;
+        }
+
+        .play-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 137, 123, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00897B;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-icon:hover {
+            background: rgba(0, 137, 123, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* === LESSON CONTENT === */
+        .lesson-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #C73866;
+            margin-bottom: 1.5rem;
+        }
+
+        .lesson-description {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .lesson-section {
+            margin-bottom: 2rem;
+        }
+
+        .lesson-section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #C73866;
+            margin-bottom: 1rem;
+        }
+
+        .lesson-section ul {
+            margin-left: 1.5rem;
+            color: #666;
+            line-height: 2;
+        }
+
+        .lesson-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* === RIGHT SIDEBAR === */
+        .lesson-sidebar {
+            width: 320px;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+            margin-right: 2rem;
+        }
+
+        .progress-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .progress-percentage {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #666;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00897B 0%, #008B82 100%);
+            width: 0%;
+        }
+
+        .week-section {
+            margin-bottom: 2rem;
+        }
+
+        .week-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            color: #C73866;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .week-header i {
+            color: #CCC;
+            cursor: pointer;
+        }
+
+        .lesson-item {
+            padding: 0.75rem 1rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .lesson-item:hover {
+            background: #f0f0f0;
+        }
+
+        .lesson-item.active {
+            background: rgba(0, 137, 123, 0.1);
+            color: #00897B;
+            font-weight: 600;
+        }
+
+        .lesson-item i {
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* === AUX ICONS === */
+        .aux-icons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .aux-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .aux-btn.red { background: #C2185B; }
+        .aux-btn.teal { background: #00897B; }
+        .aux-btn:hover { opacity: 0.85; transform: scale(1.05); }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1400px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .lesson-sidebar {
+                width: 100%;
+                margin-right: 0;
+                margin-top: 2rem;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .lesson-main {
+                padding: 1.5rem;
+            }
+            .video-container {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+                padding: 1rem 0;
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                height: 100vh;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar-logo {
+                padding: 0 1.5rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .sidebar-nav a {
+                padding: 0.75rem 1.5rem;
+                justify-content: flex-start;
+            }
+
+            .sidebar-nav span {
+                display: inline;
+            }
+
+            .main-content {
+                margin-left: 0;
+                flex-direction: column;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .lesson-main {
+                padding: 1rem;
+            }
+
+            .breadcrumb {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .tabs-wrapper {
+                padding: 0 1rem;
+                margin-bottom: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .download-btn {
+                width: 100%;
+            }
+
+            .video-container {
+                height: 250px;
+                margin-bottom: 1.5rem;
+            }
+
+            .lesson-title {
+                font-size: 1.3rem;
+            }
+
+            .lesson-sidebar {
+                width: 100%;
+                margin-right: 0;
+                margin-top: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 280px;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                font-size: 1.25rem;
+            }
+
+            .lesson-main {
+                padding: 0.75rem;
+            }
+
+            .breadcrumb {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+                gap: 0.25rem;
+            }
+
+            .tabs-wrapper {
+                padding: 0 0.5rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+            }
+
+            .tab {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+
+            .download-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .video-container {
+                height: 200px;
+                margin-bottom: 1rem;
+            }
+
+            .lesson-title {
+                font-size: 1.1rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .lesson-description {
+                font-size: 0.9rem;
+            }
+
+            .lesson-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .lesson-section ul {
+                margin-left: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .progress-percentage {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <a href="index.html"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge"></a>
+        </div>
+
+        <nav class="sidebar-nav">
+            <li><a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+            <li><a href="explore-courses.html"><i class="fas fa-book"></i> Explore Courses</a></li>
+            <li><a href="#"><i class="fas fa-calendar-check"></i> Class Sessions</a></li>
+            <li><a href="#"><i class="fas fa-file-check"></i> Submissions</a></li>
+            <li><a href="study-groups.html"><i class="fas fa-users"></i> Groups</a></li>
+            <li><a href="community.html"><i class="fas fa-comments"></i> Community</a></li>
+            <li><a href="#"><i class="fas fa-bolt"></i> Power AI</a></li>
+            <li><a href="#"><i class="fas fa-certificate"></i> Certificates</a></li>
+            <li><a href="#" style="margin-top: 2rem; color: rgba(255,255,255,0.6);"><i class="fas fa-chevron-left"></i> Collapse</a></li>
+        </nav>
+
+        <!-- <div class="sidebar-footer">
+            <div class="course-card">
+                <h4>SkillBridge Development</h4>
+                <p>Join our support channel for assistance and collab</p>
+                <div class="qr-code"><i class="fas fa-qrcode"></i></div>
+            </div>
+        </div> -->
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="lesson-main">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <button class="mobile-menu-btn" id="sidebarToggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="dashboard.html">Dashboard</a>
+                <span class="breadcrumb-separator">•</span>
+                <a href="#" onclick="history.back()" id="courseBreadcrumb">Load Course...</a>
+                <span class="breadcrumb-separator">•</span>
+                <span class="breadcrumb-current" id="lessonBreadcrumb">Load Lesson...</span>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs-wrapper">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab(event, 'notes')">Notes</button>
+                    <button class="tab" onclick="switchTab(event, 'code')">Code</button>
+                    <button class="tab" onclick="switchTab(event, 'ai')">AI</button>
+                </div>
+                <button class="download-btn">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+
+            <!-- Video Container -->
+            <div class="video-container">
+                <div class="play-icon">▶</div>
+            </div>
+
+            <!-- Lesson Content -->
+            <div id="notesContent">
+                <h2 class="lesson-title" id="lessonTitle">Loading lesson...</h2>
+                <p class="lesson-description" id="lessonIntro">Loading content...</p>
+
+                <div class="lesson-section">
+                    <h3>Key Topics:</h3>
+                    <ul id="keyTopics">
+                        <li>Loading...</li>
+                    </ul>
+                </div>
+
+                <div class="lesson-section">
+                    <h3>Learning Objectives:</h3>
+                    <ul id="objectives">
+                        <li>Loading...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="codeContent" class="tab-content" style="display: none;">
+                <p style="color: #666; font-size: 1.1rem;">Code examples will be displayed here for this lesson.</p>
+            </div>
+
+            <div id="aiContent" class="tab-content" style="display: none;">
+                <p style="color: #666; font-size: 1.1rem;">AI-assisted learning resources for this topic coming soon.</p>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="lesson-sidebar">
+            <div class="progress-section">
+                <div class="progress-percentage" id="progressPercentage">0%</div>
+                <div class="progress-text">Completed</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <div class="week-section">
+                <div class="week-header">
+                    <span>Week One</span>
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div id="lessonsContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aux Icons -->
+    <div class="aux-icons">
+        <a href="#" class="aux-btn red" title="Help"><i class="fas fa-question"></i></a>
+        <a href="#" class="aux-btn red" title="Chat"><i class="fas fa-comments"></i></a>
+        <a href="#" class="aux-btn teal" title="Accessibility"><i class="fas fa-universal-access"></i></a>
+    </div>
+
+    <script>
+        // Lesson content for each module with detailed topic content
+        const lessonContent = {
+            0: { // JavaScript Fundamentals
+                title: 'Variables and Data Types',
+                intro: 'Welcome to JavaScript Fundamentals. In this lesson, we\'ll explore variables and data types, which form the foundation of all JavaScript programming. Understanding how to declare, initialize, and work with different data types is crucial for writing effective code.',
+                topics: [
+                    'Variable declaration (var, let, const)',
+                    'Data types: string, number, boolean, null, undefined',
+                    'Type coercion and conversion',
+                    'Template literals and string interpolation',
+                    'Dynamic typing in JavaScript'
+                ],
+                objectives: [
+                    'Understand the differences between var, let, and const',
+                    'Master JavaScript\'s primitive data types',
+                    'Learn about type coercion and how it works',
+                    'Practice variable declaration and manipulation',
+                    'Write clean, readable code with proper naming conventions'
+                ],
+                topicDetails: {
+                    'Introduction': {
+                        title: 'Introduction to JavaScript Variables',
+                        content: 'Variables are containers for storing data. JavaScript provides three keywords to declare variables: var, let, and const. Each has different characteristics regarding scope, hoisting, and reassignment.',
+                        keyPoints: [
+                            'var is function-scoped (older syntax)',
+                            'let is block-scoped (modern standard)',
+                            'const is block-scoped and cannot be reassigned',
+                            'Use const by default, let when needed, avoid var'
+                        ]
+                    },
+                    'Variable declaration (var, let, const)': {
+                        title: 'Understanding Variable Declaration Keywords',
+                        content: 'Each keyword has distinct characteristics that affect how variables behave in your code. Understanding these differences is crucial for writing bug-free JavaScript.',
+                        keyPoints: [
+                            'var: Function-scoped, can be redeclared, hoisted with undefined',
+                            'let: Block-scoped, cannot be redeclared in same scope, temporal dead zone',
+                            'const: Block-scoped, cannot be reassigned, must be initialized',
+                            'Scope determines where a variable can be accessed'
+                        ]
+                    },
+                    'Data types: string, number, boolean, null, undefined': {
+                        title: 'JavaScript Primitive Data Types',
+                        content: 'JavaScript has 7 primitive data types plus Object. Primitive types are immutable and are passed by value. Understanding each type is essential for working with data.',
+                        keyPoints: [
+                            'String: Text data in quotes ("hello" or \'hello\')',
+                            'Number: Integer and floating point numbers (42, 3.14)',
+                            'Boolean: true or false values',
+                            'null: Intentional absence of value',
+                            'undefined: Variable declared but not assigned',
+                            'Symbol and BigInt are also primitives'
+                        ]
+                    },
+                    'Type coercion and conversion': {
+                        title: 'Type Coercion vs Conversion',
+                        content: 'Type coercion is automatic conversion, while type conversion is explicit. Both are important to understand to avoid unexpected behavior.',
+                        keyPoints: [
+                            'Coercion happens automatically when comparing different types',
+                            'Conversion is intentional: String(), Number(), Boolean()',
+                            '== causes type coercion, === does not',
+                            'Falsy values: 0, "", null, undefined, false, NaN',
+                            'Understanding truthy/falsy is key to conditionals'
+                        ]
+                    },
+                    'Template literals and string interpolation': {
+                        title: 'Modern String Handling with Template Literals',
+                        content: 'Template literals (backticks) provide a modern way to work with strings, including interpolation and multi-line support.',
+                        keyPoints: [
+                            'Use backticks (`) instead of quotes for template literals',
+                            'Interpolate variables with ${variable}',
+                            'Support multi-line strings without escape characters',
+                            'Tagged templates for advanced processing',
+                            'More readable and flexible than string concatenation'
+                        ]
+                    },
+                    'Dynamic typing in JavaScript': {
+                        title: 'Dynamic Typing and Type Flexibility',
+                        content: 'JavaScript is dynamically typed, meaning variable types can change at runtime. This provides flexibility but requires careful coding.',
+                        keyPoints: [
+                            'Variables can hold any data type',
+                            'Type can change during execution: let x = 5; x = "hello"',
+                            'typeof operator reveals current type',
+                            'Use TypeScript for static typing if needed',
+                            'Be careful with implicit conversions'
+                        ]
+                    }
+                }
+            },
+            1: { // HTML & CSS Masterclass
+                title: 'Semantic HTML & Accessibility',
+                intro: 'Create accessible and semantically correct HTML structures. This lesson covers best practices for writing HTML that improves SEO, accessibility, and maintainability. Learn how to structure documents properly and use semantic elements effectively.',
+                topics: [
+                    'Semantic HTML5 elements',
+                    'ARIA (Accessible Rich Internet Applications)',
+                    'Document structure and hierarchy',
+                    'Accessibility standards (WCAG)',
+                    'Screen reader compatibility'
+                ],
+                objectives: [
+                    'Write semantic HTML using proper elements',
+                    'Implement ARIA attributes for accessibility',
+                    'Create accessible navigation structures',
+                    'Ensure keyboard navigation support',
+                    'Validate HTML for accessibility compliance'
+                ],
+                topicDetails: {
+                    'Introduction': {
+                        title: 'Introduction to Semantic HTML & Accessibility',
+                        content: 'Semantic HTML and accessibility are fundamental to modern web development. They ensure content is available to everyone, regardless of ability or device.',
+                        keyPoints: [
+                            'Semantic HTML describes content meaning',
+                            'Accessibility benefits everyone, not just disabled users',
+                            'WCAG guidelines provide standards for compliance',
+                            'Good semantic markup improves SEO'
+                        ]
+                    },
+                    'Semantic HTML5 elements': {
+                        title: 'Using Semantic HTML5 Elements',
+                        content: 'Semantic elements clearly describe their meaning to both browser and developer. They replace generic divs with meaningful tags.',
+                        keyPoints: [
+                            '<header>: Page or section header',
+                            '<nav>: Navigation section',
+                            '<main>: Main content of document',
+                            '<article>: Self-contained content',
+                            '<section>: Thematic grouping',
+                            '<footer>: Footer information',
+                            '<aside>: Sidebar or supplementary content'
+                        ]
+                    },
+                    'ARIA (Accessible Rich Internet Applications)': {
+                        title: 'ARIA Attributes for Accessibility',
+                        content: 'ARIA provides attributes to enhance accessibility when native HTML is insufficient, especially for dynamic content.',
+                        keyPoints: [
+                            'ARIA labels: aria-label, aria-labelledby',
+                            'ARIA descriptions: aria-describedby',
+                            'ARIA roles: role="button", role="modal"',
+                            'ARIA states: aria-expanded, aria-selected',
+                            'Live regions: aria-live, aria-atomic'
+                        ]
+                    },
+                    'Document structure and hierarchy': {
+                        title: 'Creating Proper Document Structure',
+                        content: 'Good document structure includes proper heading hierarchy, logical order, and semantic nesting.',
+                        keyPoints: [
+                            'Use h1-h6 tags in logical order',
+                            'Only one h1 per page',
+                            'Proper nesting of sections',
+                            'Clear content flow and organization',
+                            'Skip links for keyboard navigation'
+                        ]
+                    },
+                    'Accessibility standards (WCAG)': {
+                        title: 'WCAG Accessibility Guidelines',
+                        content: 'WCAG (Web Content Accessibility Guidelines) provides international standards for web accessibility with three conformance levels.',
+                        keyPoints: [
+                            'Level A: Basic accessibility compliance',
+                            'Level AA: Enhanced accessibility (recommended)',
+                            'Level AAA: Advanced accessibility level',
+                            'Four principles: Perceivable, Operable, Understandable, Robust',
+                            'Testing with actual assistive technologies'
+                        ]
+                    },
+                    'Screen reader compatibility': {
+                        title: 'Screen Reader Optimization',
+                        content: 'Screen readers announce content to visually impaired users. Proper markup ensures good announcements.',
+                        keyPoints: [
+                            'Use semantic HTML for better announcements',
+                            'Provide text alternatives for images (alt text)',
+                            'Label form inputs properly',
+                            'Avoid using images for text',
+                            'Test with NVDA, JAWS, or VoiceOver'
+                        ]
+                    }
+                }
+            },
+            2: { // React
+                title: 'Components and Props',
+                intro: 'Components are the building blocks of React applications. This lesson introduces functional components, JSX syntax, and props for passing data between components. Master the fundamentals of component composition.',
+                topics: [
+                    'Functional components vs Class components',
+                    'JSX syntax and expressions',
+                    'Props and prop drilling',
+                    'Default props and prop validation',
+                    'Component composition patterns'
+                ],
+                objectives: [
+                    'Create functional React components',
+                    'Write and understand JSX code',
+                    'Pass and receive props correctly',
+                    'Implement prop validation with PropTypes',
+                    'Build component hierarchies effectively'
+                ],
+                topicDetails: {
+                    'Introduction': {
+                        title: 'React Components Fundamentals',
+                        content: 'React is built on components - reusable pieces of UI. Modern React uses functional components with hooks instead of class components.',
+                        keyPoints: [
+                            'Components are functions that return JSX',
+                            'Functional components are the modern standard',
+                            'Each component manages its own logic and rendering',
+                            'Components can be composed together',
+                            'React re-renders when state or props change'
+                        ]
+                    },
+                    'Functional components vs Class components': {
+                        title: 'Functional vs Class Components',
+                        content: 'While both work, functional components with hooks are now the recommended approach for modern React development.',
+                        keyPoints: [
+                            'Functional components are JavaScript functions',
+                            'Class components extend React.Component',
+                            'Hooks allow state in functional components',
+                            'Functional components are simpler and more intuitive',
+                            'Class components becoming legacy in new projects'
+                        ]
+                    },
+                    'JSX syntax and expressions': {
+                        title: 'Understanding JSX',
+                        content: 'JSX is XML-like syntax that gets compiled to JavaScript. It makes React code more readable and intuitive.',
+                        keyPoints: [
+                            'JSX looks like HTML but is JavaScript',
+                            'Use curly braces {} to embed expressions',
+                            'className instead of class attribute',
+                            'All tags must be closed (self-closing or paired)',
+                            'Babel transpiles JSX to React.createElement() calls'
+                        ]
+                    },
+                    'Props and prop drilling': {
+                        title: 'Passing Data with Props',
+                        content: 'Props are how you pass data from parent to child components. Prop drilling happens when you pass props through multiple intermediate components.',
+                        keyPoints: [
+                            'Props are read-only data passed to components',
+                            'Parent passes props to children as attributes',
+                            'Access props as function parameter',
+                            'Destructure props for cleaner code',
+                            'Consider context or state management for deep drilling'
+                        ]
+                    },
+                    'Default props and prop validation': {
+                        title: 'PropTypes and Default Values',
+                        content: 'Validate component props to catch bugs early and document expected data types.',
+                        keyPoints: [
+                            'PropTypes library for runtime prop validation',
+                            'defaultProps for default values',
+                            'PropTypes.string, PropTypes.number, PropTypes.shape',
+                            'PropTypes.oneOf for limited options',
+                            'PropTypes.arrayOf and PropTypes.objectOf for collections'
+                        ]
+                    },
+                    'Component composition patterns': {
+                        title: 'Building with Component Composition',
+                        content: 'Composition is building complex UIs by combining simple, focused components.',
+                        keyPoints: [
+                            'Create small, single-responsibility components',
+                            'Compose components into larger features',
+                            'Render children with props.children',
+                            'Higher-Order Components (HOCs) for code reuse',
+                            'Compound components for related components'
+                        ]
+                    }
+                }
+            },
+            3: { // TypeScript
+                title: 'Type Definitions and Interfaces',
+                intro: 'TypeScript brings type safety to JavaScript. Learn how to define types, create interfaces, and use TypeScript\'s type system to catch errors early and write more maintainable code.',
+                topics: [
+                    'Basic types and type aliases',
+                    'Interfaces and object types',
+                    'Union and intersection types',
+                    'Generics and type parameters',
+                    'Type narrowing and guards'
+                ],
+                objectives: [
+                    'Define and use TypeScript types',
+                    'Create and extend interfaces',
+                    'Handle complex type scenarios',
+                    'Use generics for reusable components',
+                    'Understand type inference'
+                ],
+                topicDetails: {
+                    'Introduction': {
+                        title: 'TypeScript Fundamentals',
+                        content: 'TypeScript is a superset of JavaScript that adds static typing. It compiles to plain JavaScript and helps catch errors at development time.',
+                        keyPoints: [
+                            'TypeScript catches type errors before runtime',
+                            'Better IDE support and autocomplete',
+                            'Improved documentation through types',
+                            'Gradual adoption - can mix with JavaScript',
+                            'Compiles to clean, readable JavaScript'
+                        ]
+                    },
+                    'Basic types and type aliases': {
+                        title: 'TypeScript Basic Types',
+                        content: 'TypeScript extends JavaScript with a type system. Understand basic types and how to create reusable type aliases.',
+                        keyPoints: [
+                            'string, number, boolean primitive types',
+                            'any (use sparingly), void, null, undefined',
+                            'Type aliases: type Point = { x: number; y: number }',
+                            'Union types: string | number',
+                            'Type inference: TypeScript deduces types automatically'
+                        ]
+                    },
+                    'Interfaces and object types': {
+                        title: 'Creating Interfaces',
+                        content: 'Interfaces define the structure of objects. They\'re central to TypeScript\'s type system.',
+                        keyPoints: [
+                            'Interface keyword defines object shape',
+                            'Properties can be optional with ?',
+                            'Readonly properties cannot be modified',
+                            'Interface extends for inheritance',
+                            'Interfaces are structural - shape matters, not name'
+                        ]
+                    },
+                    'Union and intersection types': {
+                        title: 'Advanced Type Combinations',
+                        content: 'Union and intersection types allow combining multiple types in flexible ways.',
+                        keyPoints: [
+                            'Union types (|): Type A OR Type B',
+                            'Intersection types (&): Type A AND Type B',
+                            'Discriminated unions for specific handling',
+                            'Type guards to narrow union types',
+                            'Optional properties and nullish coalescing'
+                        ]
+                    },
+                    'Generics and type parameters': {
+                        title: 'Generic Types for Reusability',
+                        content: 'Generics allow writing reusable code that works with any type while maintaining type safety.',
+                        keyPoints: [
+                            'Generic syntax: <T> type parameter',
+                            'Generic functions: function identity<T>(arg: T): T',
+                            'Generic interfaces and classes',
+                            'Constraints: <T extends Base>',
+                            'Generic arrays and collections'
+                        ]
+                    },
+                    'Type narrowing and guards': {
+                        title: 'Type Guards and Type Safety',
+                        content: 'Type guards narrow union types to specific types, enabling safer code.',
+                        keyPoints: [
+                            'typeof guard: typeof x === "string"',
+                            'instanceof guard for classes',
+                            'Custom type predicates: is User',
+                            'Exhaustiveness checking with never type',
+                            'Type assertion with as keyword (use sparingly)'
+                        ]
+                    }
+                }
+            },
+            4: { // Python for Data Science
+                title: 'NumPy and Data Manipulation',
+                intro: 'NumPy is the fundamental library for numerical computing in Python. This lesson covers arrays, operations, and vectorization techniques essential for data science work.',
+                topics: [
+                    'NumPy arrays and array operations',
+                    'Broadcasting and vectorization',
+                    'Array indexing and slicing',
+                    'Mathematical and statistical functions',
+                    'Performance optimization with NumPy'
+                ],
+                objectives: [
+                    'Create and manipulate NumPy arrays',
+                    'Perform vectorized operations',
+                    'Apply statistical functions',
+                    'Optimize computations with NumPy',
+                    'Integrate NumPy with pandas'
+                ],
+                topicDetails: {
+                    'Introduction': {
+                        title: 'NumPy Fundamentals',
+                        content: 'NumPy (Numerical Python) provides the ndarray object for efficient numerical computing. It\'s the foundation for pandas and scikit-learn.',
+                        keyPoints: [
+                            'NumPy is faster than native Python lists',
+                            'ndarray is the core data structure',
+                            'Vectorization enables efficient computation',
+                            'Broadcasting allows operations on different shapes',
+                            'Install with: pip install numpy'
+                        ]
+                    },
+                    'NumPy arrays and array operations': {
+                        title: 'Creating and Manipulating Arrays',
+                        content: 'Arrays are the primary data structure in NumPy, offering efficient storage and computation.',
+                        keyPoints: [
+                            'Create arrays: np.array(), np.zeros(), np.ones()',
+                            'np.arange() for sequences',
+                            'np.linspace() for evenly spaced values',
+                            'Shape and reshape for dimensional changes',
+                            'Transpose and flatting operations'
+                        ]
+                    },
+                    'Broadcasting and vectorization': {
+                        title: 'Vectorization for Performance',
+                        content: 'Vectorization avoids slow Python loops by applying operations to entire arrays at once.',
+                        keyPoints: [
+                            'Broadcasting aligns arrays of different shapes',
+                            'Vectorized operations much faster than loops',
+                            'Element-wise operations: +, -, *, /',
+                            'Broadcasting rules determine compatibility',
+                            'Avoid explicit loops - use NumPy functions'
+                        ]
+                    },
+                    'Array indexing and slicing': {
+                        title: 'Accessing Array Elements',
+                        content: 'Indexing and slicing are fundamental for selecting data from arrays.',
+                        keyPoints: [
+                            'Zero-indexed: arr[0] is first element',
+                            'Negative indexing: arr[-1] is last element',
+                            'Slicing: arr[start:stop:step]',
+                            'Multi-dimensional indexing: arr[0, 1]',
+                            'Boolean indexing for conditional selection'
+                        ]
+                    },
+                    'Mathematical and statistical functions': {
+                        title: 'NumPy Mathematical Functions',
+                        content: 'NumPy provides comprehensive mathematical and statistical functions.',
+                        keyPoints: [
+                            'Statistical: np.mean(), np.median(), np.std()',
+                            'Mathematical: np.sum(), np.dot(), np.cross()',
+                            'Trigonometric: np.sin(), np.cos(), np.tan()',
+                            'Linear algebra: np.linalg functions',
+                            'Random: np.random for sampling'
+                        ]
+                    },
+                    'Performance optimization with NumPy': {
+                        title: 'Optimizing NumPy Code',
+                        content: 'Write efficient NumPy code by understanding performance characteristics.',
+                        keyPoints: [
+                            'Vectorize instead of looping',
+                            'Use built-in functions instead of manual implementations',
+                            'Memory layout affects performance (C vs Fortran)',
+                            'Avoid copies, use views when possible',
+                            'Profile code to identify bottlenecks'
+                        ]
+                    }
+                }
+            },
+            5: { // SQL
+                title: 'Advanced Queries and Joins',
+                intro: 'Master complex SQL queries using joins, subqueries, and aggregations. Learn how to extract meaningful insights from relational databases efficiently.',
+                topics: [
+                    'INNER, LEFT, RIGHT, and FULL OUTER joins',
+                    'Subqueries and CTEs (Common Table Expressions)',
+                    'Window functions and ranking',
+                    'Aggregation and GROUP BY',
+                    'Query optimization techniques'
+                ],
+                objectives: [
+                    'Write complex SQL queries with multiple joins',
+                    'Use subqueries and CTEs effectively',
+                    'Apply window functions for analysis',
+                    'Optimize queries for performance',
+                    'Create efficient database solutions'
+                ],
+                topicDetails: {
+                    'Introduction': {
+                        title: 'Advanced SQL Concepts',
+                        content: 'Build on SQL basics to write complex queries that solve real-world data problems efficiently.',
+                        keyPoints: [
+                            'Combine data from multiple tables',
+                            'Aggregate and summarize data',
+                            'Perform advanced analysis with window functions',
+                            'Optimize queries for performance',
+                            'Work with complex business logic'
+                        ]
+                    },
+                    'INNER, LEFT, RIGHT, and FULL OUTER joins': {
+                        title: 'SQL Joins Explained',
+                        content: 'Joins combine rows from multiple tables based on related columns. Master all join types.',
+                        keyPoints: [
+                            'INNER JOIN: Only matching rows',
+                            'LEFT JOIN: All from left, matching from right',
+                            'RIGHT JOIN: All from right, matching from left',
+                            'FULL OUTER JOIN: All rows from both tables',
+                            'CROSS JOIN: Cartesian product'
+                        ]
+                    },
+                    'Subqueries and CTEs (Common Table Expressions)': {
+                        title: 'Complex Query Structures',
+                        content: 'Subqueries and CTEs allow building complex queries from simpler components.',
+                        keyPoints: [
+                            'Subqueries in SELECT, FROM, WHERE clauses',
+                            'Scalar subqueries return single value',
+                            'CTEs (WITH clause) for readability',
+                            'Recursive CTEs for hierarchical data',
+                            'Combine multiple subqueries'
+                        ]
+                    },
+                    'Window functions and ranking': {
+                        title: 'Window Functions for Analysis',
+                        content: 'Window functions perform calculations across rows while maintaining row identity.',
+                        keyPoints: [
+                            'ROW_NUMBER(), RANK(), DENSE_RANK() for ranking',
+                            'LAG(), LEAD() for forward/backward access',
+                            'SUM(), AVG() as window functions',
+                            'OVER() clause defines window frame',
+                            'PARTITION BY for grouping within windows'
+                        ]
+                    },
+                    'Aggregation and GROUP BY': {
+                        title: 'Aggregating Data',
+                        content: 'Summarize data using aggregate functions and grouping.',
+                        keyPoints: [
+                            'COUNT(), SUM(), AVG(), MIN(), MAX()',
+                            'GROUP BY creates aggregate groups',
+                            'HAVING filters groups after aggregation',
+                            'GROUP BY with multiple columns',
+                            'NULL handling in aggregates'
+                        ]
+                    },
+                    'Query optimization techniques': {
+                        title: 'Writing Efficient Queries',
+                        content: 'Optimize queries for performance and resource usage.',
+                        keyPoints: [
+                            'Use indexes on frequently queried columns',
+                            'Avoid SELECT * - specify needed columns',
+                            'Filter early with WHERE clauses',
+                            'Use EXPLAIN to analyze query plans',
+                            'Consider materialized views for complex queries'
+                        ]
+                    }
+                }
+            },
+            6: { // UI/UX Design
+                title: 'User Research and Wireframing',
+                intro: 'Effective design starts with understanding users. This lesson covers user research methodologies, creating personas, and translating insights into wireframes and prototypes.',
+                topics: [
+                    'User research methods and interviews',
+                    'Creating user personas',
+                    'Information architecture',
+                    'Wireframing techniques',
+                    'Prototyping tools and workflows'
+                ],
+                objectives: [
+                    'Conduct effective user research',
+                    'Create detailed user personas',
+                    'Design clear information hierarchies',
+                    'Produce professional wireframes',
+                    'Build interactive prototypes'
+                ],
+                topicDetails: {
+                    'Introduction': {
+                        title: 'User-Centered Design Process',
+                        content: 'Good design starts with understanding users. Research informs every design decision.',
+                        keyPoints: [
+                            'Empathy is the foundation of good design',
+                            'Research uncovers user needs and pain points',
+                            'Data-driven decisions improve outcomes',
+                            'Iterate based on user feedback',
+                            'Accessibility benefits all users'
+                        ]
+                    },
+                    'User research methods and interviews': {
+                        title: 'Conducting User Research',
+                        content: 'Research methodologies help uncover user needs, behaviors, and motivations.',
+                        keyPoints: [
+                            'Qualitative: Interviews, observations, user testing',
+                            'Quantitative: Surveys, analytics, heatmaps',
+                            'Interview techniques: Open-ended questions',
+                            'User testing reveals usability issues',
+                            'Analyze findings to identify patterns'
+                        ]
+                    },
+                    'Creating user personas': {
+                        title: 'Developing User Personas',
+                        content: 'Personas represent archetypal users based on research data.',
+                        keyPoints: [
+                            'Include demographics, goals, pain points',
+                            'Base on research, not assumptions',
+                            '3-5 personas typically sufficient',
+                            'Give personas names and faces',
+                            'Use personas to guide design decisions'
+                        ]
+                    },
+                    'Information architecture': {
+                        title: 'Structuring Content',
+                        content: 'Information architecture organizes content logically for users to find what they need.',
+                        keyPoints: [
+                            'Create site maps showing structure',
+                            'Organize content in logical hierarchies',
+                            'User mental models inform structure',
+                            'Card sorting exercises with users',
+                            'Taxonomy and labeling consistency'
+                        ]
+                    },
+                    'Wireframing techniques': {
+                        title: 'Creating Wireframes',
+                        content: 'Wireframes are low-fidelity layouts mapping page structure and content.',
+                        keyPoints: [
+                            'Focus on layout, not visual design',
+                            'Use component libraries for consistency',
+                            'Create wireframes for key flows',
+                            'Include annotations and notes',
+                            'Tools: Figma, Sketch, Adobe XD, Wireframing tools'
+                        ]
+                    },
+                    'Prototyping tools and workflows': {
+                        title: 'Building Interactive Prototypes',
+                        content: 'Prototypes bring designs to life and enable testing with users.',
+                        keyPoints: [
+                            'Low-fidelity: Paper, clickable wireframes',
+                            'Medium-fidelity: Interactive mockups',
+                            'High-fidelity: Near-final designs',
+                            'Test prototypes with users early',
+                            'Tools: Figma, Axure, Adobe XD, Framer'
+                        ]
+                    }
+                }
+            },
+            7: { // iOS Development
+                title: 'SwiftUI Fundamentals',
+                intro: 'SwiftUI is Apple\'s modern framework for building iOS apps. Learn how to create responsive, beautiful interfaces using declarative syntax and state management.',
+                topics: [
+                    'SwiftUI views and modifiers',
+                    'State and binding',
+                    'Layout containers (VStack, HStack, ZStack)',
+                    'Navigation and routing',
+                    'Data flow and MVVM patterns'
+                ],
+                objectives: [
+                    'Build iOS interfaces with SwiftUI',
+                    'Manage state and data flow',
+                    'Create responsive layouts',
+                    'Implement navigation',
+                    'Follow iOS design guidelines'
+                ],
+                topicDetails: {
+                    'Introduction': {
+                        title: 'SwiftUI Fundamentals',
+                        content: 'SwiftUI is Apple\'s declarative UI framework for iOS, macOS, watchOS, and tvOS development.',
+                        keyPoints: [
+                            'Declarative syntax - describe what you want, not how',
+                            'Live preview in Xcode for immediate feedback',
+                            'Automatic layout and responsiveness',
+                            'State management with @State and @Binding',
+                            'Compositional architecture with small views'
+                        ]
+                    },
+                    'SwiftUI views and modifiers': {
+                        title: 'Building with Views and Modifiers',
+                        content: 'SwiftUI views are structs that conform to View protocol. Modifiers customize their appearance.',
+                        keyPoints: [
+                            'View protocol defines UI elements',
+                            'Modifiers chain to customize views',
+                            'Common views: Text, Button, Image, TextField',
+                            'Container views: VStack, HStack, ZStack',
+                            'Order of modifiers matters'
+                        ]
+                    },
+                    'State and binding': {
+                        title: 'Managing State',
+                        content: 'State management is central to SwiftUI. Understand @State, @Binding, and other property wrappers.',
+                        keyPoints: [
+                            '@State for local view state',
+                            '@Binding to share state between views',
+                            '@StateObject for reference types',
+                            '@EnvironmentObject for app-wide state',
+                            'State changes trigger re-renders'
+                        ]
+                    },
+                    'Layout containers (VStack, HStack, ZStack)': {
+                        title: 'Layout Systems',
+                        content: 'Stack-based layouts arrange views in rows, columns, or layers.',
+                        keyPoints: [
+                            'VStack arranges views vertically',
+                            'HStack arranges views horizontally',
+                            'ZStack layers views on top of each other',
+                            'Spacer() fills available space',
+                            'Alignment and spacing parameters'
+                        ]
+                    },
+                    'Navigation and routing': {
+                        title: 'Navigation in SwiftUI',
+                        content: 'Navigate between screens using NavigationStack, NavigationLink, or Sheet presentations.',
+                        keyPoints: [
+                            'NavigationStack for hierarchical navigation',
+                            'NavigationLink for destination buttons',
+                            '.sheet() for modal presentations',
+                            '.fullScreenCover() for full-screen modals',
+                            'Deep linking for direct navigation'
+                        ]
+                    },
+                    'Data flow and MVVM patterns': {
+                        title: 'MVVM Architecture',
+                        content: 'MVVM separates UI from business logic, making code testable and maintainable.',
+                        keyPoints: [
+                            'Model contains business logic and data',
+                            'View displays UI',
+                            'ViewModel bridges Model and View',
+                            '@StateObject for ViewModels',
+                            'Observable protocols for state updates'
+                        ]
+                    }
+                }
+            },
+            8: { // AWS
+                title: 'EC2 and Core Services',
+                intro: 'Amazon EC2 is the foundation of AWS compute services. This lesson covers instance types, security groups, and how to launch and manage virtual servers in the cloud.',
+                topics: [
+                    'EC2 instances and instance types',
+                    'Security groups and network ACLs',
+                    'Elastic IPs and load balancing',
+                    'Auto Scaling and auto-healing',
+                    'Cost optimization strategies'
+                ],
+                objectives: [
+                    'Launch and configure EC2 instances',
+                    'Manage security and networking',
+                    'Implement high availability',
+                    'Optimize cloud costs',
+                    'Prepare for AWS certification'
+                ],
+                topicDetails: {
+                    'Introduction': {
+                        title: 'AWS EC2 Fundamentals',
+                        content: 'EC2 (Elastic Compute Cloud) provides resizable compute capacity in the cloud. It\'s the most popular AWS service.',
+                        keyPoints: [
+                            'EC2 is virtual servers (instances) in the cloud',
+                            'Pay only for resources you use',
+                            'Scales up or down on demand',
+                            'Global availability through regions and AZs',
+                            'Foundation for most AWS applications'
+                        ]
+                    },
+                    'EC2 instances and instance types': {
+                        title: 'Understanding EC2 Instances',
+                        content: 'Choose the right instance type for your workload. Different types optimize for different needs.',
+                        keyPoints: [
+                            'General purpose (t3, m5): Balanced compute, memory, networking',
+                            'Compute optimized (c5): High-performance processors',
+                            'Memory optimized (r5): Large in-memory databases',
+                            'Instance sizing (nano, micro, small, medium, large, xlarge)',
+                            'On-Demand, Reserved, and Spot pricing options'
+                        ]
+                    },
+                    'Security groups and network ACLs': {
+                        title: 'EC2 Security Controls',
+                        content: 'Control inbound and outbound traffic with security groups and network ACLs.',
+                        keyPoints: [
+                            'Security groups act as virtual firewalls',
+                            'Allow/deny rules for ingress and egress traffic',
+                            'Default security group denies all inbound',
+                            'Network ACLs for subnet-level control',
+                            'Key pairs for SSH access'
+                        ]
+                    },
+                    'Elastic IPs and load balancing': {
+                        title: 'IP Management and Load Balancing',
+                        content: 'Use Elastic IPs and load balancers for high availability and fault tolerance.',
+                        keyPoints: [
+                            'Elastic IPs persist when instances stop',
+                            'Classic Load Balancer for basic load balancing',
+                            'Application Load Balancer for web applications',
+                            'Network Load Balancer for extreme performance',
+                            'Health checks ensure traffic goes to healthy instances'
+                        ]
+                    },
+                    'Auto Scaling and auto-healing': {
+                        title: 'Automatic Scaling',
+                        content: 'Auto Scale groups automatically adjust capacity based on demand.',
+                        keyPoints: [
+                            'Launch templates define instance configuration',
+                            'Auto Scaling groups manage instance lifecycle',
+                            'Target tracking policies adjust based on metrics',
+                            'Health checks replace unhealthy instances',
+                            'Scheduled scaling for predictable patterns'
+                        ]
+                    },
+                    'Cost optimization strategies': {
+                        title: 'Optimizing AWS Costs',
+                        content: 'Reduce EC2 costs through strategic resource management.',
+                        keyPoints: [
+                            'Use Reserved Instances for stable workloads',
+                            'Spot Instances for flexible, fault-tolerant workloads',
+                            'Right-sizing: Choose appropriate instance types',
+                            'Stop instances when not in use',
+                            'Monitor with CloudWatch for optimization opportunities'
+                        ]
+                    }
+                }
+            }
+        };
+
+        // Get course ID from URL
+        const queryParams = new URLSearchParams(window.location.search);
+        const courseId = queryParams.get('id');
+
+        const sampleCourses = [
+            { id: 0, title: 'JavaScript Fundamentals' },
+            { id: 1, title: 'HTML & CSS Masterclass' },
+            { id: 2, title: 'React - The Complete Guide' },
+            { id: 3, title: 'TypeScript Masterclass' },
+            { id: 4, title: 'Python for Data Science' },
+            { id: 5, title: 'SQL for Data Science' },
+            { id: 6, title: 'UI/UX Design Fundamentals' },
+            { id: 7, title: 'iOS Development with Swift' },
+            { id: 8, title: 'AWS Certified Cloud Practitioner' }
+        ];
+
+        function loadLesson() {
+            const id = courseId ? parseInt(courseId) : 0;
+            const course = sampleCourses[id];
+            const content = lessonContent[id];
+
+            // Update breadcrumbs
+            document.getElementById('courseBreadcrumb').textContent = course.title;
+            document.getElementById('lessonBreadcrumb').textContent = content.title;
+
+            // Generate lessons list
+            generateLessons(id);
+
+            // Load the first topic (Introduction)
+            loadTopic(id, 'Introduction');
+        }
+
+        function generateLessons(courseId) {
+            const container = document.getElementById('lessonsContainer');
+            const content = lessonContent[courseId];
+            const lessons = [
+                'Introduction',
+                ...content.topics
+            ];
+
+            container.innerHTML = lessons.map((lesson, index) => `
+                <div class="lesson-item ${index === 0 ? 'active' : ''}" onclick="loadTopic(${courseId}, '${lesson}')">
+                    <i class="fas fa-book"></i>
+                    <span>${lesson}</span>
+                </div>
+            `).join('');
+        }
+
+        function loadTopic(courseId, topicName) {
+            const content = lessonContent[courseId];
+            const topicDetail = content.topicDetails[topicName];
+
+            if (!topicDetail) {
+                return;
+            }
+
+            // Update breadcrumb
+            document.getElementById('lessonBreadcrumb').textContent = topicDetail.title;
+
+            // Update main content
+            document.getElementById('lessonTitle').textContent = topicDetail.title;
+            document.getElementById('lessonIntro').textContent = topicDetail.content;
+            
+            // Update key topics to show key points
+            const keyPointsHtml = topicDetail.keyPoints.map(point => `<li>${point}</li>`).join('');
+            document.getElementById('keyTopics').innerHTML = keyPointsHtml;
+
+            // Update objectives section with additional notes
+            document.getElementById('objectives').innerHTML = `
+                <li><strong>Focus:</strong> ${topicDetail.title}</li>
+                <li><strong>Duration:</strong> ~15-20 minutes</li>
+                <li><strong>Difficulty:</strong> Intermediate</li>
+            `;
+
+            // Update progress percentage
+            const allLessons = ['Introduction', ...content.topics];
+            const currentIndex = allLessons.indexOf(topicName);
+            const progressPercentage = Math.round(((currentIndex + 1) / allLessons.length) * 100);
+            document.getElementById('progressPercentage').textContent = progressPercentage + '%';
+            document.getElementById('progressBar').style.width = progressPercentage + '%';
+
+            // Update active lesson item
+            document.querySelectorAll('.lesson-item').forEach((item, index) => {
+                item.classList.remove('active');
+                if (item.textContent.includes(topicName)) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        function switchTab(event, tabName) {
+            // Hide all tabs
+            document.querySelectorAll('[id$="Content"]').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName + 'Content').style.display = 'block';
+            event.target.classList.add('active');
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadLesson);
+    </script>
+</body>
+</html>

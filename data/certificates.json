@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "title": "JavaScript Fundamentals",
+    "date": "2026-03-15",
+    "credential": "SB-JS-001",
+    "userId": 1
+  },
+  {
+    "id": 2,
+    "title": "Python Basics",
+    "date": "2026-02-28",
+    "credential": "SB-PY-089",
+    "userId": 1
+  },
+  {
+    "id": 3,
+    "title": "Sample Certificate",
+    "date": "2026-05-06",
+    "credential": "CERT-1778065104329",
+    "userId": 2
+  }
+]

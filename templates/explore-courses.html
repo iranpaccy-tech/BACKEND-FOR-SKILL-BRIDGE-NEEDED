@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Courses - SkillBridge Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .explore-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            padding: 0 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .sidebar-logo img {
+            height: 40px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin: 0.5rem 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 2rem;
+        }
+
+        .sidebar-nav a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid white;
+            padding-left: 1.25rem;
+        }
+
+        .sidebar-nav i {
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-footer .course-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .sidebar-footer .course-card h4 {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .sidebar-footer .qr-code {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        /* === MAIN CONTENT === */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 2rem;
+        }
+
+        /* === TOP HEADER === */
+        .explore-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left h1 {
+            font-size: 1.75rem;
+            color: #222;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #f0f0f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .notification-icon:hover {
+            background: #e0e0e0;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 1rem;
+            background: #f0f0f0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: #222;
+        }
+
+        /* === MOBILE HAMBURGER MENU === */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #222;
+            padding: 0.5rem;
+            margin-right: 1rem;
+        }
+
+        .mobile-menu-btn:hover {
+            color: #00897B;
+        }
+
+        /* === SECTION TITLE === */
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 1.5rem;
+        }
+
+        /* === COURSE CARDS GRID === */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .course-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            display: flex;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .course-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .course-item-image {
+            width: 140px;
+            min-width: 140px;
+            height: 140px;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .course-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .course-item-content {
+            flex: 1;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .course-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .course-item-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #222;
+            flex: 1;
+        }
+
+        .course-item-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(200, 200, 200, 0.3);
+            color: #666;
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-left: 0.5rem;
+        }
+
+        .course-item-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00897B 0%, #008B82 100%);
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+            min-width: 60px;
+        }
+
+        /* === AUX ICONS === */
+        .aux-icons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .aux-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .aux-btn.red { background: #C2185B; }
+        .aux-btn.teal { background: #00897B; }
+        .aux-btn:hover { opacity: 0.85; transform: scale(1.05); }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1400px) {
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                padding: 1.5rem;
+            }
+            .courses-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+                padding: 1rem 0;
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                height: 100vh;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar-logo {
+                padding: 0 1.5rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .sidebar-nav a {
+                padding: 0.75rem 1.5rem;
+                justify-content: flex-start;
+            }
+
+            .sidebar-nav span {
+                display: inline;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .explore-header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 0.5rem;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .course-item {
+                flex-direction: column;
+            }
+
+            .course-item-image {
+                width: 100%;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 280px;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0.5rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                font-size: 1.25rem;
+            }
+
+            .explore-header {
+                gap: 0.5rem;
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .explore-header input {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .course-item {
+                padding: 0.75rem;
+            }
+
+            .course-item-image {
+                height: 150px;
+            }
+
+            .course-title {
+                font-size: 0.95rem;
+            }
+
+            .course-progress {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <a href="index.html"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge"></a>
+        </div>
+
+        <nav class="sidebar-nav">
+            <li><a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+            <li><a href="explore-courses.html" class="active"><i class="fas fa-book"></i> Explore Courses</a></li>
+            <li><a href="class-sessions.html"><i class="fas fa-calendar-check"></i> Class Sessions</a></li>
+            <li><a href="submissions.html"><i class="fas fa-file-check"></i> Submissions</a></li>
+            <li><a href="groups.html"><i class="fas fa-users"></i> Groups</a></li>
+            <li><a href="community.html"><i class="fas fa-comments"></i> Community</a></li>
+            <li><a href="power-ai.html"><i class="fas fa-bolt"></i> Power AI</a></li>
+            <li><a href="certificates.html"><i class="fas fa-certificate"></i> Certificates</a></li>
+            <li><a href="#" style="margin-top: 2rem; color: rgba(255,255,255,0.6);"><i class="fas fa-chevron-left"></i> Collapse</a></li>
+        </nav>
+
+        <!-- <div class="sidebar-footer">
+            <div class="course-card">
+                <h4>SkillBridge Development</h4>
+                <p>Join our support channel for assistance and collab</p>
+                <div class="qr-code"><i class="fas fa-qrcode"></i></div>
+            </div>
+        </div> -->
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="explore-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="sidebarToggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Explore Courses</h1>
+            </div>
+            <div class="header-right">
+                <div class="language-selector">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23012169' width='32' height='32'/%3E%3Cpath fill='%23FFF' d='M0 0h32v32H0z'/%3E%3C/svg%3E" alt="EN" style="width:20px;height:13px;border-radius:2px;">
+                    English
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="notification-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="profile-section">
+                    <div class="profile-avatar">M</div>
+                    <span class="profile-name">Mugisha</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enrolled Modules Section -->
+        <h2 class="section-title">Enrolled Modules</h2>
+        <div class="courses-grid" id="coursesGrid"></div>
+    </div>
+
+    <!-- Aux Icons -->
+    <div class="aux-icons">
+        <a href="#" class="aux-btn red" title="Help"><i class="fas fa-question"></i></a>
+        <a href="#" class="aux-btn red" title="Chat"><i class="fas fa-comments"></i></a>
+        <a href="#" class="aux-btn teal" title="Accessibility"><i class="fas fa-universal-access"></i></a>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // sample courses - same as in dashboard and courses.html
+        const sampleCourses = [
+            { title: 'JavaScript Fundamentals', description: 'Master JavaScript from scratch with hands-on projects.', image: 'asset/modules/maxresdefault.jpg' },
+            { title: 'HTML & CSS Masterclass', description: 'Build beautiful responsive websites with modern HTML5 & CSS3.', image: 'asset/modules/maxresdefault (1).jpg' },
+            { title: 'React - The Complete Guide', description: 'Build powerful React applications with hooks and Redux.', image: 'asset/modules/react-with-bootstrap.png' },
+            { title: 'TypeScript Masterclass', description: 'Learn TypeScript and build type-safe applications.', image: 'asset/modules/maxresdefault (2).jpg' },
+            { title: 'Python for Data Science', description: 'Learn Python for analysis, visualization, and ML.', image: 'asset/modules/Python_for_Data_Science.png' },
+            { title: 'SQL for Data Science', description: 'Master SQL queries, joins, and optimizations.', image: 'asset/modules/learning-sql-for-data-science-analytix-labs.webp' },
+            { title: 'UI/UX Design Fundamentals', description: 'Master Figma, wireframing, and prototyping.', image: 'asset/modules/UI-UX Design Fundamentals.png' },
+            { title: 'iOS Development with Swift', description: 'Build iOS apps with Swift and SwiftUI.', image: 'asset/modules/Swift-Development-for-iOS.jpg' },
+            { title: 'AWS Certified Cloud Practitioner', description: 'Prepare for the AWS Cloud Practitioner exam.', image: 'asset/modules/OIP.webp' }
+        ];
+
+        // progress data for each course (demo)
+        const courseProgress = {
+            'JavaScript Fundamentals': 100,
+            'HTML & CSS Masterclass': 0,
+            'React - The Complete Guide': 0,
+            'TypeScript Masterclass': 0,
+            'Python for Data Science': 0,
+            'SQL for Data Science': 0,
+            'UI/UX Design Fundamentals': 0,
+            'iOS Development with Swift': 0,
+            'AWS Certified Cloud Practitioner': 0
+        };
+
+        // render courses grid
+        function renderCoursesGrid() {
+            const container = document.getElementById('coursesGrid');
+            container.innerHTML = sampleCourses.map((course, index) => {
+                const progress = courseProgress[course.title] || 0;
+                return `
+                    <div class="course-item" onclick="openModuleDetail(${index})">
+                        <div class="course-item-image">
+                            <img src="${course.image}" alt="${course.title}">
+                        </div>
+                        <div class="course-item-content">
+                            <div class="course-item-header">
+                                <div class="course-item-title">${course.title}</div>
+                                <div class="course-item-badge">💬</div>
+                            </div>
+                            <div class="course-item-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${progress}%;"></div>
+                                </div>
+                                <div class="progress-text">${progress}%</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = JSON.parse(localStorage.getItem('skillbridge_user') || 'null');
+            if (user && user.name) {
+                document.querySelector('.profile-avatar').textContent = user.name.charAt(0).toUpperCase();
+                document.querySelector('.profile-name').textContent = user.name;
+            }
+            renderCoursesGrid();
+        });
+
+        // Open module detail page
+        function openModuleDetail(courseIndex) {
+            window.location.href = `module-detail.html?id=${courseIndex}`;
+        }
+
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+
+        // Close sidebar when clicking on a link
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        document.querySelector('.sidebar').classList.remove('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

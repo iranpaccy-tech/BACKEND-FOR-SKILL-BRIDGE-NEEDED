@@ -1,6 +1,7 @@
 const API = {
     async getMentors() {
         await this.delay();
+        // Return mock data for now, but could be stored in localStorage
         return {
             success: true,
             data: [
@@ -25,29 +26,82 @@ const API = {
 
     async getCourses() {
         await this.delay();
-        return { success: true, data: [] };
+        // Get courses from localStorage or return default
+        let courses = this.getStoredData('skillbridge_courses');
+        if (!courses || courses.length === 0) {
+            courses = [
+                { id: 1, title: 'HTML & CSS Fundamentals', instructor: 'Sarah Johnson', duration: '4 weeks', rating: 4.8, students: 1250, price: 49 },
+                { id: 2, title: 'JavaScript Mastery', instructor: 'Michael Chen', duration: '6 weeks', rating: 4.9, students: 890, price: 79 },
+                { id: 3, title: 'React Development', instructor: 'Priya Patel', duration: '8 weeks', rating: 4.7, students: 756, price: 99 }
+            ];
+            this.saveData('skillbridge_courses', courses);
+        }
+        return { success: true, data: courses };
     },
 
     async getJobs() {
         await this.delay();
-        return { success: true, data: [] };
+        // Get jobs from localStorage or return default
+        let jobs = this.getStoredData('skillbridge_jobs');
+        if (!jobs || jobs.length === 0) {
+            jobs = [
+                { id: 1, title: 'Frontend Developer', company: 'TechCorp', location: 'Remote', salary: '$70k-90k', type: 'Full-time' },
+                { id: 2, title: 'Full Stack Engineer', company: 'StartupXYZ', location: 'San Francisco', salary: '$90k-120k', type: 'Full-time' },
+                { id: 3, title: 'UI/UX Designer', company: 'DesignHub', location: 'New York', salary: '$60k-80k', type: 'Contract' }
+            ];
+            this.saveData('skillbridge_jobs', jobs);
+        }
+        return { success: true, data: jobs };
+    },
+
+    async getStudyGroups() {
+        await this.delay();
+        // Get study groups from localStorage or return default
+        let groups = this.getStoredData('skillbridge_groups');
+        if (!groups || groups.length === 0) {
+            groups = [
+                {
+                    id: 1,
+                    name: 'JavaScript Masters',
+                    description: 'Master advanced JavaScript concepts',
+                    category: 'programming',
+                    language: 'JavaScript',
+                    members: 25,
+                    maxMembers: 30
+                },
+                {
+                    id: 2,
+                    name: 'React Developers',
+                    description: 'Build modern React applications',
+                    category: 'framework',
+                    language: 'JavaScript',
+                    members: 18,
+                    maxMembers: 25
+                }
+            ];
+            this.saveData('skillbridge_groups', groups);
+        }
+        return { success: true, data: groups };
+    },
+
+    // Helper methods for localStorage
+    getStoredData(key) {
+        try {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : [];
+        } catch (e) {
+            return [];
+        }
+    },
+
+    saveData(key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
     },
 
     delay(ms = 500) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 };
-async getStudyGroups() {
-    await this.delay();
-    return {
-        success: true,
-        data: [
-            {
-                id: 1,
-                name: 'JavaScript Masters',
-                description: 'Master advanced JavaScript concepts',
-                category: 'programming',
-                language: 'JavaScript',
                 members: 1234,
                 online: 42,
                 rating: 4.9,

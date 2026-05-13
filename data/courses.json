@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "HTML & CSS Fundamentals",
+    "instructor": "Sarah Johnson",
+    "duration": "4 weeks",
+    "rating": 4.8,
+    "students": 1250,
+    "price": 49
+  },
+  {
+    "id": 2,
+    "title": "JavaScript Mastery",
+    "instructor": "Michael Chen",
+    "duration": "6 weeks",
+    "rating": 4.9,
+    "students": 890,
+    "price": 79
+  },
+  {
+    "id": 3,
+    "title": "React Development",
+    "instructor": "Priya Patel",
+    "duration": "8 weeks",
+    "rating": 4.7,
+    "students": 756,
+    "price": 99
+  }
+]

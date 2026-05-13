@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "JavaScript Masters",
+    "description": "Master advanced JavaScript concepts",
+    "category": "programming",
+    "language": "JavaScript",
+    "members": 25,
+    "maxMembers": 30
+  },
+  {
+    "id": 2,
+    "name": "React Developers",
+    "description": "Build modern React applications",
+    "category": "framework",
+    "language": "JavaScript",
+    "members": 18,
+    "maxMembers": 25
+  },
+  {
+    "id": 3,
+    "name": "css  learner",
+    "description": "join this group if you want to master css",
+    "category": "intermediate ",
+    "language": "css",
+    "members": 53,
+    "maxMembers": 52
+  }
+]

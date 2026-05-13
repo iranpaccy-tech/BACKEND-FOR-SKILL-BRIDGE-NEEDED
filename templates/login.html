@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillBridge - Create Account</title>
+    <title>SkillBridge - Sign In</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <style>
-        /* register page custom layout */
-        body.register-page {
+        /* login page custom layout */
+        body.login-page {
             display: flex;
             min-height: 100vh;
             overflow: hidden;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-        .register-image {
+        .login-image {
             flex: 1;
             background: url('asset/HBoLdmbXwAAwNNn.svg') center/cover no-repeat;
             position: relative;
         }
-        .register-form-container {
+        .login-form-container {
             flex: 1;
             display: flex;
             align-items: center;
@@ -27,7 +27,7 @@
             background: var(--bg-primary);
             padding: 2rem;
         }
-        .register-form {
+        .login-form {
             width: 100%;
             max-width: 400px;
             background: var(--card-bg);
@@ -35,21 +35,21 @@
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-lg);
         }
-        .register-form h2 {
+        .login-form h2 {
             margin-bottom: 1.5rem;
             font-size: 1.75rem;
             color: var(--text-primary);
             text-align: center;
         }
-        .register-form .form-group {
+        .login-form .form-group {
             margin-bottom: 1.25rem;
         }
-        .register-form label {
+        .login-form label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
         }
-        .register-form input {
+        .login-form input {
             width: 100%;
             padding: 0.75rem 1rem 0.75rem 1rem;
             border: 1px solid var(--input-border);
@@ -58,10 +58,10 @@
             font-size: 1rem;
             position: relative;
         }
-        .register-form .password-wrapper {
+        .login-form .password-wrapper {
             position: relative;
         }
-        .register-form .password-wrapper i.eye-toggle {
+        .login-form .password-wrapper i.eye-toggle {
             position: absolute;
             right: 10px;
             top: 50%;
@@ -69,7 +69,7 @@
             cursor: pointer;
             color: var(--gray-600);
         }
-        .register-form .btn-register {
+        .login-form .btn-login {
             width: 100%;
             padding: 0.75rem;
             background: #00BFA5; /* teal button color from screenshot */
@@ -81,96 +81,92 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .register-form .btn-register:hover {
+        .login-form .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,191,165,0.3);
+            box-shadow: 0 5px 15px rgba(139,92,246,0.3);
         }
-        .register-form .extra-link {
+        .login-form .extra-link {
             display: block;
             margin-top: 1rem;
             text-align: center;
             color: #009688;
             text-decoration: none;
-            font-size: 0.9rem;
         }
-        .register-form .extra-link:hover {
-            text-decoration: underline;
-        }
-        header.register-header {
+        header.login-header {
             position: absolute;
             top: 20px;
             left: 30px;
         }
-        header.register-header .logo-img {
+        header.login-header .logo-img {
             height: 50px;
         }
         @media (max-width: 1024px) {
-            body.register-page {
+            body.login-page {
                 flex-direction: column-reverse;
             }
-            .register-image {
+            .login-image {
                 height: 35vh;
                 min-height: 250px;
             }
-            .register-form-container {
+            .login-form-container {
                 padding: 1.5rem;
             }
-            .register-form {
+            .login-form {
                 padding: 2rem;
                 max-width: 100%;
             }
         }
         
         @media (max-width: 768px) {
-            body.register-page {
+            body.login-page {
                 flex-direction: column;
             }
-            .register-image {
+            .login-image {
                 height: 30vh;
                 min-height: 200px;
             }
-            .register-form-container {
+            .login-form-container {
                 padding: 1rem;
             }
-            .register-form {
+            .login-form {
                 padding: 1.5rem;
                 max-width: 100%;
             }
-            .register-form h2 {
+            .login-form h2 {
                 font-size: 1.5rem;
-                margin-bottom: 1rem;
+                margin-bottom: 1.25rem;
             }
-            header.register-header {
+            header.login-header {
                 top: 15px;
                 left: 15px;
             }
-            header.register-header .logo-img {
+            header.login-header .logo-img {
                 height: 40px;
             }
         }
         
         @media (max-width: 480px) {
-            body.register-page {
+            body.login-page {
                 overflow-y: auto;
             }
-            .register-image {
+            .login-image {
                 height: 25vh;
                 min-height: 180px;
             }
-            .register-form-container {
+            .login-form-container {
                 padding: 1rem;
                 min-height: auto;
             }
-            .register-form {
+            .login-form {
                 padding: 1.25rem;
             }
-            .register-form h2 {
+            .login-form h2 {
                 font-size: 1.3rem;
             }
-            .register-form .form-group {
-                margin-bottom: 0.9rem;
+            .login-form .form-group {
+                margin-bottom: 1rem;
             }
-            .register-form .btn-register {
+            .login-form .btn-login {
                 padding: 0.65rem;
                 font-size: 0.95rem;
             }
@@ -206,16 +202,16 @@
         .aux-btn.red { background: #C2185B; }
         .aux-btn.teal { background: #009688; }
         .aux-btn:hover { opacity: 0.85; }
+
     </style>
 </head>
-<body class="register-page">
+<body class="login-page">
 <!-- include shared scripts for authentication -->
 <script src="js/utils.js"></script>
 <script src="js/ui.js"></script>
-<script src="js/auth.js"></script>
-<script>
+<script src="js/auth.js"></script><script>
     function togglePasswordVisibility() {
-        const pwd = document.getElementById('registerPassword');
+        const pwd = document.getElementById('loginPassword');
         const icon = document.querySelector('.eye-toggle');
         if (pwd.type === 'password') {
             pwd.type = 'text';
@@ -227,34 +223,25 @@
             icon.classList.add('fa-eye');
         }
     }
-</script>
-    <div class="register-image">
-        <header class="register-header">
-            <a href="index.html"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge" class="logo-img"></a>
+</script>    <div class="login-image">
+        <header class="login-header">
+            <a href="/"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge" class="logo-img"></a>
         </header>
     </div>
-    <div class="register-form-container">
-        <form id="registerForm" class="register-form" onsubmit="return false;">
-            <h2>Join SkillBridge Academy</h2>
+    <div class="login-form-container">
+        <form id="loginForm" class="login-form" onsubmit="return false;">
+            <h2>Welcome Back to SkillBridge Academy</h2>
             <div class="form-group">
-                <label for="registerName">Full Name</label>
-                <input type="text" id="registerName" placeholder="Enter your full name" required>
-            </div>
-            <div class="form-group">
-                <label for="registerEmail">Email Address</label>
-                <input type="email" id="registerEmail" placeholder="Enter your email" required>
+                <label for="loginEmail">Email or Student ID</label>
+                <input type="email" id="loginEmail" placeholder="Enter your email" required>
             </div>
             <div class="form-group password-wrapper">
-                <label for="registerPassword">Create Password</label>
-                <input type="password" id="registerPassword" placeholder="Create a strong password" required>
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password" required>
                 <i class="fas fa-eye eye-toggle" onclick="togglePasswordVisibility()"></i>
             </div>
-            <div class="form-group password-wrapper">
-                <label for="registerConfirmPassword">Confirm Password</label>
-                <input type="password" id="registerConfirmPassword" placeholder="Confirm your password" required>
-            </div>
-            <button type="submit" class="btn-register">Create Account</button>
-            <a href="login.html" class="extra-link">Already have an account? Sign In</a>
+            <button type="submit" class="btn-login">Sign In</button>
+            <a href="#" class="extra-link">Forgot password?</a>
         </form>
     </div>
     <div class="aux-icons">

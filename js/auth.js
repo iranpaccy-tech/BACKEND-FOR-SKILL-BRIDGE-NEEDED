@@ -1,1 +1,167 @@
-const Auth = { currentUser: null, init() { this.currentUser = Utils.Storage.get('user'); this.updateUI(); this.setupEventListeners() }, setupEventListeners() { document.getElementById('loginForm')?.addEventListener('submit', (e) => this.handleLogin(e)); document.getElementById('registerForm')?.addEventListener('submit', (e) => this.handleRegister(e)) }, showLogin() { document.getElementById('loginModal')?.classList.add('active') }, showRegister() { document.getElementById('registerModal')?.classList.add('active') }, handleLogin(e) { e.preventDefault(); const email = document.getElementById('loginEmail').value, password = document.getElementById('loginPassword').value; if (!email || !password) return UI.showToast('Please fill in all fields', 'error'); UI.showToast('Logging in...', 'info'); setTimeout(() => { const user = { id: Date.now(), name: email.split('@')[0], email, role: 'student', avatar: email.charAt(0).toUpperCase(), xp: 1250, level: 5 }; this.setUser(user); UI.showToast(`Welcome back, ${user.name}!`, 'success'); UI.closeAllModals(); if (!window.location.pathname.includes('dashboard.html')) window.location.href = 'dashboard.html' }, 1000) }, handleRegister(e) { e.preventDefault(); const name = document.getElementById('registerName').value, email = document.getElementById('registerEmail').value, password = document.getElementById('registerPassword').value, role = document.getElementById('registerRole').value; if (!name || !email || !password) return UI.showToast('Please fill in all fields', 'error'); UI.showToast('Creating account...', 'info'); setTimeout(() => { const user = { id: Date.now(), name, email, role, avatar: name.charAt(0).toUpperCase(), xp: 100, level: 1 }; this.setUser(user); UI.showToast(`Welcome, ${name}!`, 'success'); UI.closeAllModals(); window.location.href = 'dashboard.html' }, 1500) }, setUser(user) { this.currentUser = user; Utils.Storage.set('user', user); this.updateUI() }, logout() { this.currentUser = null; Utils.Storage.remove('user'); this.updateUI(); UI.showToast('Logged out', 'info'); window.location.href = 'index.html' }, updateUI() { const navAuth = document.getElementById('navAuth'); if (!navAuth) return; if (this.currentUser) { navAuth.innerHTML = `<span style="margin-right:1rem">👤 ${this.currentUser.name}</span><a href="dashboard.html" class="btn-outline" style="margin-right:0.5rem">Dashboard</a><button class="btn-primary" onclick="Auth.logout()">Logout</button>` } else { navAuth.innerHTML = `<button class="btn-outline" onclick="Auth.showLogin()">Log In</button><button class="btn-primary" onclick="Auth.showRegister()">Sign Up</button>` } } }; document.addEventListener('DOMContentLoaded', () => Auth.init());
+/**
+ * FRONTEND AUTHENTICATION
+ * Uses Flask API instead of localStorage
+ */
+
+const Auth = {
+    currentUser: null,
+
+    init() {
+        this.checkAuthStatus();
+        this.setupEventListeners();
+    },
+
+    setupEventListeners() {
+        document.getElementById('loginForm')?.addEventListener('submit', (e) => this.handleLogin(e));
+        document.getElementById('registerForm')?.addEventListener('submit', (e) => this.handleRegister(e));
+    },
+
+    showLogin() {
+        window.location.href = '/login';
+    },
+
+    showRegister() {
+        window.location.href = '/register';
+    },
+
+    async handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        if (!email || !password) {
+            UI.showToast('Please fill in all fields', 'error');
+            return;
+        }
+
+        UI.showToast('Logging in...', 'info');
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                this.currentUser = data.user;
+                UI.showToast(`Welcome back, ${data.user.firstName}!`, 'success');
+                setTimeout(() => {
+                    if (data.user.role === 'admin') {
+                        window.location.href = '/admin';
+                    } else {
+                        window.location.href = '/dashboard';
+                    }
+                }, 1000);
+            } else {
+                UI.showToast(data.message || 'Login failed', 'error');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            UI.showToast('Connection error. Please try again.', 'error');
+        }
+    },
+
+    async handleRegister(e) {
+        e.preventDefault();
+        const firstName = document.getElementById('registerFirstName')?.value || document.getElementById('registerName')?.value.split(' ')[0];
+        const lastName = document.getElementById('registerLastName')?.value || document.getElementById('registerName')?.value.split(' ')[1] || '';
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+        const confirmPassword = document.getElementById('registerConfirmPassword').value;
+
+        if (!firstName || !email || !password) {
+            UI.showToast('Please fill in all required fields', 'error');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            UI.showToast('Passwords do not match', 'error');
+            return;
+        }
+
+        if (password.length < 6) {
+            UI.showToast('Password must be at least 6 characters', 'error');
+            return;
+        }
+
+        UI.showToast('Creating account...', 'info');
+
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                    confirmPassword
+                })
+            });
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                this.currentUser = data.user;
+                UI.showToast(`Welcome, ${data.user.firstName}!`, 'success');
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 1000);
+            } else {
+                UI.showToast(data.message || 'Registration failed', 'error');
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            UI.showToast('Connection error. Please try again.', 'error');
+        }
+    },
+
+    async logout() {
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+        this.currentUser = null;
+        UI.showToast('Logged out', 'info');
+        window.location.href = '/';
+    },
+
+    updateUI() {
+        // This will be called after checking auth status
+        const navAuth = document.getElementById('navAuth');
+        if (!navAuth) return;
+
+        if (this.currentUser) {
+            navAuth.innerHTML = `
+                <span style="margin-right:1rem">👤 ${this.currentUser.firstName}</span>
+                <a href="/dashboard" class="btn-outline" style="margin-right:0.5rem">Dashboard</a>
+                <button class="btn-primary" onclick="Auth.logout()">Logout</button>
+            `;
+        } else {
+            navAuth.innerHTML = `
+                <button class="btn-outline" onclick="Auth.showLogin()">Log In</button>
+                <button class="btn-primary" onclick="Auth.showRegister()">Sign Up</button>
+            `;
+        }
+    },
+
+    async checkAuthStatus() {
+        try {
+            const response = await fetch('/api/user');
+            const data = await response.json();
+            if (data.success) {
+                this.currentUser = data.user;
+            } else {
+                this.currentUser = null;
+            }
+        } catch (error) {
+            this.currentUser = null;
+        }
+        this.updateUI();
+    }
+};
+
+// Initialize auth on page load
+document.addEventListener('DOMContentLoaded', () => Auth.init());

@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "Frontend Developer",
+    "company": "TechCorp",
+    "location": "Remote",
+    "salary": "$70k-90k",
+    "type": "Full-time"
+  },
+  {
+    "id": 2,
+    "title": "Full Stack Engineer",
+    "company": "StartupXYZ",
+    "location": "San Francisco",
+    "salary": "$90k-120k",
+    "type": "Full-time"
+  },
+  {
+    "id": 3,
+    "title": "UI/UX Designer",
+    "company": "DesignHub",
+    "location": "New York",
+    "salary": "$60k-80k",
+    "type": "Contract"
+  }
+]

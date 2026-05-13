@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificates - SkillBridge Dashboard</title>
+    <title>Community - SkillBridge Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <style>
@@ -85,29 +85,37 @@
             text-align: center;
         }
 
-        .sidebar-support-card {
-            margin: 2rem 1.5rem 0;
-            padding: 1.25rem;
-            border-radius: 16px;
-            background: #C2185B;
-            color: white;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-            font-size: 0.95rem;
-            line-height: 1.5;
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .sidebar-support-card .support-card-title {
-            font-weight: 700;
-            margin-bottom: 0.75rem;
+        .sidebar-footer .course-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
         }
 
-        .sidebar-support-card .support-card-text {
-            opacity: 0.95;
+        .sidebar-footer .course-card h4 {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
         }
 
-        .collapse-link {
-            margin-top: 2rem;
-            color: rgba(255,255,255,0.6);
+        .sidebar-footer .qr-code {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
         }
 
         /* === MAIN CONTENT === */
@@ -216,253 +224,118 @@
             color: #00897B;
         }
 
-        /* === CERTIFICATES SECTION === */
-        .certificates-section {
-            margin-bottom: 2rem;
+        /* === COMMUNITY POSTS === */
+        .community-container {
+            max-width: 900px;
         }
 
-        .certificates-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #222;
-            margin-bottom: 1rem;
-        }
-
-        .certificates-intro {
+        .community-intro {
             background: white;
             border-radius: 12px;
-            padding: 1.5rem 2rem;
+            padding: 2rem;
             margin-bottom: 2rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
-        .certificates-intro p {
+        .community-intro h2 {
+            font-size: 1.25rem;
+            color: #222;
+            margin-bottom: 0.75rem;
+        }
+
+        .community-intro p {
             color: #666;
             line-height: 1.6;
         }
 
-        .certificates-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-            min-height: calc(100vh - 320px);
-            align-items: center;
-        }
-
-        .no-certificates {
-            background: white;
-            border-radius: 18px;
-            padding: 3rem 2rem;
-            text-align: center;
-            box-shadow: 0 2px 24px rgba(0, 0, 0, 0.08);
-            max-width: 560px;
-            margin: 0 auto;
-        }
-
-        .no-certificates-icon {
-            font-size: 4rem;
-            color: #00897B;
-            margin-bottom: 1rem;
-        }
-
-        .no-certificates h2 {
-            font-size: 1.75rem;
-            margin-bottom: 0.75rem;
-            color: #222;
-        }
-
-        .no-certificates p {
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        .certificate-card {
+        .post-card {
             background: white;
             border-radius: 12px;
-            overflow: hidden;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             transition: all 0.3s;
-            cursor: pointer;
         }
 
-        .certificate-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        .post-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
 
-        .certificate-card h3 {
-            margin: 0;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        .certificate-card p {
-            margin: 0;
-            padding: 0.5rem 1.5rem;
-            color: #666;
-        }
-
-        .certificate-actions {
-            padding: 1rem 1.5rem;
+        .post-header {
             display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .certificate-actions button {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .certificate-actions .btn-outline {
-            background: transparent;
-            color: #00897B;
-            border: 1px solid #00897B;
-        }
-
-        .certificate-actions .btn-outline:hover {
-            background: #00897B;
-            color: white;
-        }
-
-        .certificate-actions .btn-link {
-            background: transparent;
-            color: #666;
-            text-decoration: underline;
-        }
-
-        .certificate-actions .btn-link:hover {
-            color: #00897B;
-        }
-
-        .certificate-header {
-            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
-            padding: 2rem;
-            color: white;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .certificate-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-        }
-
-        .certificate-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .certificate-name {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .certificate-body {
-            padding: 1.5rem;
-        }
-
-        .certificate-detail {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .certificate-detail:last-of-type {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .certificate-label {
-            color: #666;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .certificate-value {
-            color: #222;
-            font-weight: 600;
-        }
-
-        .certificate-status {
-            display: inline-block;
-            background: rgba(16, 185, 129, 0.1);
-            color: #10B981;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            gap: 1rem;
             margin-bottom: 1rem;
         }
 
-        .certificate-footer {
-            padding: 1rem 1.5rem;
-            border-top: 1px solid #eee;
-            display: flex;
-            gap: 1rem;
-        }
-
-        .download-btn {
-            flex: 1;
-            background: linear-gradient(180deg, #FF6EA0 0%, #FF3366 100%);
-            color: white;
-            border: none;
-            padding: 0.75rem 1rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            transition: all 0.3s;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
         }
 
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 51, 102, 0.3);
+        .post-meta {
+            flex: 1;
         }
 
-        .share-btn {
-            background: #f0f0f0;
-            color: #666;
-            border: none;
-            padding: 0.75rem 1rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
+        .post-author {
             font-weight: 600;
+            color: #222;
+            margin-bottom: 0.25rem;
+        }
+
+        .post-time {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .post-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .post-content {
+            margin-bottom: 1rem;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .post-footer {
+            display: flex;
+            gap: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             cursor: pointer;
             transition: all 0.3s;
         }
 
-        .share-btn:hover {
-            background: #e0e0e0;
-            color: #222;
+        .post-action:hover {
+            color: #00897B;
+        }
+
+        .post-action i {
+            font-size: 1rem;
         }
 
         /* === AUX ICONS === */
@@ -506,10 +379,6 @@
         @media (max-width: 1200px) {
             .main-content {
                 padding: 1.5rem;
-            }
-
-            .certificates-grid {
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             }
         }
 
@@ -558,10 +427,6 @@
                 flex-direction: column;
                 gap: 1rem;
                 padding: 0.75rem;
-            }
-
-            .certificates-grid {
-                grid-template-columns: 1fr;
             }
         }
 
@@ -633,14 +498,17 @@
                 display: none;
             }
 
-            .certificate-footer {
-                flex-direction: column;
-                gap: 0.5rem;
+            .community-intro {
+                padding: 1rem;
             }
 
-            .download-btn,
-            .share-btn {
-                width: 100%;
+            .post-card {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .post-footer {
+                gap: 1rem;
             }
         }
     </style>
@@ -659,15 +527,12 @@
             <li><a href="class-sessions.html"><i class="fas fa-calendar-check"></i> Class Sessions</a></li>
             <li><a href="submissions.html"><i class="fas fa-file-check"></i> Submissions</a></li>
             <li><a href="groups.html"><i class="fas fa-users"></i> Groups</a></li>
-            <li><a href="community.html"><i class="fas fa-comments"></i> Community</a></li>
+            <li><a href="community.html" class="active"><i class="fas fa-comments"></i> Community</a></li>
             <li><a href="power-ai.html"><i class="fas fa-bolt"></i> Power AI</a></li>
-            <li><a href="certificates.html" class="active"><i class="fas fa-certificate"></i> Certificates</a></li>
-            <li><a href="#" class="collapse-link"><i class="fas fa-chevron-left"></i> Collapse</a></li>
+            <li><a href="certificates.html"><i class="fas fa-certificate"></i> Certificates</a></li>
+            <li><a href="#" style="margin-top: 2rem; color: rgba(255,255,255,0.6);"><i class="fas fa-chevron-left"></i>
+                    Collapse</a></li>
         </nav>
-        <div class="sidebar-support-card">
-            <div class="support-card-title">Default Cohort Support Channel</div>
-            <div class="support-card-text">Join our support channel for real-time assistance, peer collaboration, and exclusive resources tailored to your cohort.</div>
-        </div>
     </aside>
 
     <!-- Main Content -->
@@ -678,12 +543,9 @@
                 <button class="mobile-menu-btn" id="sidebarToggle" onclick="toggleSidebar()">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1>Certificates</h1>
+                <h1>Community</h1>
             </div>
             <div class="header-right">
-                <button class="btn-primary" onclick="Certificates.showAddForm()" style="margin-right: 1rem;">
-                    <i class="fas fa-plus"></i> Add Certificate
-                </button>
                 <div class="language-selector">
                     <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23012169' width='32' height='32'/%3E%3Cpath fill='%23FFF' d='M0 0h32v32H0z'/%3E%3C/svg%3E"
                         alt="EN" style="width:20px;height:13px;border-radius:2px;">
@@ -694,16 +556,151 @@
                     <i class="fas fa-bell"></i>
                 </div>
                 <div class="profile-section">
-                    <div class="profile-avatar">IP</div>
-                    <span class="profile-name">Iran Paccy</span>
+                    <div class="profile-avatar">M</div>
+                    <span class="profile-name">Mugisha</span>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
         </div>
 
-        <!-- Certificates Section -->
-        <div class="certificates-section">
-            <div class="certificates-grid" id="certificatesGrid"></div>
+        <!-- Community Content -->
+        <div class="community-container">
+            <!-- Intro Section -->
+            <div class="community-intro">
+                <h2>SkillBridge Community</h2>
+                <p>Connect with peers, share knowledge, ask questions, and collaborate on projects. Our community is a
+                    supportive space for learners to grow together and support each other on their learning journey.</p>
+            </div>
+
+            <!-- Community Posts -->
+            <div class="community-posts">
+                <!-- Post 1 -->
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-avatar">AJ</div>
+                        <div class="post-meta">
+                            <div class="post-author">Alice Johnson</div>
+                            <div class="post-time">2 hours ago</div>
+                        </div>
+                        <div class="post-badge">Looking for Help</div>
+                    </div>
+                    <div class="post-content">
+                        <p>Anyone else struggling with the React project? I'm stuck on state management and would love
+                            to find a study buddy to work through this together. I'm available evenings and weekends!
+                        </p>
+                    </div>
+                    <div class="post-footer">
+                        <div class="post-action">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span>12 Likes</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-comments"></i>
+                            <span>5 Replies</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-share"></i>
+                            <span>Share</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post 2 -->
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-avatar" style="background:linear-gradient(135deg,#FF6EA0 0%,#FF3366 100%);">MT
+                        </div>
+                        <div class="post-meta">
+                            <div class="post-author">Mugisha Thierry</div>
+                            <div class="post-time">5 hours ago</div>
+                        </div>
+                        <div class="post-badge">Resource Share</div>
+                    </div>
+                    <div class="post-content">
+                        <p>🎓 Just discovered an amazing article on CSS Grid by <strong>Jen Simmons</strong>. It
+                            completely changed how I understand CSS layout. The examples are super practical and easy to
+                            follow. Check it out in the Resources channel!</p>
+                    </div>
+                    <div class="post-footer">
+                        <div class="post-action">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span>28 Likes</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-comments"></i>
+                            <span>8 Replies</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-share"></i>
+                            <span>Share</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post 3 -->
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-avatar" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);">PK
+                        </div>
+                        <div class="post-meta">
+                            <div class="post-author">Philip Kipkemboi</div>
+                            <div class="post-time">1 day ago</div>
+                        </div>
+                        <div class="post-badge">Announcement</div>
+                    </div>
+                    <div class="post-content">
+                        <p>🎉 Congratulations to everyone who completed the JavaScript fundamentals module! Your hard
+                            work and dedication are paying off. Next module starts this Friday. Let's continue building
+                            amazing projects together!</p>
+                    </div>
+                    <div class="post-footer">
+                        <div class="post-action">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span>45 Likes</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-comments"></i>
+                            <span>12 Replies</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-share"></i>
+                            <span>Share</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post 4 -->
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-avatar" style="background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);">EN
+                        </div>
+                        <div class="post-meta">
+                            <div class="post-author">Emmanuel Njoroge</div>
+                            <div class="post-time">2 days ago</div>
+                        </div>
+                        <div class="post-badge">Project Showcase</div>
+                    </div>
+                    <div class="post-content">
+                        <p>Excited to share my first React project - a personal portfolio website! It took me a while to
+                            understand hooks, but the community feedback helped me so much. Thanks everyone for the
+                            support and encouragement. Ready for the next challenge! 🚀</p>
+                    </div>
+                    <div class="post-footer">
+                        <div class="post-action">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span>34 Likes</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-comments"></i>
+                            <span>9 Replies</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-share"></i>
+                            <span>Share</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -714,110 +711,9 @@
         <a href="#" class="aux-btn teal" title="Accessibility"><i class="fas fa-universal-access"></i></a>
     </div>
 
-    <!-- Toast Container -->
-    <div id="toastContainer" class="toast-container"></div>
-
     <script src="js/utils.js"></script>
     <script src="js/auth.js"></script>
-    <script src="js/certificates.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
-        // Download certificate
-        function downloadCertificate(title, credentialId) {
-            // Create a PDF certificate
-            const certificateHTML = `
-                <div style="width: 800px; height: 600px; background: white; border: 2px solid #00897B; border-radius: 20px; padding: 40px; font-family: 'Times New Roman', serif; position: relative; overflow: hidden;">
-                    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(0, 137, 123, 0.1); border-radius: 50%;"></div>
-                    
-                    <div style="text-align: center; margin-bottom: 40px;">
-                        <h1 style="color: #00897B; font-size: 36px; margin-bottom: 10px; font-weight: bold;">SKILLBRIDGE ACADEMY</h1>
-                        <h2 style="color: #333; font-size: 24px; margin-bottom: 20px;">Certificate of Completion</h2>
-                        <div style="width: 100px; height: 4px; background: #00897B; margin: 0 auto;"></div>
-                    </div>
-                    
-                    <div style="text-align: center; margin: 60px 0;">
-                        <p style="font-size: 18px; color: #666; margin-bottom: 20px;">This is to certify that</p>
-                        <h3 style="font-size: 32px; color: #00897B; margin-bottom: 20px; font-weight: bold;">${document.querySelector('.profile-name')?.textContent || 'Learner'}</h3>
-                        <p style="font-size: 18px; color: #666; margin-bottom: 20px;">has successfully completed the course</p>
-                        <h4 style="font-size: 28px; color: #333; margin-bottom: 30px; font-style: italic;">"${title}"</h4>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; margin-top: 80px; padding: 0 40px;">
-                        <div style="text-align: center;">
-                            <p style="font-size: 14px; color: #666; margin-bottom: 5px;">Credential ID</p>
-                            <p style="font-size: 16px; color: #333; font-weight: bold;">${credentialId}</p>
-                        </div>
-                        <div style="text-align: center;">
-                            <p style="font-size: 14px; color: #666; margin-bottom: 5px;">Date Issued</p>
-                            <p style="font-size: 16px; color: #333; font-weight: bold;">${new Date().toLocaleDateString()}</p>
-                        </div>
-                    </div>
-                    
-                    <div style="position: absolute; bottom: 40px; left: 40px; right: 40px; text-align: center;">
-                        <div style="width: 200px; height: 2px; background: #00897B; margin: 0 auto 20px;"></div>
-                        <p style="font-size: 14px; color: #666;">SkillBridge Academy • Empowering Africa's Future Developers</p>
-                    </div>
-                </div>
-            `;
-
-            // Create temporary element
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = certificateHTML;
-            tempDiv.style.position = 'absolute';
-            tempDiv.style.left = '-9999px';
-            document.body.appendChild(tempDiv);
-
-            // Configure PDF options
-            const options = {
-                margin: 0.5,
-                filename: title.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '_certificate.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
-            };
-
-            // Generate and download PDF
-            html2pdf().set(options).from(tempDiv).save().then(() => {
-                document.body.removeChild(tempDiv);
-            });
-        }
-
-        // Share certificate
-        function shareCertificate(title) {
-            const shareText = `I just completed the "${title}" course on SkillBridge Academy! 🎉`;
-            if (navigator.share) {
-                navigator.share({
-                    title: 'SkillBridge Certificate',
-                    text: shareText,
-                    url: window.location.href
-                }).catch(err => console.log('Error sharing:', err));
-            } else {
-                alert('Share: ' + shareText);
-            }
-        }
-
-        // Override the download and share methods to use the new functions
-        const originalDownload = Certificates.download;
-        const originalShare = Certificates.share;
-
-        Certificates.download = function(id) {
-            const cert = this.list.find(c => c.id === id);
-            if (cert) {
-                downloadCertificate(cert.title, cert.credential);
-            } else {
-                originalDownload.call(this, id);
-            }
-        };
-
-        Certificates.share = function(id) {
-            const cert = this.list.find(c => c.id === id);
-            if (cert) {
-                shareCertificate(cert.title);
-            } else {
-                originalShare.call(this, id);
-            }
-        };
-
         // Highlight active link
         function markActiveLink() {
             const links = document.querySelectorAll('.sidebar-nav a');

@@ -178,7 +178,6 @@
             border: none;
             font: inherit;
             cursor: pointer;
-            padding: 0;
             outline: none;
         }
 
@@ -224,12 +223,6 @@
             cursor: pointer;
             color: #222;
             font-size: 0.95rem;
-        }
-
-        .notification-panel {
-            right: auto;
-            left: auto;
-            width: 280px;
         }
 
         .notification-panel h4,
@@ -869,7 +862,7 @@
                 <h1>Dashboard</h1>
             </div>
             <div class="header-right">
-                <div class="language-selector">
+                    <div class="language-selector">
                     <i class="fas fa-language"></i>
                     <select id="languageSelect" onchange="setLanguage(this.value)">
                         <option value="English">English</option>
@@ -889,8 +882,8 @@
                 <div class="notification-panel" id="notificationPanel">
                     <h4>Notifications</h4>
                     <div class="notification-item">Welcome back to SkillBridge!</div>
-                    <div class="notification-item">New event: Live workshop tomorrow.</div>
-                    <div class="notification-item">Course progress updated.</div>
+                    <div class="notification-item">New live session available.</div>
+                    <div class="notification-item">You have 3 unread messages.</div>
                 </div>
                 <div class="profile-menu" id="profileMenu">
                     <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
@@ -1070,15 +1063,36 @@
             });
         }
 
-        // Check if user is logged in
-        document.addEventListener('DOMContentLoaded', function () {
-            const user = JSON.parse(localStorage.getItem('skillbridge_user') || 'null');
-            if (user && user.name) {
-                // Update profile name with first letter
-                document.querySelector('.profile-avatar').textContent = user.name.charAt(0).toUpperCase();
-                document.querySelector('.profile-name').textContent = user.name;
+        function setDashboardProfile(user) {
+            if (!user) return;
+            const name = user.firstName ? `${user.firstName}${user.lastName ? ' ' + user.lastName : ''}` : user.name || 'Student';
+            const avatar = document.querySelector('.profile-avatar');
+            const profileName = document.querySelector('.profile-name');
+            if (avatar) avatar.textContent = name.charAt(0).toUpperCase();
+            if (profileName) profileName.textContent = name;
+        }
+
+        async function loadDashboardUser() {
+            try {
+                const response = await fetch('/api/user');
+                const data = await response.json();
+                if (data.success && data.user) {
+                    setDashboardProfile(data.user);
+                    return;
+                }
+            } catch (error) {
+                console.warn('Could not load dashboard user from API.', error);
             }
-            // render enrolled modules
+
+            const storedUser = JSON.parse(localStorage.getItem('skillbridge_user') || 'null');
+            if (storedUser && (storedUser.name || storedUser.firstName)) {
+                setDashboardProfile(storedUser);
+            }
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function () {
+            loadDashboardUser();
             renderEnrolledModules();
             markActiveLink();
         });
@@ -1131,8 +1145,7 @@
 
         function setLanguage(language) {
             const selector = document.getElementById('languageSelect');
-            selector.value = language;
-            // Add additional translation or persistence logic here
+            if (selector) selector.value = language;
             alert(`Language set to ${language}`);
         }
 

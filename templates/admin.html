@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SkillBridge Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+
+        .sidebar.collapsed {
+            width: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-logo {
+            padding: 0 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin: 0.5rem 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .sidebar-nav a:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 2rem;
+        }
+
+        .sidebar-nav a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid white;
+            padding-left: 1.25rem;
+        }
+
+        .sidebar-nav i {
+            width: 24px;
+            text-align: center;
+        }
+
+        /* === MAIN CONTENT === */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 2rem;
+            transition: 0.3s;
+            overflow-y: auto;
+        }
+
+        .main-content.collapsed {
+            margin-left: 0;
+        }
+
+        /* === HEADER === */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-left h1 {
+            font-size: 1.75rem;
+            color: #222;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #f0f0f0;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: default;
+        }
+
+        .language-selector select {
+            background: transparent;
+            border: none;
+            font: inherit;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .notification-icon:hover {
+            background: #e0e0e0;
+        }
+
+        .profile-menu,
+        .notification-panel {
+            position: absolute;
+            right: 2rem;
+            top: 110px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            width: 260px;
+            display: none;
+            z-index: 200;
+        }
+
+        .profile-menu.show,
+        .notification-panel.show {
+            display: block;
+        }
+
+        .profile-menu button {
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: left;
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            color: #222;
+            font-size: 0.95rem;
+        }
+
+        .notification-panel h4,
+        .notification-panel .notification-item {
+            margin: 0;
+            padding: 1rem 1.25rem;
+            font-size: 0.95rem;
+            color: #444;
+        }
+
+        .notification-panel .notification-item {
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00897B 0%, #008B82 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #222;
+        }
+
+        /* === ADMIN SECTION === */
+        .admin-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .admin-section h2 {
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+
+        .admin-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .admin-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .admin-card h3 {
+            margin-bottom: 0.5rem;
+            color: #00897B;
+            font-size: 1.2rem;
+        }
+
+        .admin-card p {
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        .btn-admin {
+            background: #00897B;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn-admin:hover {
+            background: #00695c;
+        }
+
+        /* === DATA DISPLAY === */
+        .data-display {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .data-display h3 {
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+            font-size: 1.5rem;
+        }
+
+        .data-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-add {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            background: #218838;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.6rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .data-table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-edit {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-edit:hover {
+            background: #ffb300;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+        }
+
+        /* === ANALYTICS === */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .analytics-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+
+        .analytics-card h4 {
+            margin-bottom: 0.5rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .analytics-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00897B;
+        }
+
+        /* === MODAL === */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #000;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #00897B;
+            box-shadow: 0 0 0 3px rgba(0, 137, 123, 0.1);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .btn-cancel,
+        .btn-save {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .btn-cancel:hover {
+            background: #dee2e6;
+        }
+
+        .btn-save {
+            background: #00897B;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #00695c;
+        }
+
+        .btn-save:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* === NO DATA MESSAGE === */
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        .no-data-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.6;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                height: 100vh;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-left,
+            .header-right {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .admin-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-left h1 {
+                font-size: 1.25rem;
+            }
+
+            .data-toolbar {
+                flex-direction: column;
+            }
+
+            .btn-add,
+            .search-box {
+                width: 100%;
+            }
+
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-chart-bar"></i>
+            <span>Admin</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <li><a href="#" onclick="showDashboard(); return false;" class="active"><i class="fas fa-cog"></i> Dashboard</a></li>
+            <li><a href="#" onclick="showUsers(); return false;"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="#" onclick="showCertificates(); return false;"><i class="fas fa-certificate"></i> Certificates</a></li>
+            <li><a href="#" onclick="showCourses(); return false;"><i class="fas fa-book"></i> Courses</a></li>
+            <li><a href="#" onclick="showJobs(); return false;"><i class="fas fa-briefcase"></i> Jobs</a></li>
+            <li><a href="#" onclick="showGroups(); return false;"><i class="fas fa-users-cog"></i> Groups</a></li>
+            <li><a href="#" onclick="showAnalytics(); return false;"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+            <li><a href="#" onclick="logout(); return false;" style="margin-top: 2rem;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="sidebarToggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Admin Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="language-selector">
+                    <i class="fas fa-language"></i>
+                    <select id="adminLanguageSelect" onchange="setAdminLanguage(this.value)">
+                        <option value="English">English</option>
+                        <option value="Français">Français</option>
+                        <option value="Español">Español</option>
+                        <option value="Deutsch">Deutsch</option>
+                    </select>
+                </div>
+                <div class="notification-icon" id="adminNotificationButton" onclick="toggleAdminNotifications()">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="profile-section" onclick="toggleAdminProfileMenu()">
+                    <div class="profile-avatar" id="profileAvatar">A</div>
+                    <span id="profileName">Admin</span>
+                </div>
+                <div class="notification-panel" id="adminNotificationPanel">
+                    <h4>Notifications</h4>
+                    <div class="notification-item">New user registered.</div>
+                    <div class="notification-item">Course 'React Development' needs review.</div>
+                    <div class="notification-item">2 new support requests.</div>
+                </div>
+                <div class="profile-menu" id="adminProfileMenu">
+                    <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Controls -->
+        <div class="admin-section">
+            <h2>System Administration</h2>
+            <div class="admin-cards">
+                <div class="admin-card" onclick="showUsers()">
+                    <h3><i class="fas fa-users"></i> User Management</h3>
+                    <p>Manage registered users</p>
+                    <button class="btn-admin">View Users</button>
+                </div>
+                <div class="admin-card" onclick="showCertificates()">
+                    <h3><i class="fas fa-certificate"></i> Certificate Management</h3>
+                    <p>Manage all certificates</p>
+                    <button class="btn-admin">View Certificates</button>
+                </div>
+                <div class="admin-card" onclick="showCourses()">
+                    <h3><i class="fas fa-book"></i> Course Management</h3>
+                    <p>Manage courses</p>
+                    <button class="btn-admin">View Courses</button>
+                </div>
+                <div class="admin-card" onclick="showJobs()">
+                    <h3><i class="fas fa-briefcase"></i> Job Management</h3>
+                    <p>Manage job listings</p>
+                    <button class="btn-admin">View Jobs</button>
+                </div>
+                <div class="admin-card" onclick="showGroups()">
+                    <h3><i class="fas fa-users-cog"></i> Group Management</h3>
+                    <p>Manage study groups</p>
+                    <button class="btn-admin">View Groups</button>
+                </div>
+                <div class="admin-card" onclick="showAnalytics()">
+                    <h3><i class="fas fa-chart-bar"></i> Analytics</h3>
+                    <p>View system statistics</p>
+                    <button class="btn-admin">View Analytics</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Display Area -->
+        <div id="dataDisplay" class="data-display">
+            <p style="text-align: center; color: #999; padding: 3rem;">Select an option above to manage system data.</p>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Edit Item</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Form will be injected here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-save" id="saveBtn" onclick="saveItem()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentEditData = null;
+        let currentEditType = null;
+        let currentDataList = [];
+
+        // Check admin access
+        document.addEventListener('DOMContentLoaded', function () {
+            checkAdminAccess();
+        });
+
+        function checkAdminAccess() {
+            fetch('/api/auth/status')
+                .then(r => r.json())
+                .then(data => {
+                    if (!data.logged_in || data.user.role !== 'admin') {
+                        window.location.href = '/login';
+                    } else {
+                        const initials = (data.user.firstName.charAt(0) + (data.user.lastName ? data.user.lastName.charAt(0) : '')).toUpperCase();
+                        document.getElementById('profileAvatar').textContent = initials;
+                        document.getElementById('profileName').textContent = data.user.firstName + ' ' + (data.user.lastName || '');
+                        showDashboard();
+                    }
+                })
+                .catch(err => {
+                    console.error('Auth check failed:', err);
+                    window.location.href = '/login';
+                });
+        }
+
+        // Show Dashboard
+        function showDashboard() {
+            setActiveNav('Dashboard');
+            document.getElementById('dataDisplay').innerHTML = `
+                <h3>Dashboard Overview</h3>
+                <p style="margin-top: 1rem; color: #666;">Welcome to the SkillBridge Admin Dashboard. Use the cards above or sidebar navigation to manage system data.</p>
+            `;
+        }
+
+        function setActiveNav(section) {
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            navLinks.forEach(link => {
+                const text = link.textContent.trim();
+                if (text.startsWith(section)) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        // Sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('active');
+            }
+        }
+
+        // Show Users
+        async function showUsers() {
+            setActiveNav('Users');
+            try {
+                const response = await fetch('/api/admin/users');
+                const data = await response.json();
+                if (data.success) {
+                    currentDataList = data.users;
+                    const usersWithName = data.users.map(user => ({
+                        ...user,
+                        name: `${user.firstName || ''} ${user.lastName || ''}`.trim()
+                    }));
+                    displayData('Users', usersWithName, ['id', 'name', 'email', 'role']);
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+                alert('Error loading users');
+            }
+        }
+
+        // Show Certificates
+        async function showCertificates() {
+            setActiveNav('Certificates');
+            try {
+                const response = await fetch('/api/admin/certificates');
+                const data = await response.json();
+                if (data.success) {
+                    currentDataList = data.certificates;
+                    displayData('Certificates', data.certificates, ['id', 'title', 'date', 'credential', 'userId']);
+                }
+            } catch (error) {
+                console.error('Error loading certificates:', error);
+                alert('Error loading certificates');
+            }
+        }
+
+        // Show Courses
+        async function showCourses() {
+            setActiveNav('Courses');
+            try {
+                const response = await fetch('/api/admin/courses');
+                const data = await response.json();
+                if (data.success) {
+                    currentDataList = data.courses;
+                    displayData('Courses', data.courses, ['id', 'title', 'instructor', 'duration', 'rating', 'students', 'price']);
+                }
+            } catch (error) {
+                console.error('Error loading courses:', error);
+                alert('Error loading courses');
+            }
+        }
+
+        // Show Jobs
+        async function showJobs() {
+            setActiveNav('Jobs');
+            try {
+                const response = await fetch('/api/admin/jobs');
+                const data = await response.json();
+                if (data.success) {
+                    currentDataList = data.jobs;
+                    displayData('Jobs', data.jobs, ['id', 'title', 'company', 'location', 'salary', 'type']);
+                }
+            } catch (error) {
+                console.error('Error loading jobs:', error);
+                alert('Error loading jobs');
+            }
+        }
+
+        // Show Groups
+        async function showGroups() {
+            setActiveNav('Groups');
+            try {
+                const response = await fetch('/api/admin/groups');
+                const data = await response.json();
+                if (data.success) {
+                    currentDataList = data.groups;
+                    displayData('Groups', data.groups, ['id', 'name', 'description', 'category', 'members', 'maxMembers']);
+                }
+            } catch (error) {
+                console.error('Error loading groups:', error);
+                alert('Error loading groups');
+            }
+        }
+
+        // Show Analytics
+        function showAnalytics() {
+            setActiveNav('Analytics');
+            Promise.all([
+                fetch('/api/admin/users').then(r => r.json()),
+                fetch('/api/admin/certificates').then(r => r.json()),
+                fetch('/api/admin/courses').then(r => r.json()),
+                fetch('/api/admin/jobs').then(r => r.json()),
+                fetch('/api/admin/groups').then(r => r.json())
+            ]).then(([users, certs, courses, jobs, groups]) => {
+                const totalUsers = users.users?.length || 0;
+                const totalCerts = certs.certificates?.length || 0;
+                const totalCourses = courses.courses?.length || 0;
+                const totalJobs = jobs.jobs?.length || 0;
+                const totalGroups = groups.groups?.length || 0;
+                
+                const html = `
+                    <h3>System Analytics</h3>
+                    <div class="analytics-grid">
+                        <div class="analytics-card">
+                            <h4>Total Users</h4>
+                            <span class="analytics-number">${totalUsers}</span>
+                        </div>
+                        <div class="analytics-card">
+                            <h4>Total Certificates</h4>
+                            <span class="analytics-number">${totalCerts}</span>
+                        </div>
+                        <div class="analytics-card">
+                            <h4>Total Courses</h4>
+                            <span class="analytics-number">${totalCourses}</span>
+                        </div>
+                        <div class="analytics-card">
+                            <h4>Total Jobs</h4>
+                            <span class="analytics-number">${totalJobs}</span>
+                        </div>
+                        <div class="analytics-card">
+                            <h4>Total Groups</h4>
+                            <span class="analytics-number">${totalGroups}</span>
+                        </div>
+                        <div class="analytics-card">
+                            <h4>Active Users</h4>
+                            <span class="analytics-number">${Math.floor(totalUsers * 0.7)}</span>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('dataDisplay').innerHTML = html;
+            }).catch(err => {
+                console.error('Analytics error:', err);
+                alert('Error loading analytics');
+            });
+        }
+
+        function setAdminLanguage(language) {
+            const selector = document.getElementById('adminLanguageSelect');
+            if (selector) selector.value = language;
+            alert(`Language set to ${language}`);
+        }
+
+        function toggleAdminNotifications() {
+            const panel = document.getElementById('adminNotificationPanel');
+            panel.classList.toggle('show');
+            document.getElementById('adminProfileMenu').classList.remove('show');
+        }
+
+        function toggleAdminProfileMenu() {
+            const menu = document.getElementById('adminProfileMenu');
+            menu.classList.toggle('show');
+            document.getElementById('adminNotificationPanel').classList.remove('show');
+        }
+
+        async function logout() {
+            try {
+                await fetch('/api/auth/logout', { method: 'POST' });
+            } catch (err) {
+                console.error('Logout error:', err);
+            }
+            window.location.href = '/login';
+        }
+
+        // Display Data Table
+        function displayData(title, data, columns) {
+            let html = `
+                <h3>${title} Management</h3>
+                <div class="data-toolbar">
+                    <button class="btn-add" onclick="openAddModal('${title.toLowerCase()}')">
+                        <i class="fas fa-plus"></i> Add New
+                    </button>
+                    <input type="text" class="search-box" placeholder="Search..." id="searchBox" 
+                           onkeyup="filterTable()">
+                </div>
+            `;
+
+            if (data.length === 0) {
+                html += '<div class="no-data"><div class="no-data-icon"><i class="fas fa-inbox"></i></div><p>No data available</p></div>';
+            } else {
+                html += `
+                    <div class="data-table-container">
+                        <table class="data-table" id="dataTable">
+                            <thead>
+                                <tr>
+                                    ${columns.map(col => `<th>${col.charAt(0).toUpperCase() + col.slice(1)}</th>`).join('')}
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.map(item => `
+                                    <tr>
+                                        ${columns.map(col => `<td>${item[col] || ''}</td>`).join('')}
+                                        <td>
+                                            <button onclick="openEditModal('${title.toLowerCase()}', ${JSON.stringify(item).replace(/'/g, '&quot;')})" class="btn-edit">Edit</button>
+                                            <button onclick="deleteItem('${title.toLowerCase()}', ${item.id})" class="btn-delete">Delete</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            document.getElementById('dataDisplay').innerHTML = html;
+        }
+
+        // Filter table
+        function filterTable() {
+            const searchBox = document.getElementById('searchBox');
+            const table = document.getElementById('dataTable');
+            if (!table) return;
+
+            const filter = searchBox.value.toUpperCase();
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const text = rows[i].textContent.toUpperCase();
+                rows[i].style.display = text.includes(filter) ? '' : 'none';
+            }
+        }
+
+        // Open Add Modal
+        function openAddModal(type) {
+            currentEditType = type;
+            currentEditData = null;
+
+            const formFields = {
+                users: { firstName: 'text', lastName: 'text', email: 'email', password: 'password', role: 'select:student,admin' },
+                certificates: { title: 'text', date: 'date', credential: 'text', userId: 'number' },
+                courses: { title: 'text', instructor: 'text', duration: 'text', rating: 'number', students: 'number', price: 'number' },
+                jobs: { title: 'text', company: 'text', location: 'text', salary: 'text', type: 'text' },
+                groups: { name: 'text', description: 'textarea', category: 'text', language: 'text', members: 'number', maxMembers: 'number' }
+            };
+
+            let form = '<form id="editForm">';
+            const fields = formFields[type] || {};
+            
+            Object.keys(fields).forEach(field => {
+                const fieldType = fields[field];
+                let input = '';
+                
+                if (fieldType.startsWith('select:')) {
+                    const options = fieldType.split(':')[1].split(',');
+                    input = `<select name="${field}" required>${options.map(o => `<option value="${o}">${o}</option>`).join('')}</select>`;
+                } else if (fieldType === 'textarea') {
+                    input = `<textarea name="${field}" required></textarea>`;
+                } else {
+                    input = `<input type="${fieldType}" name="${field}" required>`;
+                }
+                
+                form += `
+                    <div class="form-group">
+                        <label>${field.charAt(0).toUpperCase() + field.slice(1)}</label>
+                        ${input}
+                    </div>
+                `;
+            });
+            form += '</form>';
+
+            document.getElementById('modalTitle').textContent = `Add New ${type.charAt(0).toUpperCase() + type.slice(1, -1)}`;
+            document.getElementById('modalBody').innerHTML = form;
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        // Open Edit Modal
+        function openEditModal(type, item) {
+            currentEditType = type;
+            currentEditData = item;
+
+            const formFields = {
+                users: { firstName: 'text', lastName: 'text', email: 'email', role: 'select:student,admin' },
+                certificates: { title: 'text', date: 'date', credential: 'text', userId: 'number' },
+                courses: { title: 'text', instructor: 'text', duration: 'text', rating: 'number', students: 'number', price: 'number' },
+                jobs: { title: 'text', company: 'text', location: 'text', salary: 'text', type: 'text' },
+                groups: { name: 'text', description: 'textarea', category: 'text', language: 'text', members: 'number', maxMembers: 'number' }
+            };
+
+            let form = '<form id="editForm">';
+            const fields = formFields[type] || {};
+            
+            Object.keys(fields).forEach(field => {
+                const fieldType = fields[field];
+                const value = item[field] || '';
+                let input = '';
+                
+                if (fieldType.startsWith('select:')) {
+                    const options = fieldType.split(':')[1].split(',');
+                    input = `<select name="${field}" required>${options.map(o => `<option value="${o}" ${o === value ? 'selected' : ''}>${o}</option>`).join('')}</select>`;
+                } else if (fieldType === 'textarea') {
+                    input = `<textarea name="${field}" required>${value}</textarea>`;
+                } else {
+                    input = `<input type="${fieldType}" name="${field}" value="${value}" required>`;
+                }
+                
+                form += `
+                    <div class="form-group">
+                        <label>${field.charAt(0).toUpperCase() + field.slice(1)}</label>
+                        ${input}
+                    </div>
+                `;
+            });
+            form += '</form>';
+
+            document.getElementById('modalTitle').textContent = `Edit ${type.charAt(0).toUpperCase() + type.slice(1, -1)}`;
+            document.getElementById('modalBody').innerHTML = form;
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        // Save Item
+        async function saveItem() {
+            const form = document.getElementById('editForm');
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.disabled = true;
+
+            try {
+                let url, method, body;
+                
+                if (currentEditData) {
+                    // Update existing item
+                    url = `/api/admin/${currentEditType}/${currentEditData.id}`;
+                    method = 'PUT';
+                    body = JSON.stringify(data);
+                } else {
+                    // Create new item
+                    url = `/api/admin/${currentEditType}`;
+                    method = 'POST';
+                    body = JSON.stringify(data);
+                }
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: body
+                });
+
+                if (response.ok) {
+                    closeModal();
+                    // Refresh the data
+                    if (currentEditType === 'users') showUsers();
+                    else if (currentEditType === 'certificates') showCertificates();
+                    else if (currentEditType === 'courses') showCourses();
+                    else if (currentEditType === 'jobs') showJobs();
+                    else if (currentEditType === 'groups') showGroups();
+                } else {
+                    const errorData = await response.json();
+                    alert('Error saving item: ' + (errorData.message || response.statusText));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error saving item: ' + error.message);
+            } finally {
+                saveBtn.disabled = false;
+            }
+        }
+
+        // Delete Item
+        async function deleteItem(type, id) {
+            if (!confirm('Are you sure you want to delete this item?')) return;
+
+            try {
+                const response = await fetch(`/api/admin/${type}/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    if (type === 'users') showUsers();
+                    else if (type === 'certificates') showCertificates();
+                    else if (type === 'courses') showCourses();
+                    else if (type === 'jobs') showJobs();
+                    else if (type === 'groups') showGroups();
+                } else {
+                    alert('Error deleting item');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error deleting item');
+            }
+        }
+
+        // Close Modal
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('show');
+            currentEditData = null;
+            currentEditType = null;
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('editModal')?.addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+
+</html>
