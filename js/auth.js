@@ -125,7 +125,7 @@ const Auth = {
         }
         this.currentUser = null;
         UI.showToast('Logged out', 'info');
-        window.location.href = '/';
+        window.location.href = '/login';
     },
 
     updateUI() {

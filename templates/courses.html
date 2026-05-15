@@ -2899,7 +2899,7 @@
         // Called when user clicks Enroll Now
         function handleEnroll(courseIndex, courseTitle) {
             // attempt to resolve current user from multiple places
-            const user = window.currentUser || (typeof Auth !== 'undefined' && Auth.currentUser) || (typeof Utils !== 'undefined' && Utils.Storage.get('user')) || JSON.parse(localStorage.getItem('skillbridge_user') || 'null');
+            const user = window.currentUser || (typeof Auth !== 'undefined' && Auth.currentUser) || (typeof Utils !== 'undefined' && Utils.Storage.get('user')) || null;
             if (!user) {
                 // not logged in — redirect to register page
                 const params = new URLSearchParams();
@@ -3070,16 +3070,10 @@
             return;
         }
 
-        document.getElementById('videoCallTitle').textContent = `Study Group: ${courseTitle}`;
-        document.getElementById('currentUserAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
-        document.getElementById('currentUserName').textContent = currentUser.name;
-        document.getElementById('videoCallContainer').classList.add('active');
-        showToast('Joined video study group!', 'success');
-    }
-
-    function closeVideoCall() {
-        document.getElementById('videoCallContainer').classList.remove('active');
-        showToast('Left video call', 'info');
+            const participantName = getDisplayName(currentUser);
+            document.getElementById('videoCallTitle').textContent = `Study Group: ${courseTitle}`;
+            document.getElementById('currentUserAvatar').textContent = participantName.charAt(0).toUpperCase();
+            document.getElementById('currentUserName').textContent = participantName;
     }
 
     function toggleVideoMute() {
@@ -3751,7 +3745,27 @@
     });
 
     // ===== AUTH FUNCTIONS =====
-    function checkAuth() {
+    function getDisplayName(user) {
+        if (!user) return 'Learner';
+        if (user.firstName) {
+            return `${user.firstName}${user.lastName ? ' ' + user.lastName : ''}`;
+        }
+        return user.name || user.email || 'Learner';
+    }
+
+    async function checkAuth() {
+        try {
+            const response = await fetch('/api/user');
+            const data = await response.json();
+            if (response.ok && data.success && data.user) {
+                currentUser = data.user;
+                updateUIForLoggedInUser();
+                return;
+            }
+        } catch (error) {
+            console.warn('Could not load session user', error);
+        }
+
         const savedUser = localStorage.getItem('skillbridge_user');
         if (savedUser) {
             currentUser = JSON.parse(savedUser);
@@ -3765,13 +3779,15 @@
         document.getElementById('userWelcomeBanner').style.display = 'flex';
         document.getElementById('loginPrompt').style.display = 'none';
 
-        document.getElementById('welcomeAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
-        document.getElementById('welcomeName').textContent = currentUser.name;
-        document.getElementById('learnerName').textContent = `Continue learning, ${currentUser.name.split(' ')[0]}`;
+        const displayName = getDisplayName(currentUser);
+        document.getElementById('welcomeAvatar').textContent = displayName.charAt(0).toUpperCase();
+        document.getElementById('welcomeName').textContent = displayName;
+        document.getElementById('learnerName').textContent = `Continue learning, ${displayName.split(' ')[0]}`;
 
         // Count completed courses
         let completedCount = 0;
-        const userProgress = lessonProgress[`${currentUser.email}`] || {};
+        const userProgressKey = currentUser.email || currentUser.name || getDisplayName(currentUser);
+        const userProgress = lessonProgress[userProgressKey] || {};
         document.getElementById('enrolledCount').textContent = Object.keys(userProgress).length || 0;
 
         // Update nav auth
@@ -3790,8 +3806,9 @@
         const navAuth = document.getElementById('navAuth');
 
         if (currentUser) {
+            const displayName = getDisplayName(currentUser);
             navAuth.innerHTML = `
-                    <span class="user-greeting" style="margin-right: 1rem; color: var(--text-primary);">👤 ${currentUser.name}</span>
+                    <span class="user-greeting" style="margin-right: 1rem; color: var(--text-primary);">👤 ${displayName}</span>
                     <button class="btn-outline" onclick="logout()">Logout</button>
                 `;
         }
@@ -3841,7 +3858,7 @@
 
         closeLoginModal();
         updateUIForLoggedInUser();
-        showToast(`Welcome back, ${currentUser.name}!`, 'success');
+        showToast(`Welcome back, ${getDisplayName(currentUser)}!`, 'success');
     }
 
     function registerUser() {
@@ -3863,14 +3880,20 @@
 
         closeRegisterModal();
         updateUIForLoggedInUser();
-        showToast(`Welcome, ${name}! Start learning today!`, 'success');
+        showToast(`Welcome, ${getDisplayName(currentUser)}! Start learning today!`, 'success');
     }
 
     function logout() {
         currentUser = null;
         localStorage.removeItem('skillbridge_user');
         updateUIForLoggedOutUser();
-        showToast('Logged out successfully', 'info');
+        fetch('/api/auth/logout', { method: 'POST' })
+            .finally(() => {
+                showToast('Logged out successfully', 'info');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 800);
+            });
     }
 
     // ===== COURSE FUNCTIONS =====

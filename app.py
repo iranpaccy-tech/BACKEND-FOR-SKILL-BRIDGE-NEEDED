@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, jsonify, send_file, session, redirect, url_for, send_from_directory
+from werkzeug.utils import secure_filename
+from uuid import uuid4
 import json
 import os
 from datetime import datetime
@@ -22,9 +24,12 @@ CERTIFICATES_FILE = os.path.join(DATA_DIR, 'certificates.json')
 COURSES_FILE = os.path.join(DATA_DIR, 'courses.json')
 JOBS_FILE = os.path.join(DATA_DIR, 'jobs.json')
 GROUPS_FILE = os.path.join(DATA_DIR, 'groups.json')
+UPLOAD_FOLDER = os.path.join('uploads', 'group-images')
+DEFAULT_GROUP_IMAGE = 'asset/modules/maxresdefault.jpg'
 
 # Ensure data directory exists
 os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def load_data(filename, default=None):
     """Load data from JSON file"""
@@ -43,6 +48,32 @@ def save_data(filename, data):
     with open(filename, 'w') as f:
         json.dump(data, f, indent=2)
 
+
+def parse_bool(value):
+    if isinstance(value, bool):
+        return value
+    return str(value).lower() in ('1', 'true', 'yes', 'on')
+
+
+def get_user_by_session():
+    if 'user' not in session:
+        return None
+    users = load_data(USERS_FILE)
+    return next((u for u in users if u['id'] == session['user'].get('id')), None)
+
+
+def save_group_image(file):
+    if not file:
+        return DEFAULT_GROUP_IMAGE
+    filename = secure_filename(file.filename)
+    if not filename:
+        return DEFAULT_GROUP_IMAGE
+    name, ext = os.path.splitext(filename)
+    new_filename = f"{name}_{uuid4().hex}{ext}"
+    saved_path = os.path.join(UPLOAD_FOLDER, new_filename)
+    file.save(saved_path)
+    return os.path.join('uploads', 'group-images', new_filename).replace('\\', '/')
+
 # Initialize default data
 def init_default_data():
     # Users
@@ -55,6 +86,7 @@ def init_default_data():
                 "email": "demo@skillbridge.com",
                 "password": "password123",
                 "role": "student",
+                "disabled": False,
                 "createdAt": "2026-01-01T00:00:00Z"
             },
             {
@@ -64,6 +96,7 @@ def init_default_data():
                 "email": "admin@skillbridge.com",
                 "password": "admin123",
                 "role": "admin",
+                "disabled": False,
                 "createdAt": "2026-01-01T00:00:00Z"
             }
         ]
@@ -98,8 +131,8 @@ def init_default_data():
     # Groups
     if not os.path.exists(GROUPS_FILE):
         groups = [
-            {"id": 1, "name": 'JavaScript Masters', "description": 'Master advanced JavaScript concepts', "category": 'programming', "language": 'JavaScript', "members": 25, "maxMembers": 30},
-            {"id": 2, "name": 'React Developers', "description": 'Build modern React applications', "category": 'framework', "language": 'JavaScript', "members": 18, "maxMembers": 25}
+            {"id": 1, "name": 'JavaScript Masters', "description": 'Master advanced JavaScript concepts', "category": 'programming', "language": 'JavaScript', "members": 25, "maxMembers": 30, "image": DEFAULT_GROUP_IMAGE},
+            {"id": 2, "name": 'React Developers', "description": 'Build modern React applications', "category": 'framework', "language": 'JavaScript', "members": 18, "maxMembers": 25, "image": DEFAULT_GROUP_IMAGE}
         ]
         save_data(GROUPS_FILE, groups)
 
@@ -112,6 +145,9 @@ def index():
 def dashboard():
     if 'user' not in session:
         return redirect(url_for('login'))
+    if get_user_by_session() and get_user_by_session().get('disabled'):
+        session.clear()
+        return redirect(url_for('login', message='Account disabled. Contact admin.'))
     if session['user'].get('role') == 'admin':
         return redirect(url_for('admin'))
     return render_template('dashboard.html')
@@ -120,6 +156,9 @@ def dashboard():
 def certificates():
     if 'user' not in session:
         return redirect(url_for('login'))
+    if get_user_by_session() and get_user_by_session().get('disabled'):
+        session.clear()
+        return redirect(url_for('login', message='Account disabled. Contact admin.'))
     return render_template('certificates.html')
 
 @app.route('/login')
@@ -128,7 +167,7 @@ def login():
         if session['user'].get('role') == 'admin':
             return redirect(url_for('admin'))
         return redirect(url_for('dashboard'))
-    return render_template('login.html')
+    return render_template('login.html', disabled_message=request.args.get('message'))
 
 @app.route('/register')
 def register():
@@ -146,6 +185,9 @@ def about():
 def admin():
     if 'user' not in session or session['user'].get('role') != 'admin':
         return redirect(url_for('login'))
+    if get_user_by_session() and get_user_by_session().get('disabled'):
+        session.clear()
+        return redirect(url_for('login', message='Account disabled. Contact admin.'))
     return render_template('admin.html')
 
 # API Routes
@@ -159,6 +201,8 @@ def api_login():
     user = next((u for u in users if u['email'] == email and u['password'] == password), None)
 
     if user:
+        if user.get('disabled'):
+            return jsonify({"success": False, "message": "Account disabled. Please contact the admin."}), 403
         user_data = {k: v for k, v in user.items() if k != 'password'}
         session['user'] = user_data
         return jsonify({"success": True, "user": user_data})
@@ -187,6 +231,7 @@ def api_register():
         "email": email,
         "password": password,
         "role": "student",
+        "disabled": False,
         "createdAt": datetime.now().isoformat()
     }
 
@@ -208,6 +253,11 @@ def auth_status():
 def get_certificates():
     if 'user' not in session:
         return jsonify({"success": False, "message": "Not authenticated"}), 401
+
+    current_user = get_user_by_session()
+    if current_user and current_user.get('disabled'):
+        session.clear()
+        return jsonify({"success": False, "message": "Account disabled. Please contact the admin."}), 403
 
     user_id = session['user']['id']
     certificates = load_data(CERTIFICATES_FILE)
@@ -345,6 +395,10 @@ def get_groups():
 @app.route('/api/user')
 def get_user():
     if 'user' in session:
+        current_user = get_user_by_session()
+        if current_user and current_user.get('disabled'):
+            session.clear()
+            return jsonify({"success": False, "message": "Account disabled. Please contact the admin."}), 403
         return jsonify({"success": True, "user": session['user']})
     return jsonify({"success": False, "message": "Not authenticated"}), 401
 
@@ -400,6 +454,7 @@ def admin_add_user():
         "email": data.get('email', ''),
         "password": data.get('password', 'password123'),
         "role": data.get('role', 'student'),
+        "disabled": parse_bool(data.get('disabled', False)),
         "createdAt": datetime.now().isoformat()
     }
     
@@ -475,8 +530,9 @@ def admin_add_group():
     if 'user' not in session or session['user'].get('role') != 'admin':
         return jsonify({'error': 'Unauthorized'}), 403
     
-    data = request.get_json()
+    data = request.form
     groups = load_data(GROUPS_FILE)
+    image = save_group_image(request.files.get('image'))
     
     new_group = {
         "id": max([g['id'] for g in groups], default=0) + 1,
@@ -485,7 +541,8 @@ def admin_add_group():
         "category": data.get('category', ''),
         "language": data.get('language', ''),
         "members": int(data.get('members', 0)),
-        "maxMembers": int(data.get('maxMembers', 30))
+        "maxMembers": int(data.get('maxMembers', 30)),
+        "image": image
     }
     
     groups.append(new_group)
@@ -509,7 +566,8 @@ def admin_update_user(user_id):
         "firstName": data.get('firstName', user.get('firstName')),
         "lastName": data.get('lastName', user.get('lastName')),
         "email": data.get('email', user.get('email')),
-        "role": data.get('role', user.get('role'))
+        "role": data.get('role', user.get('role')),
+        "disabled": parse_bool(data.get('disabled', user.get('disabled', False)))
     })
     
     save_data(USERS_FILE, users)
@@ -589,12 +647,16 @@ def admin_update_group(group_id):
     if 'user' not in session or session['user'].get('role') != 'admin':
         return jsonify({'error': 'Unauthorized'}), 403
     
-    data = request.get_json()
+    data = request.form
     groups = load_data(GROUPS_FILE)
     group = next((g for g in groups if g['id'] == group_id), None)
     
     if not group:
         return jsonify({'error': 'Group not found'}), 404
+    
+    image = request.files.get('image')
+    if image:
+        group['image'] = save_group_image(image)
     
     group.update({
         "name": data.get('name', group.get('name')),

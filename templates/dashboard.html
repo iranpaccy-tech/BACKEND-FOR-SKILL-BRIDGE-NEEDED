@@ -274,6 +274,19 @@
             color: #222;
         }
 
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.15rem;
+        }
+
+        .profile-email {
+            font-size: 0.82rem;
+            color: #666;
+            line-height: 1.2;
+        }
+
         /* === MOBILE HAMBURGER MENU === */
         .mobile-menu-btn {
             display: none;
@@ -876,7 +889,10 @@
                 </div>
                 <div class="profile-section" onclick="toggleProfileMenu()">
                     <div class="profile-avatar">M</div>
-                    <span class="profile-name">Mugisha</span>
+                    <div class="profile-details">
+                        <span class="profile-name">Mugisha</span>
+                        <span class="profile-email">admin@skillbridge.com</span>
+                    </div>
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 <div class="notification-panel" id="notificationPanel">
@@ -1066,10 +1082,13 @@
         function setDashboardProfile(user) {
             if (!user) return;
             const name = user.firstName ? `${user.firstName}${user.lastName ? ' ' + user.lastName : ''}` : user.name || 'Student';
+            const displayEmail = user.email || (user.name && user.name.includes('@') ? user.name : '');
             const avatar = document.querySelector('.profile-avatar');
             const profileName = document.querySelector('.profile-name');
+            const profileEmail = document.querySelector('.profile-email');
             if (avatar) avatar.textContent = name.charAt(0).toUpperCase();
             if (profileName) profileName.textContent = name;
+            if (profileEmail) profileEmail.textContent = displayEmail;
         }
 
         async function loadDashboardUser() {
@@ -1084,10 +1103,7 @@
                 console.warn('Could not load dashboard user from API.', error);
             }
 
-            const storedUser = JSON.parse(localStorage.getItem('skillbridge_user') || 'null');
-            if (storedUser && (storedUser.name || storedUser.firstName)) {
-                setDashboardProfile(storedUser);
-            }
+            window.location.href = '/login';
         }
 
         // Initialize dashboard
@@ -1161,8 +1177,13 @@
             document.getElementById('notificationPanel').classList.remove('show');
         }
 
-        function logout() {
+        async function logout() {
             localStorage.removeItem('skillbridge_user');
+            try {
+                await fetch('/api/auth/logout', { method: 'POST' });
+            } catch (error) {
+                console.warn('Logout API failed', error);
+            }
             window.location.href = '/login';
         }
     </script>

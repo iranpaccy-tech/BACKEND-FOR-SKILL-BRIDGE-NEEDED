@@ -358,6 +358,18 @@
             cursor: pointer;
         }
 
+        @media (max-width: 1400px) {
+            .main-content {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+
         @media(max-width:768px) {
             .sidebar {
                 width: 280px;
@@ -476,10 +488,10 @@
             class="aux-btn red" title="Chat"><i class="fas fa-comments"></i></a><a href="#" class="aux-btn teal"
             title="Accessibility"><i class="fas fa-universal-access"></i></a></div>
     <script>
-        const groups = [
+        const defaultGroups = [
             {
                 name: 'JavaScript Fundamentals Study Group',
-                desc: 'Master JavaScript from scratch with hands-on projects and peer support.',
+                description: 'Master JavaScript from scratch with hands-on projects and peer support.',
                 members: 12,
                 icon: '📱',
                 certificate: 'JavaScript Fundamentals',
@@ -487,7 +499,7 @@
             },
             {
                 name: 'HTML & CSS Masterclass Group',
-                desc: 'Build beautiful responsive websites with modern HTML5 & CSS3 together.',
+                description: 'Build beautiful responsive websites with modern HTML5 & CSS3 together.',
                 members: 14,
                 icon: '🎨',
                 certificate: 'HTML & CSS Masterclass',
@@ -495,7 +507,7 @@
             },
             {
                 name: 'React - Complete Guide Squad',
-                desc: 'Build powerful React applications with hooks and Redux in this group.',
+                description: 'Build powerful React applications with hooks and Redux in this group.',
                 members: 8,
                 icon: '⚛️',
                 certificate: 'React - The Complete Guide',
@@ -503,7 +515,7 @@
             },
             {
                 name: 'Python for Data Science Group',
-                desc: 'Learn Python for analysis, visualization, and machine learning projects.',
+                description: 'Learn Python for analysis, visualization, and machine learning projects.',
                 members: 15,
                 icon: '🐍',
                 certificate: 'Python for Data Science',
@@ -511,7 +523,7 @@
             },
             {
                 name: 'SQL for Data Science Crew',
-                desc: 'Master SQL queries, joins, and optimizations with real-world datasets.',
+                description: 'Master SQL queries, joins, and optimizations with real-world datasets.',
                 members: 10,
                 icon: '🗄️',
                 certificate: 'SQL for Data Science',
@@ -519,14 +531,32 @@
             },
             {
                 name: 'UI/UX Design Fundamentals Group',
-                desc: 'Master Figma, wireframing, and prototyping with design peers.',
+                description: 'Master Figma, wireframing, and prototyping with design peers.',
                 members: 9,
                 icon: '🎭',
                 certificate: 'UI/UX Design Fundamentals',
                 team: ['Yara Rose', 'Zack Green', 'Amber Stone', 'Blake Knight', 'Casey Brooks', 'Drew Mason']
             }
         ];
+        let groups = defaultGroups;
         let joined = JSON.parse(localStorage.getItem('joinedGroups') || '{}');
+
+        async function loadGroups() {
+            try {
+                const response = await fetch('/api/groups');
+                if (!response.ok) throw new Error('Failed to fetch groups');
+                const data = await response.json();
+                if (data.success && Array.isArray(data.data) && data.data.length) {
+                    groups = data.data.map(group => ({
+                        ...group,
+                        description: group.description || group.desc || '',
+                        icon: group.icon || '👥'
+                    }));
+                }
+            } catch (error) {
+                console.warn('Could not load groups from server, using default list.', error);
+            }
+        }
         function renderGroups() {
             const container = document.getElementById('groupsSection');
             container.innerHTML = groups.map((g, i) => {
@@ -539,15 +569,17 @@
                     }).join('');
                     teamHtml = `<div class="team-chart"><div class="avatar-grid">${avatars}</div></div>`;
                 }
+                const imageUrl = g.image || '';
                 return `<div class="group-card" id="group${i}" onclick="joinGroup(${i})">
+                    ${imageUrl ? `<div style="width:100%; height:180px; background-image:url('${imageUrl}'); background-size:cover; background-position:center; border-radius:16px; margin-bottom:1rem;"></div>` : ''}
                     <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
                         <div style="font-size: 2.5rem; background: linear-gradient(135deg, #00897B 0%, #008B82 100%); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">${g.icon}</div>
                         <div>
                             <div class="group-title" style="margin-bottom: 0.25rem;">${g.name}</div>
-                            <div style="font-size: 0.8rem; color: #00897B; font-weight: 600;">📜 ${g.certificate}</div>
+                            <div style="font-size: 0.8rem; color: #00897B; font-weight: 600;">${g.category ? 'Category: ' + g.category : 'Study Group'}</div>
                         </div>
                     </div>
-                    <div class="group-desc">${g.desc}</div>
+                    <div class="group-desc">${g.description || g.desc || ''}</div>
                     <div class="group-members">${g.members} members studying together</div>
                     ${teamHtml}
                     <div class="group-actions">
@@ -593,13 +625,34 @@
         // removed join modal functions
         function markActiveLink() { const links = document.querySelectorAll('.sidebar-nav a'); links.forEach(l => { if (l.getAttribute('href') === window.location.pathname.split('/').pop()) l.classList.add('active'); }); }
         function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('active'); }
-        document.addEventListener('DOMContentLoaded', function () {
+        async function loadSessionUser() {
+            try {
+                const response = await fetch('/api/user');
+                const data = await response.json();
+                if (response.ok && data.success && data.user) {
+                    const user = data.user;
+                    const displayName = user.firstName ? `${user.firstName}${user.lastName ? ' ' + user.lastName : ''}` : user.email || user.name || 'Learner';
+                    const avatarEl = document.querySelector('.profile-avatar');
+                    const nameEl = document.querySelector('.profile-name');
+                    const emailEl = document.querySelector('.profile-email');
+                    if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
+                    if (nameEl) nameEl.textContent = displayName;
+                    if (emailEl) emailEl.textContent = user.email || '';
+                    return user;
+                }
+            } catch (error) {
+                console.warn('Could not load session user', error);
+            }
+            return null;
+        }
+
+        document.addEventListener('DOMContentLoaded', async function () {
             // load joined flags from storage
             joined = JSON.parse(localStorage.getItem('joinedGroups') || '{}');
+            await loadGroups();
             renderGroups();
             markActiveLink();
-            const user = JSON.parse(localStorage.getItem('skillbridge_user') || 'null');
-            if (user && user.name) { document.querySelector('.profile-avatar').textContent = user.name.charAt(0).toUpperCase(); document.querySelector('.profile-name').textContent = user.name; }
+            await loadSessionUser();
             const sidebarLinks = document.querySelectorAll('.sidebar-nav a'); sidebarLinks.forEach(link => { link.addEventListener('click', function () { if (window.innerWidth <= 768) { document.querySelector('.sidebar').classList.remove('active'); } }); });
         });
     </script>

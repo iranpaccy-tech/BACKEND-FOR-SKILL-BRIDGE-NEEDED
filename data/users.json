@@ -6,7 +6,8 @@
     "email": "demo@skillbridge.com",
     "password": "password123",
     "role": "student",
-    "createdAt": "2026-01-01T00:00:00Z"
+    "createdAt": "2026-01-01T00:00:00Z",
+    "disabled": false
   },
   {
     "id": 2,
@@ -52,5 +53,15 @@
     "password": "12345",
     "role": "student",
     "createdAt": "2026-05-13T17:06:47.873682"
+  },
+  {
+    "id": 7,
+    "firstName": "iran",
+    "lastName": "",
+    "email": "iran@gmai.com",
+    "password": "iran@123",
+    "role": "student",
+    "disabled": false,
+    "createdAt": "2026-05-14T13:04:16.179947"
   }
 ]

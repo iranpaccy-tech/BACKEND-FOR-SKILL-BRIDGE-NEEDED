@@ -1930,8 +1930,29 @@ function reverseString(s) {
             updateStats();
         });
 
+        // ===== AUTH HELPERS =====
+        function getDisplayName(user) {
+            if (!user) return 'Learner';
+            if (user.firstName) {
+                return `${user.firstName}${user.lastName ? ' ' + user.lastName : ''}`;
+            }
+            return user.name || user.email || 'Learner';
+        }
+
         // ===== AUTH FUNCTIONS =====
-        function checkAuth() {
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/user');
+                const data = await response.json();
+                if (response.ok && data.success && data.user) {
+                    currentUser = data.user;
+                    updateUIForLoggedInUser();
+                    return;
+                }
+            } catch (error) {
+                console.warn('Could not load session user', error);
+            }
+
             const savedUser = localStorage.getItem('skillbridge_user');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
@@ -1945,9 +1966,10 @@ function reverseString(s) {
             document.getElementById('userWelcomeBanner').style.display = 'flex';
             document.getElementById('loginPrompt').style.display = 'none';
 
-            document.getElementById('welcomeAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
-            document.getElementById('welcomeName').textContent = `Welcome back, ${currentUser.name}!`;
-            document.getElementById('playerName').textContent = `Playing as ${currentUser.name}`;
+            const displayName = getDisplayName(currentUser);
+            document.getElementById('welcomeAvatar').textContent = displayName.charAt(0).toUpperCase();
+            document.getElementById('welcomeName').textContent = `Welcome back, ${displayName}!`;
+            document.getElementById('playerName').textContent = `Playing as ${displayName}`;
             document.getElementById('userRank').textContent = `#${currentUser.rank || 42}`;
             document.getElementById('userXP').textContent = `${currentUser.xp || 2450}`;
 
@@ -1967,8 +1989,9 @@ function reverseString(s) {
             const navAuth = document.getElementById('navAuth');
 
             if (currentUser) {
+                const displayName = getDisplayName(currentUser);
                 navAuth.innerHTML = `
-                    <span class="user-greeting" style="margin-right: 1rem; color: var(--text-primary);">👤 ${currentUser.name}</span>
+                    <span class="user-greeting" style="margin-right: 1rem; color: var(--text-primary);">👤 ${displayName}</span>
                     <button class="btn-outline" onclick="logout()">Logout</button>
                 `;
             }
@@ -2020,7 +2043,7 @@ function reverseString(s) {
 
             closeLoginModal();
             updateUIForLoggedInUser();
-            showToast(`Welcome back, ${currentUser.name}! Ready to play?`, 'success');
+            showToast(`Welcome back, ${getDisplayName(currentUser)}! Ready to play?`, 'success');
         }
 
         function registerUser() {
@@ -2051,7 +2074,13 @@ function reverseString(s) {
             currentUser = null;
             localStorage.removeItem('skillbridge_user');
             updateUIForLoggedOutUser();
-            showToast('Logged out successfully', 'info');
+            fetch('/api/auth/logout', { method: 'POST' })
+                .finally(() => {
+                    showToast('Logged out successfully', 'info');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 800);
+                });
         }
 
         // ===== CHALLENGE FUNCTIONS =====
@@ -2285,9 +2314,10 @@ function reverseString(s) {
             document.getElementById('codeEditor').value = challenge.starterCode[language] || challenge.starterCode.javascript;
 
             // Update player info
-            document.getElementById('workspacePlayerName').textContent = currentUser.name;
+            const playerName = getDisplayName(currentUser);
+            document.getElementById('workspacePlayerName').textContent = playerName;
             document.getElementById('workspacePlayerXP').textContent = `${currentUser.xp || 0} XP`;
-            document.getElementById('workspacePlayerAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+            document.getElementById('workspacePlayerAvatar').textContent = playerName.charAt(0).toUpperCase();
 
             // Clear output
             document.getElementById('outputContent').textContent = 'Click "Run" to test your code';
@@ -2296,7 +2326,7 @@ function reverseString(s) {
             // Show workspace
             document.getElementById('workspaceContainer').classList.add('active');
 
-            showToast(`Challenge started! Good luck, ${currentUser.name}!`, 'success');
+            showToast(`Challenge started! Good luck, ${playerName}!`, 'success');
         }
 
         function closeWorkspace() {
@@ -2398,7 +2428,8 @@ function reverseString(s) {
             } else {
                 container.innerHTML = leaderboard.map((entry, index) => {
                     const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
-                    const isCurrentUser = currentUser && entry.name === currentUser.name;
+                    const displayName = currentUser ? getDisplayName(currentUser) : null;
+                    const isCurrentUser = displayName && entry.name === displayName;
 
                     return `
                         <div class="leaderboard-item ${isCurrentUser ? 'current-user' : ''}">

@@ -209,7 +209,14 @@
 <!-- include shared scripts for authentication -->
 <script src="js/utils.js"></script>
 <script src="js/ui.js"></script>
-<script src="js/auth.js"></script><script>
+<script src="js/auth.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const message = {{ disabled_message|default('')|tojson }};
+        if (message) {
+            UI.showToast(message, 'error');
+        }
+    });
     function togglePasswordVisibility() {
         const pwd = document.getElementById('loginPassword');
         const icon = document.querySelector('.eye-toggle');
@@ -244,6 +251,7 @@
             <a href="#" class="extra-link">Forgot password?</a>
         </form>
     </div>
+    <div id="toastContainer" class="toast-container"></div>
     <div class="aux-icons">
         <a href="#" class="aux-btn red"><i class="fas fa-question"></i></a>
         <a href="#" class="aux-btn red"><i class="fas fa-comments"></i></a>

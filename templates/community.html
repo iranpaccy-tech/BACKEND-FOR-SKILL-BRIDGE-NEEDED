@@ -376,6 +376,13 @@
         }
 
         /* === RESPONSIVE === */
+        /* === RESPONSIVE === */
+        @media (max-width: 1400px) {
+            .community-container {
+                max-width: 1200px;
+            }
+        }
+
         @media (max-width: 1200px) {
             .main-content {
                 padding: 1.5rem;
@@ -724,13 +731,29 @@
             });
         }
 
-        // Check if user is logged in
-        document.addEventListener('DOMContentLoaded', function () {
-            const user = JSON.parse(localStorage.getItem('skillbridge_user') || 'null');
-            if (user && user.name) {
-                document.querySelector('.profile-avatar').textContent = user.name.charAt(0).toUpperCase();
-                document.querySelector('.profile-name').textContent = user.name;
+        async function loadSessionUser() {
+            try {
+                const response = await fetch('/api/user');
+                const data = await response.json();
+                if (response.ok && data.success && data.user) {
+                    const user = data.user;
+                    const displayName = user.firstName ? `${user.firstName}${user.lastName ? ' ' + user.lastName : ''}` : user.email || user.name || 'Learner';
+                    const avatarEl = document.querySelector('.profile-avatar');
+                    const nameEl = document.querySelector('.profile-name');
+                    const emailEl = document.querySelector('.profile-email');
+                    if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
+                    if (nameEl) nameEl.textContent = displayName;
+                    if (emailEl) emailEl.textContent = user.email || '';
+                    return user;
+                }
+            } catch (error) {
+                console.warn('Could not load session user', error);
             }
+            return null;
+        }
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            await loadSessionUser();
             markActiveLink();
         });
 

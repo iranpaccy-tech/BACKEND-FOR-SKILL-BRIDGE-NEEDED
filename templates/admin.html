@@ -852,7 +852,7 @@
                         ...user,
                         name: `${user.firstName || ''} ${user.lastName || ''}`.trim()
                     }));
-                    displayData('Users', usersWithName, ['id', 'name', 'email', 'role']);
+                    displayData('Users', usersWithName, ['id', 'name', 'email', 'role', 'disabled']);
                 }
             } catch (error) {
                 console.error('Error loading users:', error);
@@ -916,7 +916,7 @@
                 const data = await response.json();
                 if (data.success) {
                     currentDataList = data.groups;
-                    displayData('Groups', data.groups, ['id', 'name', 'description', 'category', 'members', 'maxMembers']);
+                    displayData('Groups', data.groups, ['id', 'name', 'description', 'category', 'members', 'maxMembers', 'image']);
                 }
             } catch (error) {
                 console.error('Error loading groups:', error);
@@ -1029,15 +1029,25 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                ${data.map(item => `
+                                ${data.map(item => {
+                                    const dataType = title.toLowerCase();
+                                    return `
                                     <tr>
-                                        ${columns.map(col => `<td>${item[col] || ''}</td>`).join('')}
+                                        ${columns.map(col => {
+                                            if (col === 'image') {
+                                                return `<td><img src="${item[col] || 'asset/modules/maxresdefault.jpg'}" style="max-width:80px;height:50px;object-fit:cover;border-radius:6px;" alt="Group image"></td>`;
+                                            }
+                                            if (col === 'disabled') {
+                                                return `<td>${item[col] ? 'Yes' : 'No'}</td>`;
+                                            }
+                                            return `<td>${item[col] || ''}</td>`;
+                                        }).join('')}
                                         <td>
-                                            <button onclick="openEditModal('${title.toLowerCase()}', ${JSON.stringify(item).replace(/'/g, '&quot;')})" class="btn-edit">Edit</button>
-                                            <button onclick="deleteItem('${title.toLowerCase()}', ${item.id})" class="btn-delete">Delete</button>
+                                            <button onclick="openEditModal('${dataType}', ${JSON.stringify(item).replace(/'/g, '&quot;')})" class="btn-edit">Edit</button>
+                                            ${dataType === 'users' ? `<button onclick="toggleUserStatus(${item.id}, ${item.disabled ? 'true' : 'false'})" class="btn-delete">${item.disabled ? 'Enable' : 'Disable'}</button>` : `<button onclick="deleteItem('${dataType}', ${item.id})" class="btn-delete">Delete</button>`}
                                         </td>
                                     </tr>
-                                `).join('')}
+                                `}).join('')}
                             </tbody>
                         </table>
                     </div>
@@ -1068,11 +1078,11 @@
             currentEditData = null;
 
             const formFields = {
-                users: { firstName: 'text', lastName: 'text', email: 'email', password: 'password', role: 'select:student,admin' },
+                users: { firstName: 'text', lastName: 'text', email: 'email', password: 'password', role: 'select:student,admin,teacher', disabled: 'checkbox' },
                 certificates: { title: 'text', date: 'date', credential: 'text', userId: 'number' },
                 courses: { title: 'text', instructor: 'text', duration: 'text', rating: 'number', students: 'number', price: 'number' },
                 jobs: { title: 'text', company: 'text', location: 'text', salary: 'text', type: 'text' },
-                groups: { name: 'text', description: 'textarea', category: 'text', language: 'text', members: 'number', maxMembers: 'number' }
+                groups: { name: 'text', description: 'textarea', category: 'text', language: 'text', members: 'number', maxMembers: 'number', image: 'file' }
             };
 
             let form = '<form id="editForm">';
@@ -1087,6 +1097,10 @@
                     input = `<select name="${field}" required>${options.map(o => `<option value="${o}">${o}</option>`).join('')}</select>`;
                 } else if (fieldType === 'textarea') {
                     input = `<textarea name="${field}" required></textarea>`;
+                } else if (fieldType === 'checkbox') {
+                    input = `<input type="checkbox" name="${field}">`;
+                } else if (fieldType === 'file') {
+                    input = `<input type="file" name="${field}" accept="image/*">`;
                 } else {
                     input = `<input type="${fieldType}" name="${field}" required>`;
                 }
@@ -1111,11 +1125,11 @@
             currentEditData = item;
 
             const formFields = {
-                users: { firstName: 'text', lastName: 'text', email: 'email', role: 'select:student,admin' },
+                users: { firstName: 'text', lastName: 'text', email: 'email', role: 'select:student,admin,teacher', disabled: 'checkbox' },
                 certificates: { title: 'text', date: 'date', credential: 'text', userId: 'number' },
                 courses: { title: 'text', instructor: 'text', duration: 'text', rating: 'number', students: 'number', price: 'number' },
                 jobs: { title: 'text', company: 'text', location: 'text', salary: 'text', type: 'text' },
-                groups: { name: 'text', description: 'textarea', category: 'text', language: 'text', members: 'number', maxMembers: 'number' }
+                groups: { name: 'text', description: 'textarea', category: 'text', language: 'text', members: 'number', maxMembers: 'number', image: 'file' }
             };
 
             let form = '<form id="editForm">';
@@ -1131,6 +1145,13 @@
                     input = `<select name="${field}" required>${options.map(o => `<option value="${o}" ${o === value ? 'selected' : ''}>${o}</option>`).join('')}</select>`;
                 } else if (fieldType === 'textarea') {
                     input = `<textarea name="${field}" required>${value}</textarea>`;
+                } else if (fieldType === 'checkbox') {
+                    input = `<input type="checkbox" name="${field}" ${value ? 'checked' : ''}>`;
+                } else if (fieldType === 'file') {
+                    input = `<input type="file" name="${field}" accept="image/*">`;
+                    if (item[field]) {
+                        input += `<div class="file-preview"><img src="${item[field]}" alt="Current image" style="max-width:140px;margin-top:0.5rem;border-radius:8px;" /></div>`;
+                    }
                 } else {
                     input = `<input type="${fieldType}" name="${field}" value="${value}" required>`;
                 }
@@ -1152,32 +1173,44 @@
         // Save Item
         async function saveItem() {
             const form = document.getElementById('editForm');
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData);
-
             const saveBtn = document.getElementById('saveBtn');
             saveBtn.disabled = true;
 
             try {
-                let url, method, body;
+                let url, method, response;
                 
-                if (currentEditData) {
-                    // Update existing item
-                    url = `/api/admin/${currentEditType}/${currentEditData.id}`;
-                    method = 'PUT';
-                    body = JSON.stringify(data);
+                if (currentEditType === 'groups') {
+                    const formData = new FormData(form);
+                    if (currentEditData) {
+                        url = `/api/admin/${currentEditType}/${currentEditData.id}`;
+                        method = 'PUT';
+                    } else {
+                        url = `/api/admin/${currentEditType}`;
+                        method = 'POST';
+                    }
+                    response = await fetch(url, {
+                        method: method,
+                        body: formData
+                    });
                 } else {
-                    // Create new item
-                    url = `/api/admin/${currentEditType}`;
-                    method = 'POST';
-                    body = JSON.stringify(data);
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData.entries());
+                    if (currentEditType === 'users') {
+                        data.disabled = formData.get('disabled') ? 'true' : 'false';
+                    }
+                    if (currentEditData) {
+                        url = `/api/admin/${currentEditType}/${currentEditData.id}`;
+                        method = 'PUT';
+                    } else {
+                        url = `/api/admin/${currentEditType}`;
+                        method = 'POST';
+                    }
+                    response = await fetch(url, {
+                        method: method,
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
                 }
-
-                const response = await fetch(url, {
-                    method: method,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: body
-                });
 
                 if (response.ok) {
                     closeModal();
@@ -1217,6 +1250,28 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert('Error deleting item');
+            }
+        }
+
+        async function toggleUserStatus(id, disabled) {
+            const action = disabled ? 'Enable' : 'Disable';
+            if (!confirm(`Are you sure you want to ${action.toLowerCase()} this account?`)) return;
+
+            try {
+                const response = await fetch(`/api/admin/users/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ disabled: !disabled.toString().toLowerCase().startsWith('t') })
+                });
+                if (response.ok) {
+                    showUsers();
+                } else {
+                    const errorData = await response.json();
+                    alert('Error updating user: ' + (errorData.message || response.statusText));
+                }
+            } catch (error) {
+                console.error('Error toggling user status:', error);
+                alert('Error updating user status');
             }
         }
 
