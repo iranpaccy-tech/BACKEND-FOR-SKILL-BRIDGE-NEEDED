@@ -454,7 +454,7 @@
                         class="fas fa-chevron-down"></i></div>
                 <div class="notification-icon"><i class="fas fa-bell"></i></div>
                 <div class="profile-section">
-                    <div class="profile-avatar">M</div><span class="profile-name">Mugisha</span><i
+                    <div class="profile-avatar"></div><span class="profile-name"></span><i
                         class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -475,6 +475,7 @@
     <div class="aux-icons"><a href="#" class="aux-btn red" title="Help"><i class="fas fa-question"></i></a><a href="#"
             class="aux-btn red" title="Chat"><i class="fas fa-comments"></i></a><a href="#" class="aux-btn teal"
             title="Accessibility"><i class="fas fa-universal-access"></i></a></div>
+    <script src="js/profile.js"></script>
     <script>
         const groups = [
             {
@@ -598,8 +599,6 @@
             joined = JSON.parse(localStorage.getItem('joinedGroups') || '{}');
             renderGroups();
             markActiveLink();
-            const user = JSON.parse(localStorage.getItem('skillbridge_user') || 'null');
-            if (user && user.name) { document.querySelector('.profile-avatar').textContent = user.name.charAt(0).toUpperCase(); document.querySelector('.profile-name').textContent = user.name; }
             const sidebarLinks = document.querySelectorAll('.sidebar-nav a'); sidebarLinks.forEach(link => { link.addEventListener('click', function () { if (window.innerWidth <= 768) { document.querySelector('.sidebar').classList.remove('active'); } }); });
         });
     </script>

@@ -556,8 +556,8 @@
                     <i class="fas fa-bell"></i>
                 </div>
                 <div class="profile-section">
-                    <div class="profile-avatar">M</div>
-                    <span class="profile-name">Mugisha</span>
+                    <div class="profile-avatar"></div>
+                    <span class="profile-name"></span>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -579,7 +579,7 @@
                     <div class="post-header">
                         <div class="post-avatar">AJ</div>
                         <div class="post-meta">
-                            <div class="post-author">Alice Johnson</div>
+                            <div class="post-author"></div>
                             <div class="post-time">2 hours ago</div>
                         </div>
                         <div class="post-badge">Looking for Help</div>
@@ -611,7 +611,7 @@
                         <div class="post-avatar" style="background:linear-gradient(135deg,#FF6EA0 0%,#FF3366 100%);">MT
                         </div>
                         <div class="post-meta">
-                            <div class="post-author">Mugisha Thierry</div>
+                            <div class="post-author"></div>
                             <div class="post-time">5 hours ago</div>
                         </div>
                         <div class="post-badge">Resource Share</div>
@@ -643,7 +643,7 @@
                         <div class="post-avatar" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);">PK
                         </div>
                         <div class="post-meta">
-                            <div class="post-author">Philip Kipkemboi</div>
+                            <div class="post-author"></div>
                             <div class="post-time">1 day ago</div>
                         </div>
                         <div class="post-badge">Announcement</div>
@@ -675,7 +675,7 @@
                         <div class="post-avatar" style="background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);">EN
                         </div>
                         <div class="post-meta">
-                            <div class="post-author">Emmanuel Njoroge</div>
+                            <div class="post-author"></div>
                             <div class="post-time">2 days ago</div>
                         </div>
                         <div class="post-badge">Project Showcase</div>
@@ -713,6 +713,7 @@
 
     <script src="js/utils.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
     <script>
         // Highlight active link
         function markActiveLink() {
@@ -724,13 +725,7 @@
             });
         }
 
-        // Check if user is logged in
         document.addEventListener('DOMContentLoaded', function () {
-            const user = JSON.parse(localStorage.getItem('skillbridge_user') || 'null');
-            if (user && user.name) {
-                document.querySelector('.profile-avatar').textContent = user.name.charAt(0).toUpperCase();
-                document.querySelector('.profile-name').textContent = user.name;
-            }
             markActiveLink();
         });
 

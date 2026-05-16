@@ -90,6 +90,28 @@
             text-align: center;
         }
 
+        .sidebar-logos {
+            margin: 2rem 1.5rem 0.5rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            align-items: center;
+            justify-items: center;
+        }
+
+        .sidebar-logos img {
+            max-width: 60px;
+            max-height: 40px;
+            object-fit: contain;
+            opacity: 0.9;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .sidebar-logos img:hover {
+            opacity: 1;
+            transform: scale(1.03);
+        }
+
         /* === MAIN CONTENT === */
         .main-content {
             margin-left: 280px;
@@ -237,6 +259,36 @@
             color: #222;
         }
 
+        .mobile-actions-btn {
+            display: none;
+            background: #00897B;
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .mobile-actions-btn:hover {
+            background: #00695c;
+        }
+
+        .header-right {
+            align-items: center;
+        }
+
+        .header-right.show {
+            display: flex;
+        }
+
+        .header-right.mobile-hidden {
+            display: none !important;
+        }
+
         /* === ADMIN SECTION === */
         .admin-section {
             background: white;
@@ -298,6 +350,28 @@
         .btn-admin:hover {
             background: #00695c;
         }
+
+        .btn-reset {
+            background: transparent;
+            color: #00897B;
+            border: 2px dashed #00897B;
+            padding: 0.45rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-reset:hover {
+            background: #e8f6f2;
+            transform: translateY(-1px);
+        }
+
+        /* Toast container */
+        .toast-container { position: fixed; right: 20px; bottom: 20px; z-index: 1200; }
+        .toast { background: rgba(0,0,0,0.8); color: #fff; padding: 0.6rem 1rem; border-radius: 6px; margin-top: 0.5rem; }
+        .toast.success { background: #16a34a; }
 
         /* === DATA DISPLAY === */
         .data-display {
@@ -596,6 +670,28 @@
         }
 
         /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .dashboard-header {
+                gap: 1rem;
+            }
+
+            .admin-card {
+                min-height: 160px;
+            }
+
+            .data-display {
+                padding: 1.5rem;
+            }
+
+            .data-toolbar {
+                gap: 0.75rem;
+            }
+
+            .search-box {
+                min-width: 200px;
+            }
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 width: 280px;
@@ -613,6 +709,10 @@
                 transform: translateX(0);
             }
 
+            .sidebar-logos {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
             .main-content {
                 margin-left: 0;
                 padding: 1rem;
@@ -624,31 +724,108 @@
 
             .dashboard-header {
                 flex-direction: column;
-                gap: 1rem;
+                align-items: stretch;
             }
 
             .header-left,
             .header-right {
                 flex-direction: column;
+                align-items: stretch;
                 width: 100%;
+            }
+
+            .header-left {
+                justify-content: space-between;
+            }
+
+            .header-right {
+                row-gap: 0.75rem;
+                justify-content: space-between;
+                display: none;
+            }
+
+            .header-right.show {
+                display: flex;
+            }
+
+            .header-right > * {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .profile-section {
+                justify-content: space-between;
+            }
+
+            .mobile-actions-btn {
+                display: inline-flex;
             }
 
             .admin-cards {
                 grid-template-columns: 1fr;
             }
 
+            .data-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .data-toolbar .search-box,
+            .data-toolbar .btn-add {
+                width: 100%;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 0.65rem;
+                font-size: 0.92rem;
+            }
+
+            .data-table td {
+                word-break: break-word;
+            }
+
+            .data-table tbody tr {
+                display: table-row;
+            }
+
+            .data-table tbody tr td:last-child {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .btn-edit,
+            .btn-delete,
+            .btn-reset {
+                width: 100%;
+                margin-right: 0;
+            }
+
             .modal-content {
                 width: 95%;
+            }
+
+            .profile-menu,
+            .notification-panel {
+                right: 1rem;
+                left: 1rem;
+                top: 80px;
+                width: auto;
             }
         }
 
         @media (max-width: 480px) {
+            .dashboard-header {
+                padding: 1rem;
+            }
+
             .header-left h1 {
                 font-size: 1.25rem;
             }
 
-            .data-toolbar {
-                flex-direction: column;
+            .header-right {
+                gap: 0.5rem;
             }
 
             .btn-add,
@@ -658,6 +835,24 @@
 
             .analytics-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .mobile-menu-btn {
+                align-self: flex-start;
+            }
+
+            .notification-icon,
+            .profile-avatar {
+                width: 36px;
+                height: 36px;
+            }
+
+            .profile-section span {
+                display: none;
             }
         }
     </style>
@@ -672,15 +867,20 @@
         </div>
 
         <nav class="sidebar-nav">
-            <li><a href="#" onclick="showDashboard(); return false;" class="active"><i class="fas fa-cog"></i> Dashboard</a></li>
-            <li><a href="#" onclick="showUsers(); return false;"><i class="fas fa-users"></i> Users</a></li>
-            <li><a href="#" onclick="showCertificates(); return false;"><i class="fas fa-certificate"></i> Certificates</a></li>
-            <li><a href="#" onclick="showCourses(); return false;"><i class="fas fa-book"></i> Courses</a></li>
-            <li><a href="#" onclick="showJobs(); return false;"><i class="fas fa-briefcase"></i> Jobs</a></li>
-            <li><a href="#" onclick="showGroups(); return false;"><i class="fas fa-users-cog"></i> Groups</a></li>
-            <li><a href="#" onclick="showAnalytics(); return false;"><i class="fas fa-chart-bar"></i> Analytics</a></li>
-            <li><a href="#" onclick="logout(); return false;" style="margin-top: 2rem;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="#" onclick="showDashboard(); closeSidebar(); return false;" class="active"><i class="fas fa-cog"></i> Dashboard</a></li>
+            <li><a href="#" onclick="showUsers(); closeSidebar(); return false;"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="#" onclick="showCertificates(); closeSidebar(); return false;"><i class="fas fa-certificate"></i> Certificates</a></li>
+            <li><a href="#" onclick="showCourses(); closeSidebar(); return false;"><i class="fas fa-book"></i> Courses</a></li>
+            <li><a href="#" onclick="showJobs(); closeSidebar(); return false;"><i class="fas fa-briefcase"></i> Jobs</a></li>
+            <li><a href="#" onclick="showGroups(); closeSidebar(); return false;"><i class="fas fa-users-cog"></i> Groups</a></li>
+            <li><a href="#" onclick="showAnalytics(); closeSidebar(); return false;"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+            <li><a href="#" onclick="logout(); closeSidebar(); return false;" style="margin-top: 2rem;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </nav>
+        <div class="sidebar-logos">
+            <img src="asset/logo.png" alt="SkillBridge logo" />
+            <img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge logo" />
+            <img src="asset/Final-Mastercard-Foundation-Logo-RGB-POS-removebg-preview.png" alt="Partner logo" />
+        </div>
     </aside>
 
     <!-- Main Content -->
@@ -691,9 +891,12 @@
                 <button class="mobile-menu-btn" id="sidebarToggle" onclick="toggleSidebar()">
                     <i class="fas fa-bars"></i>
                 </button>
+                <button class="mobile-actions-btn" id="headerActionsToggle" onclick="toggleHeaderActions()" title="Show actions">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
                 <h1>Admin Dashboard</h1>
             </div>
-            <div class="header-right">
+            <div class="header-right" id="adminHeaderActions">
                 <div class="language-selector">
                     <i class="fas fa-language"></i>
                     <select id="adminLanguageSelect" onchange="setAdminLanguage(this.value)">
@@ -837,6 +1040,28 @@
             const sidebar = document.getElementById('sidebar');
             if (window.innerWidth <= 768) {
                 sidebar.classList.toggle('active');
+            }
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        }
+
+        function toggleHeaderActions() {
+            const actions = document.getElementById('adminHeaderActions');
+            const toggle = document.getElementById('headerActionsToggle');
+            if (!actions) return;
+            const isOpen = actions.classList.toggle('show');
+            if (toggle) {
+                const icon = toggle.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fa-ellipsis-v', !isOpen);
+                    icon.classList.toggle('fa-times', isOpen);
+                }
+                toggle.setAttribute('title', isOpen ? 'Hide actions' : 'Show actions');
             }
         }
 
@@ -1043,8 +1268,11 @@
                                             return `<td>${item[col] || ''}</td>`;
                                         }).join('')}
                                         <td>
-                                            <button onclick="openEditModal('${dataType}', ${JSON.stringify(item).replace(/'/g, '&quot;')})" class="btn-edit">Edit</button>
-                                            ${dataType === 'users' ? `<button onclick="toggleUserStatus(${item.id}, ${item.disabled ? 'true' : 'false'})" class="btn-delete">${item.disabled ? 'Enable' : 'Disable'}</button>` : `<button onclick="deleteItem('${dataType}', ${item.id})" class="btn-delete">Delete</button>`}
+                                            ${(() => {
+                                                const escapedItem = JSON.stringify(item).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                                                return `<button onclick="openEditModal('${dataType}', ${escapedItem})" class="btn-edit">Edit</button>`;
+                                            })()}
+                                            ${dataType === 'users' ? `<button onclick="openResetPassword(${item.id})" class="btn-reset">Reset Password</button><button onclick="toggleUserStatus(${item.id}, ${item.disabled ? 'true' : 'false'})" class="btn-delete">${item.disabled ? 'Enable' : 'Disable'}</button>` : `<button onclick="deleteItem('${dataType}', ${item.id})" class="btn-delete">Delete</button>`}
                                         </td>
                                     </tr>
                                 `}).join('')}
@@ -1125,7 +1353,7 @@
             currentEditData = item;
 
             const formFields = {
-                users: { firstName: 'text', lastName: 'text', email: 'email', role: 'select:student,admin,teacher', disabled: 'checkbox' },
+                users: { firstName: 'text', lastName: 'text', email: 'email', password: 'password', role: 'select:student,admin,teacher', disabled: 'checkbox' },
                 certificates: { title: 'text', date: 'date', credential: 'text', userId: 'number' },
                 courses: { title: 'text', instructor: 'text', duration: 'text', rating: 'number', students: 'number', price: 'number' },
                 jobs: { title: 'text', company: 'text', location: 'text', salary: 'text', type: 'text' },
@@ -1153,7 +1381,8 @@
                         input += `<div class="file-preview"><img src="${item[field]}" alt="Current image" style="max-width:140px;margin-top:0.5rem;border-radius:8px;" /></div>`;
                     }
                 } else {
-                    input = `<input type="${fieldType}" name="${field}" value="${value}" required>`;
+                    const requiredAttr = field === 'password' ? '' : 'required';
+                    input = `<input type="${fieldType}" name="${field}" value="${value}" ${requiredAttr}>`;
                 }
                 
                 form += `
@@ -1166,6 +1395,27 @@
             form += '</form>';
 
             document.getElementById('modalTitle').textContent = `Edit ${type.charAt(0).toUpperCase() + type.slice(1, -1)}`;
+            document.getElementById('modalBody').innerHTML = form;
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        // Open Reset Password Modal (users only)
+        function openResetPassword(userId) {
+            currentEditType = 'users';
+            currentEditData = { id: userId };
+            const form = `
+                <form id="editForm">
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" name="password" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="muted"><input type="checkbox" name="notify"> Send email notification to user</label>
+                        <small class="muted">(Requires mail server configured on server)</small>
+                    </div>
+                </form>
+            `;
+            document.getElementById('modalTitle').textContent = 'Reset Password';
             document.getElementById('modalBody').innerHTML = form;
             document.getElementById('editModal').classList.add('show');
         }
@@ -1195,9 +1445,21 @@
                 } else {
                     const formData = new FormData(form);
                     const data = Object.fromEntries(formData.entries());
+                    // Add notify flag if present
+                    if (formData.get('notify')) data.notify = 'true';
                     if (currentEditType === 'users') {
                         data.disabled = formData.get('disabled') ? 'true' : 'false';
                     }
+
+                    // Confirm before resetting password
+                    if (currentEditType === 'users' && data.password && currentEditData) {
+                        const confirmed = confirm('Are you sure you want to reset this user\'s password? This will change their login credentials.');
+                        if (!confirmed) {
+                            saveBtn.disabled = false;
+                            return;
+                        }
+                    }
+
                     if (currentEditData) {
                         url = `/api/admin/${currentEditType}/${currentEditData.id}`;
                         method = 'PUT';
@@ -1213,7 +1475,23 @@
                 }
 
                 if (response.ok) {
+                    const resJson = await response.json();
                     closeModal();
+                    // Show success toast (special message for password resets)
+                    try {
+                        const pwInput = form.querySelector('input[name="password"]');
+                        const pwVal = pwInput ? pwInput.value.trim() : '';
+                        if (currentEditType === 'users' && pwVal) {
+                            const sent = resJson.notify_sent === true;
+                            UI.showToast('Password updated' + (sent ? ' — email sent' : ''), 'success');
+                        } else if (currentEditType === 'users') {
+                            UI.showToast('User updated', 'success');
+                        } else {
+                            UI.showToast('Saved', 'success');
+                        }
+                    } catch (e) {
+                        // ignore toast errors
+                    }
                     // Refresh the data
                     if (currentEditType === 'users') showUsers();
                     else if (currentEditType === 'certificates') showCertificates();
@@ -1289,6 +1567,7 @@
             }
         });
     </script>
+    <div id="toastContainer" class="toast-container"></div>
 </body>
 
 </html>

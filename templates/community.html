@@ -563,8 +563,8 @@
                     <i class="fas fa-bell"></i>
                 </div>
                 <div class="profile-section">
-                    <div class="profile-avatar">M</div>
-                    <span class="profile-name">Mugisha</span>
+                    <div class="profile-avatar"></div>
+                    <span class="profile-name"></span>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -586,7 +586,7 @@
                     <div class="post-header">
                         <div class="post-avatar">AJ</div>
                         <div class="post-meta">
-                            <div class="post-author">Alice Johnson</div>
+                            <div class="post-author"></div>
                             <div class="post-time">2 hours ago</div>
                         </div>
                         <div class="post-badge">Looking for Help</div>
@@ -618,7 +618,7 @@
                         <div class="post-avatar" style="background:linear-gradient(135deg,#FF6EA0 0%,#FF3366 100%);">MT
                         </div>
                         <div class="post-meta">
-                            <div class="post-author">Mugisha Thierry</div>
+                            <div class="post-author"></div>
                             <div class="post-time">5 hours ago</div>
                         </div>
                         <div class="post-badge">Resource Share</div>
@@ -650,7 +650,7 @@
                         <div class="post-avatar" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);">PK
                         </div>
                         <div class="post-meta">
-                            <div class="post-author">Philip Kipkemboi</div>
+                            <div class="post-author"></div>
                             <div class="post-time">1 day ago</div>
                         </div>
                         <div class="post-badge">Announcement</div>
@@ -682,7 +682,7 @@
                         <div class="post-avatar" style="background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);">EN
                         </div>
                         <div class="post-meta">
-                            <div class="post-author">Emmanuel Njoroge</div>
+                            <div class="post-author"></div>
                             <div class="post-time">2 days ago</div>
                         </div>
                         <div class="post-badge">Project Showcase</div>
@@ -720,6 +720,7 @@
 
     <script src="js/utils.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
     <script>
         // Highlight active link
         function markActiveLink() {
@@ -737,13 +738,15 @@
                 const data = await response.json();
                 if (response.ok && data.success && data.user) {
                     const user = data.user;
-                    const displayName = user.firstName ? `${user.firstName}${user.lastName ? ' ' + user.lastName : ''}` : user.email || user.name || 'Learner';
+                    const displayName = user.firstName ? `${user.firstName}${user.lastName ? ' ' + user.lastName : ''}` : (user.email || user.name) || null;
                     const avatarEl = document.querySelector('.profile-avatar');
                     const nameEl = document.querySelector('.profile-name');
                     const emailEl = document.querySelector('.profile-email');
-                    if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
-                    if (nameEl) nameEl.textContent = displayName;
-                    if (emailEl) emailEl.textContent = user.email || '';
+                    if (displayName) {
+                        if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
+                        if (nameEl) nameEl.textContent = displayName;
+                    }
+                    if (emailEl && user.email) emailEl.textContent = user.email || '';
                     return user;
                 }
             } catch (error) {

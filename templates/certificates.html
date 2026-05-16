@@ -701,8 +701,8 @@
                     <i class="fas fa-bell"></i>
                 </div>
                 <div class="profile-section">
-                    <div class="profile-avatar">IP</div>
-                    <span class="profile-name">Iran Paccy</span>
+                    <div class="profile-avatar"></div>
+                    <span class="profile-name"></span>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -727,6 +727,7 @@
     <script src="js/utils.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/certificates.js"></script>
+    <script src="js/profile.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         // Download certificate
@@ -744,7 +745,7 @@
                     
                     <div style="text-align: center; margin: 60px 0;">
                         <p style="font-size: 18px; color: #666; margin-bottom: 20px;">This is to certify that</p>
-                        <h3 style="font-size: 32px; color: #00897B; margin-bottom: 20px; font-weight: bold;">${document.querySelector('.profile-name')?.textContent || 'Learner'}</h3>
+                        <h3 style="font-size: 32px; color: #00897B; margin-bottom: 20px; font-weight: bold;">${document.querySelector('.profile-name')?.textContent || ''}</h3>
                         <p style="font-size: 18px; color: #666; margin-bottom: 20px;">has successfully completed the course</p>
                         <h4 style="font-size: 28px; color: #333; margin-bottom: 30px; font-style: italic;">"${title}"</h4>
                     </div>
@@ -841,13 +842,15 @@
                 const data = await response.json();
                 if (response.ok && data.success && data.user) {
                     const user = data.user;
-                    const displayName = user.firstName ? `${user.firstName}${user.lastName ? ' ' + user.lastName : ''}` : user.email || user.name || 'Learner';
+                    const displayName = user.firstName ? `${user.firstName}${user.lastName ? ' ' + user.lastName : ''}` : (user.email || user.name) || null;
                     const avatarEl = document.querySelector('.profile-avatar');
                     const nameEl = document.querySelector('.profile-name');
                     const emailEl = document.querySelector('.profile-email');
-                    if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
-                    if (nameEl) nameEl.textContent = displayName;
-                    if (emailEl) emailEl.textContent = user.email || '';
+                    if (displayName) {
+                        if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
+                        if (nameEl) nameEl.textContent = displayName;
+                    }
+                    if (emailEl && user.email) emailEl.textContent = user.email || '';
                     return user;
                 }
             } catch (error) {

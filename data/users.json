@@ -20,6 +20,16 @@
   },
   {
     "id": 3,
+    "firstName": "Teacher",
+    "lastName": "User",
+    "email": "teacher@skillbridge.com",
+    "password": "teacher123",
+    "role": "teacher",
+    "createdAt": "2026-05-16T00:00:00Z",
+    "disabled": false
+  },
+  {
+    "id": 4,
     "firstName": "IRANKUNDA",
     "lastName": "Pacifique",
     "email": "iranpacc@gmail.com",
@@ -43,7 +53,8 @@
     "email": "papa@gmail.com",
     "password": "papa123",
     "role": "student",
-    "createdAt": "2026-05-13T17:05:06.084985"
+    "createdAt": "2026-05-13T17:05:06.084985",
+    "disabled": false
   },
   {
     "id": 6,
@@ -63,5 +74,35 @@
     "role": "student",
     "disabled": false,
     "createdAt": "2026-05-14T13:04:16.179947"
+  },
+  {
+    "id": 8,
+    "firstName": "paccy",
+    "lastName": "",
+    "email": "iranpc@gmail.com",
+    "password": "paccy123",
+    "role": "student",
+    "disabled": false,
+    "createdAt": "2026-05-16T12:18:56.681730"
+  },
+  {
+    "id": 9,
+    "firstName": "irene",
+    "lastName": "",
+    "email": "irene@gmail.com",
+    "password": "irene123",
+    "role": "student",
+    "disabled": false,
+    "createdAt": "2026-05-16T12:34:18.816696"
+  },
+  {
+    "id": 10,
+    "firstName": "Irankunda",
+    "lastName": "Pacifique",
+    "email": "iranpaccy@gmail.com",
+    "password": "paccy234",
+    "role": "student",
+    "disabled": false,
+    "createdAt": "2026-05-16T13:11:57.434903"
   }
 ]

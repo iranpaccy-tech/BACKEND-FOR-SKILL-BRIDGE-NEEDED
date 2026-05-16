@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - SkillBridge Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f3f6fb; color: #111827; }
+        .dashboard-container { display: flex; min-height: 100vh; }
+        .sidebar { width: 280px; background: linear-gradient(135deg, #00897B 0%, #008B82 100%); color: white; padding: 2rem 1.25rem; position: fixed; height: 100vh; overflow-y: auto; transition: transform 0.3s ease; }
+        .sidebar-logo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem; font-size: 1.2rem; font-weight: 700; }
+        .sidebar-logo img { height: 36px; }
+        .sidebar-nav { list-style: none; padding: 0; margin-bottom: 2rem; }
+        .sidebar-nav li { margin-bottom: 0.85rem; }
+        .sidebar-nav a { display: flex; align-items: center; gap: 0.85rem; padding: 1rem 1.1rem; border-radius: 14px; color: rgba(255,255,255,0.92); text-decoration: none; font-weight: 500; transition: background 0.25s ease, transform 0.2s ease; }
+        .sidebar-nav a.active, .sidebar-nav a:hover { background: rgba(255,255,255,0.18); transform: translateX(2px); color: white; }
+        .sidebar-nav i { width: 26px; text-align: center; }
+        .sidebar-divider { height: 1px; background: rgba(255,255,255,0.14); margin: 1.75rem 0; }
+        .sidebar-footer { font-size: 0.92rem; color: rgba(255,255,255,0.82); line-height: 1.6; }
+        .sidebar-logos { margin: 1.75rem 1rem 0.5rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.85rem; align-items: center; justify-items: center; }
+        .sidebar-logos img { max-width: 60px; max-height: 40px; object-fit: contain; opacity: 0.9; transition: opacity 0.2s ease, transform 0.2s ease; }
+        .sidebar-logos img:hover { opacity: 1; transform: scale(1.03); }
+        .main-content { margin-left: 280px; flex: 1; padding: 2rem; transition: margin-left 0.3s ease; }
+        .page-section { display: none; }
+        .page-section.active, .page-section:target { display: block; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.75rem; background: white; border-radius: 24px; padding: 1.5rem; box-shadow: 0 24px 60px rgba(15,23,42,0.08); }
+        .topbar h1 { font-size: 2.05rem; letter-spacing: -0.02em; }
+        .topbar p { color: #6b7280; margin-top: 0.5rem; max-width: 560px; }
+        .topbar-actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+        .topbar-actions button { display: inline-flex; align-items: center; gap: 0.6rem; background: #00897B; color: white; border: none; border-radius: 999px; padding: 0.95rem 1.25rem; cursor: pointer; font-weight: 600; transition: background 0.25s ease, transform 0.2s ease; }
+        .topbar-actions button:hover { background: #00695c; transform: translateY(-1px); }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem; background: white; border-radius: 24px; padding: 1.5rem; box-shadow: 0 24px 60px rgba(15,23,42,0.08); }
+        .dashboard-header .header-left { display: flex; align-items: center; gap: 1rem; }
+        .dashboard-header .header-left h1 { font-size: 2rem; margin: 0; }
+        .dashboard-header .header-right { display: flex; align-items: center; gap: 0.85rem; flex-wrap: wrap; }
+        .dashboard-header .language-selector { display: flex; align-items: center; gap: 0.5rem; padding: 0.7rem 0.95rem; background: #f8fafc; border-radius: 12px; font-weight: 600; color: #374151; }
+        .dashboard-header .language-selector select { background: transparent; border: none; outline: none; font: inherit; cursor: pointer; }
+        .dashboard-header .notification-icon { width: 44px; height: 44px; border-radius: 50%; background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #0f172a; cursor: pointer; }
+        .dashboard-header .profile-section { display: flex; align-items: center; gap: 0.9rem; background: #f8fafc; padding: 0.8rem 1rem; border-radius: 999px; cursor: pointer; }
+        .dashboard-header .profile-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #00897B 0%, #008B82 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
+        .dashboard-header .profile-name { font-weight: 700; color: #111827; }
+        .admin-section { margin-bottom: 1.75rem; }
+        .admin-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin-bottom: 1.75rem; }
+        .admin-card { background: white; border-radius: 24px; padding: 1.5rem; box-shadow: 0 24px 48px rgba(15,23,42,0.08); border: 1px solid rgba(15,23,42,0.08); cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; display: flex; flex-direction: column; justify-content: space-between; }
+        .admin-card:hover { transform: translateY(-3px); box-shadow: 0 28px 60px rgba(15,23,42,0.12); }
+        .admin-card h3 { display: flex; align-items: center; gap: 0.75rem; font-size: 1rem; margin-bottom: 0.85rem; }
+        .admin-card p { color: #6b7280; line-height: 1.6; margin-bottom: 1.2rem; }
+        .btn-admin { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; background: #00897B; color: white; border: none; border-radius: 999px; padding: 0.95rem 1.2rem; font-weight: 600; cursor: pointer; }
+        .btn-admin:hover { background: #00695c; }
+        .dashboard-card-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; margin-bottom: 1.75rem; }
+        .card { background: white; border-radius: 24px; padding: 1.5rem; box-shadow: 0 24px 60px rgba(15,23,42,0.07); border: 1px solid rgba(15,23,42,0.05); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .card-title { font-size: 0.95rem; color: #6b7280; font-weight: 600; }
+        .card-value { font-size: 2.25rem; font-weight: 700; color: #111827; margin-top: 0.5rem; }
+        .card-pill { background: rgba(0, 137, 123, 0.12); color: #065f46; padding: 0.35rem 0.85rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+        .metric-list { display: grid; gap: 1rem; margin-top: 1.25rem; }
+        .metric-item { display: flex; justify-content: space-between; color: #374151; font-weight: 600; }
+        .section { margin-bottom: 1.75rem; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+        .section-header h2 { font-size: 1.2rem; color: #111827; }
+        .section-header button { background: #00897B; color: white; border: none; border-radius: 999px; padding: 0.82rem 1rem; cursor: pointer; font-weight: 600; transition: background 0.25s ease; }
+        .section-header button:hover { background: #00695c; }
+        .grid-3 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.5rem; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .table { width: 100%; border-collapse: collapse; background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 20px 45px rgba(15,23,42,0.07); }
+        .table th, .table td { text-align: left; padding: 0.95rem 1rem; border-bottom: 1px solid #e5e7eb; }
+        .table th { color: #6b7280; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; background: #f8fafc; }
+        .table tbody tr:hover { background: #f8fafc; }
+        .status-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.85rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-ontrack { background: #d1fae5; color: #166534; }
+        .status-late { background: #fee2e2; color: #991b1b; }
+        .profile-box { display: flex; align-items: center; gap: 1rem; background: white; padding: 1rem 1.25rem; border-radius: 18px; box-shadow: 0 18px 45px rgba(15,23,42,0.07); }
+        .profile-avatar { width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg, #00897B 0%, #008B82 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; font-weight: 700; }
+        .profile-info { display: flex; flex-direction: column; }
+        .profile-name { font-size: 1rem; font-weight: 700; color: #111827; }
+        .profile-role { color: #6b7280; font-size: 0.92rem; }
+        .chart-box { min-height: 330px; }
+        .announcement-card { display: grid; gap: 1rem; }
+        .announcement { background: #eff6ff; border-radius: 18px; padding: 1.25rem; color: #0f172a; }
+        .announcement h3 { margin-bottom: 0.5rem; font-size: 1rem; }
+        .announcement p { color: #334155; font-size: 0.95rem; line-height: 1.7; }
+        .quick-actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+        .quick-action { display: flex; flex-direction: column; justify-content: space-between; min-height: 150px; background: white; border-radius: 24px; padding: 1.35rem; box-shadow: 0 18px 45px rgba(15,23,42,0.07); }
+        .quick-action i { font-size: 1.4rem; color: #00897B; margin-bottom: 0.9rem; }
+        .quick-action span { font-weight: 700; color: #111827; }
+        .quick-action small { color: #6b7280; margin-top: 0.5rem; }
+        .card-small { display: flex; align-items: center; gap: 1rem; background: #f8fafc; padding: 1rem; border-radius: 18px; }
+        .card-small i { color: #10b981; font-size: 1.25rem; }
+        .card-small div { line-height: 1.4; }
+        .card-small strong { display: block; font-size: 1rem; color: #111827; }
+        @media (max-width: 1100px) { .dashboard-card-grid, .grid-3, .grid-2, .quick-actions { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 780px) { .sidebar { position: relative; width: 100%; height: auto; transform: translateX(0); border-radius: 0 0 24px 24px; } .sidebar.active { transform: translateX(-100%); } .main-content { margin-left: 0; padding: 1.25rem; } .dashboard-card-grid, .grid-3, .grid-2, .quick-actions { grid-template-columns: 1fr; } .topbar { flex-direction: column; align-items: flex-start; } .sidebar-nav a { padding: 0.9rem 1rem; } .sidebar-logo { justify-content: center; } }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <a href="index.html" style="display:flex;align-items:center;gap:0.75rem;color:white;text-decoration:none;"><img src="asset/Black_Simple_SB_Latter_Logo-removebg-preview.png" alt="SkillBridge" /><span>SkillBridge</span></a>
+            </div>
+            <nav class="sidebar-nav">
+                <li><a href="#section-dashboard" data-target="dashboard" class="active" onclick="gotoSection('dashboard'); return false;"><i class="fas fa-chart-line"></i>Dashboard</a></li>
+                <li><a href="#section-classes" data-target="classes" onclick="gotoSection('classes'); return false;"><i class="fas fa-chalkboard-teacher"></i>My Classes</a></li>
+                <li><a href="#section-grading" data-target="grading" onclick="gotoSection('grading'); return false;"><i class="fas fa-pencil-alt"></i>Grading Queue</a></li>
+                <li><a href="#section-students" data-target="students" onclick="gotoSection('students'); return false;"><i class="fas fa-user-graduate"></i>Student Roster</a></li>
+                <li><a href="#section-messages" data-target="messages" onclick="gotoSection('messages'); return false;"><i class="fas fa-comments"></i>Messages</a></li>
+                <li><a href="#section-resources" data-target="resources" onclick="gotoSection('resources'); return false;"><i class="fas fa-book-open"></i>Resources</a></li>
+                <li><a href="#section-settings" data-target="settings" onclick="gotoSection('settings'); return false;"><i class="fas fa-cog"></i>Settings</a></li>
+            </nav>
+            <div class="sidebar-logos">
+                <img src="asset/logo.png" alt="Partner Logo" />
+                <img src="asset/dot-rwanda-logo.svg" alt="Rwanda Logo" />
+                <img src="asset/Final-Mastercard-Foundation-Logo-RGB-POS-removebg-preview.png" alt="Partner Logo" style="width:auto;height:40px;" />
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-footer">
+                <p>Teacher tools include live sessions, grading, student check-ins, and course analytics.</p>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div class="dashboard-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+                    <div>
+                        <h1>Teacher Dashboard</h1>
+                        <p style="color:#6b7280;margin-top:0.5rem;">Manage your classes, assignments, student progress, and announcements from one place.</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="language-selector">
+                        <i class="fas fa-language"></i>
+                        <select><option>English</option><option>Français</option></select>
+                    </div>
+                    <div class="notification-icon"><i class="fas fa-bell"></i></div>
+                    <div class="profile-section">
+                        <div class="profile-avatar">T</div>
+                        <span class="profile-name">Teacher</span>
+                    </div>
+                </div>
+            </div>
+            <div class="page-section active" id="section-dashboard">
+                <div class="admin-section">
+                    <h2>Teacher Tools</h2>
+                    <div class="admin-cards">
+                        <div class="admin-card" data-target="classes">
+                            <h3><i class="fas fa-chalkboard-teacher"></i> Class Schedule</h3>
+                            <p>Open your live sessions and lesson plan schedule.</p>
+                            <button class="btn-admin" onclick="gotoSection('classes');">Go to Classes</button>
+                        </div>
+                        <div class="admin-card" data-target="grading">
+                            <h3><i class="fas fa-pencil-alt"></i> Grading Queue</h3>
+                            <p>Review and grade pending student submissions.</p>
+                            <button class="btn-admin" onclick="gotoSection('grading');">Go to Grading</button>
+                        </div>
+                        <div class="admin-card" data-target="students">
+                            <h3><i class="fas fa-user-graduate"></i> Student Roster</h3>
+                            <p>Track student progress and course engagement.</p>
+                            <button class="btn-admin" onclick="gotoSection('students');">Go to Roster</button>
+                        </div>
+                        <div class="admin-card" data-target="messages">
+                            <h3><i class="fas fa-comments"></i> Messages</h3>
+                            <p>Read new student messages and announcements.</p>
+                            <button class="btn-admin" onclick="gotoSection('messages');">Go to Messages</button>
+                        </div>
+                        <div class="admin-card" data-target="resources">
+                            <h3><i class="fas fa-book-open"></i> Resources</h3>
+                            <p>Upload or share teaching materials with your classes.</p>
+                            <button class="btn-admin" onclick="gotoSection('resources');">Go to Resources</button>
+                        </div>
+                        <div class="admin-card" data-target="settings">
+                            <h3><i class="fas fa-cog"></i> Settings</h3>
+                            <p>Adjust your preferences, notifications, and profile.</p>
+                            <button class="btn-admin" onclick="gotoSection('settings');">Open Settings</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-card-grid">
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Classes Today</span><span class="card-pill">3 live</span></div>
+                    <div class="card-value">12 students</div>
+                    <div class="metric-list">
+                        <div class="metric-item"><span>Upcoming class</span><strong>JavaScript Basics</strong></div>
+                        <div class="metric-item"><span>Next session</span><strong>Today, 10:00 AM</strong></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Pending Grading</span><span class="card-pill">7 assignments</span></div>
+                    <div class="card-value">42 submissions</div>
+                    <div class="metric-list">
+                        <div class="metric-item"><span>Due this week</span><strong>5</strong></div>
+                        <div class="metric-item"><span>Average turn-around</span><strong>24 hrs</strong></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Messages</span><span class="card-pill">4 unread</span></div>
+                    <div class="card-value">18 conversations</div>
+                    <div class="metric-list">
+                        <div class="metric-item"><span>Student questions</span><strong>3 awaiting</strong></div>
+                        <div class="metric-item"><span>Announcements</span><strong>1 pending</strong></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Performance</span><span class="card-pill">On track</span></div>
+                    <div class="card-value">95%</div>
+                    <div class="metric-list">
+                        <div class="metric-item"><span>Average grade</span><strong>B+</strong></div>
+                        <div class="metric-item"><span>Course completion</span><strong>78%</strong></div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-section" id="section-classes">
+                <div class="admin-section">
+                    <div class="section-header"><h2>My Classes</h2><button>Manage Schedule</button></div>
+                    <div class="dashboard-card-grid">
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Next Live Session</span></div>
+                            <div class="card-value">JavaScript Basics</div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Starts</span><strong>Today, 10:00 AM</strong></div>
+                                <div class="metric-item"><span>Enrolled</span><strong>14 students</strong></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Class Types</span></div>
+                            <div class="card-value">3 formats</div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Live sessions</span><strong>2</strong></div>
+                                <div class="metric-item"><span>Workshops</span><strong>1</strong></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Completed Sessions</span></div>
+                            <div class="card-value">5 classes</div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Ended today</span><strong>1</strong></div>
+                                <div class="metric-item"><span>Archived</span><strong>4</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-card-grid">
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Upcoming Classes</span></div>
+                            <div class="card-value">3 sessions</div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Starting soon</span><strong>2</strong></div>
+                                <div class="metric-item"><span>Student count</span><strong>52 total</strong></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Ongoing Classes</span></div>
+                            <div class="card-value">2 active</div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Average progress</span><strong>76%</strong></div>
+                                <div class="metric-item"><span>Current attendance</span><strong>91%</strong></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Ended Classes</span></div>
+                            <div class="card-value">4 archived</div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Finalized</span><strong>3</strong></div>
+                                <div class="metric-item"><span>Review needed</span><strong>1</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="section" id="classes">
+                        <div class="section-header"><h2>Upcoming Classes</h2><button>View Calendar</button></div>
+                        <table class="table">
+                            <thead><tr><th>Course</th><th>Time</th><th>Format</th><th>Students</th></tr></thead>
+                            <tbody>
+                                <tr><td>JavaScript Basics</td><td>Today 10:00 AM</td><td>Live session</td><td>14</td></tr>
+                                <tr><td>Python Data Science</td><td>Tomorrow 11:30 AM</td><td>Workshop</td><td>20</td></tr>
+                                <tr><td>UI Design Workshop</td><td>Friday 9:00 AM</td><td>Project clinic</td><td>12</td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <section class="section" style="margin-top:1.5rem;">
+                        <div class="section-header"><h2>Ongoing Classes</h2><button>Open Live Room</button></div>
+                        <table class="table">
+                            <thead><tr><th>Course</th><th>Current Topic</th><th>Progress</th><th>Attendance</th></tr></thead>
+                            <tbody>
+                                <tr><td>React Fundamentals</td><td>Component state</td><td>72%</td><td>92%</td></tr>
+                                <tr><td>Data Structures</td><td>Arrays & loops</td><td>65%</td><td>89%</td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <section class="section" style="margin-top:1.5rem;">
+                        <div class="section-header"><h2>Completed Classes</h2><button>Review Archive</button></div>
+                        <table class="table">
+                            <thead><tr><th>Course</th><th>Finished</th><th>Format</th><th>Notes</th></tr></thead>
+                            <tbody>
+                                <tr><td>HTML Fundamentals</td><td>Last week</td><td>Recorded class</td><td>Prep review</td></tr>
+                                <tr><td>CSS Layout Lab</td><td>Last week</td><td>Hands-on lab</td><td>Follow-up tasks</td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+            </div>
+            <div class="page-section" id="section-grading">
+                <div class="admin-section">
+                    <div class="section-header"><h2>Grading Queue</h2><button>Open Gradebook</button></div>
+                    <div class="dashboard-card-grid">
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Pending Grading</span><span class="card-pill">8</span></div>
+                            <div class="card-value">42 submissions</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Due Soon</span><span class="card-pill">3</span></div>
+                            <div class="card-value">24 hrs</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Average Feedback</span><span class="card-pill">18h</span></div>
+                            <div class="card-value">Fast turnaround</div>
+                        </div>
+                    </div>
+                    <section class="section" id="grading">
+                        <div class="section-header"><h2>Open Review Items</h2><button>Start Grading</button></div>
+                        <table class="table">
+                            <thead><tr><th>Assignment</th><th>Course</th><th>Due</th><th>Status</th></tr></thead>
+                            <tbody>
+                                <tr><td>Module 4 Project</td><td>JavaScript Basics</td><td>Tomorrow</td><td><span class="status-pill status-ontrack">Reviewing</span></td></tr>
+                                <tr><td>Quiz 2</td><td>React Fundamentals</td><td>Today</td><td><span class="status-pill status-pending">Needs grading</span></td></tr>
+                                <tr><td>Data Report</td><td>Python Data Science</td><td>2 days</td><td><span class="status-pill status-ontrack">Ready</span></td></tr>
+                                <tr><td>Portfolio Review</td><td>UI Design Workshop</td><td>Friday</td><td><span class="status-pill status-pending">Submitted</span></td></tr>
+                            </tbody>
+                        </table>
+                        <div class="section" style="margin-top:1.5rem;">
+                            <div class="section-header"><h2>Grading Notes</h2><button>View Drafts</button></div>
+                            <div class="announcement-card">
+                                <div class="announcement"><h3>React Fundamentals</h3><p>Review new criteria for component architecture submissions.</p></div>
+                                <div class="announcement"><h3>JavaScript Basics</h3><p>Focus feedback on callback usage and code clarity.</p></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="page-section" id="section-students">
+                <div class="admin-section">
+                    <div class="section-header"><h2>Student Roster</h2><button>View All Students</button></div>
+                    <div class="dashboard-card-grid">
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Total Enrolled</span></div>
+                            <div class="card-value">52 students</div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Active</span><strong>45</strong></div>
+                                <div class="metric-item"><span>At risk</span><strong>7</strong></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Average Progress</span></div>
+                            <div class="card-value">79%</div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>On track</span><strong>68%</strong></div>
+                                <div class="metric-item"><span>Behind</span><strong>14%</strong></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Recent Updates</span></div>
+                            <div class="card-value">4 notes</div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Flagged</span><strong>2 students</strong></div>
+                                <div class="metric-item"><span>Coaching</span><strong>1 session</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="section" id="students">
+                        <div class="section-header"><h2>Roster Details</h2><button>Export List</button></div>
+                        <table class="table">
+                            <thead><tr><th>Name</th><th>Course</th><th>Progress</th><th>Status</th></tr></thead>
+                            <tbody>
+                                <tr><td>Amaya Johnson</td><td>JS Basics</td><td>82%</td><td><span class="status-pill status-ontrack">Active</span></td></tr>
+                                <tr><td>Michael Chen</td><td>React</td><td>73%</td><td><span class="status-pill status-ontrack">Active</span></td></tr>
+                                <tr><td>Priya Patel</td><td>Python</td><td>68%</td><td><span class="status-pill status-pending">Needs Support</span></td></tr>
+                                <tr><td>Nia K.</td><td>UI Design</td><td>91%</td><td><span class="status-pill status-ontrack">Excellent</span></td></tr>
+                                <tr><td>Tariq Ali</td><td>React</td><td>64%</td><td><span class="status-pill status-pending">At Risk</span></td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+            </div>
+            <div class="page-section" id="section-messages">
+                <div class="admin-section">
+                    <div class="section-header"><h2>Messages</h2><button>Open Inbox</button></div>
+                    <div class="dashboard-card-grid">
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Unread Messages</span><span class="card-pill">4</span></div>
+                            <div class="card-value">Student questions</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Announcements</span><span class="card-pill">1</span></div>
+                            <div class="card-value">Pending review</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Replies</span><span class="card-pill">2</span></div>
+                            <div class="card-value">Awaiting response</div>
+                        </div>
+                    </div>
+                    <section class="section" id="messages">
+                        <div class="section-header"><h2>Recent Conversations</h2><button>Open Inbox</button></div>
+                        <table class="table">
+                            <thead><tr><th>From</th><th>Course</th><th>Last Message</th><th>Unread</th></tr></thead>
+                            <tbody>
+                                <tr><td>Remy K.</td><td>JS Basics</td><td>Can we review the grading rubric?</td><td>1</td></tr>
+                                <tr><td>Jules L.</td><td>React Fundamentals</td><td>Will the recording be shared?</td><td>0</td></tr>
+                                <tr><td>Anika S.</td><td>Python Data Science</td><td>I need help with the data report.</td><td>1</td></tr>
+                                <tr><td>Admin Team</td><td>All Courses</td><td>Please update the attendance log.</td><td>0</td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+            </div>
+            <div class="page-section" id="section-resources">
+                <div class="admin-section">
+                    <div class="section-header"><h2>Resources</h2><button>Upload Materials</button></div>
+                    <div class="dashboard-card-grid">
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Total Resources</span></div>
+                            <div class="card-value">18 assets</div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Slide decks</span><strong>6</strong></div>
+                                <div class="metric-item"><span>Videos</span><strong>5</strong></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Shared Templates</span></div>
+                            <div class="card-value">7 items</div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Workbooks</span><strong>3</strong></div>
+                                <div class="metric-item"><span>Sample code</span><strong>4</strong></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Resources Updated</span></div>
+                            <div class="card-value">Today</div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Uploads</span><strong>2</strong></div>
+                                <div class="metric-item"><span>Reviews</span><strong>1</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="section" id="resources">
+                        <div class="section-header"><h2>Teaching Materials</h2><button>Upload Materials</button></div>
+                        <table class="table">
+                            <thead><tr><th>Resource</th><th>Type</th><th>Course</th><th>Access</th></tr></thead>
+                            <tbody>
+                                <tr><td>JS Basics Slide Deck</td><td>Presentation</td><td>JavaScript Basics</td><td>All students</td></tr>
+                                <tr><td>React Component Guide</td><td>PDF</td><td>React Fundamentals</td><td>Course group</td></tr>
+                                <tr><td>Python Data Science Workbook</td><td>Workbook</td><td>Python Data Science</td><td>All students</td></tr>
+                                <tr><td>UI Design Inspiration</td><td>Video</td><td>UI Design Workshop</td><td>Selected learners</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="quick-actions" style="margin-top:1.5rem;">
+                            <div class="quick-action"><i class="fas fa-file-upload"></i><span>Upload syllabus</span><small>Add a new course guide for students.</small></div>
+                            <div class="quick-action"><i class="fas fa-play-circle"></i><span>Add session video</span><small>Share recorded workshops with learners.</small></div>
+                            <div class="quick-action"><i class="fas fa-bell"></i><span>Publish announcement</span><small>Highlight a new resource or deadline.</small></div>
+                            <div class="quick-action"><i class="fas fa-chart-pie"></i><span>Review engagement</span><small>See which materials students view most.</small></div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="page-section" id="section-settings">
+                <div class="admin-section">
+                    <div class="section-header"><h2>Settings</h2><button>Open Profile</button></div>
+                    <div class="dashboard-card-grid">
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Notification Settings</span></div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Email Alerts</span><strong>On</strong></div>
+                                <div class="metric-item"><span>Class Reminders</span><strong>On</strong></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Profile Status</span></div>
+                            <div class="card-value">Complete</div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Connected accounts</span><strong>2</strong></div>
+                                <div class="metric-item"><span>Role</span><strong>Teacher</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="section" id="settings">
+                        <div class="section-header"><h2>Teacher Settings</h2><button>Update Preferences</button></div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Teacher Settings</span><span class="card-pill">Personalize</span></div>
+                            <div class="metric-list">
+                                <div class="metric-item"><span>Notification preferences</span><strong>Enabled</strong></div>
+                                <div class="metric-item"><span>Live session tools</span><strong>Ready</strong></div>
+                                <div class="metric-item"><span>Course visibility</span><strong>Public</strong></div>
+                            </div>
+                            <p style="margin-top:1rem;color:#4b5563;">Use this area to quickly access your profile, communication, and classroom settings so the teacher panel stays clear and easy to use.</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/ui.js"></script>
+    <script>
+        const navLinks = document.querySelectorAll('.sidebar-nav a[data-target]');
+        const pageSections = document.querySelectorAll('.page-section');
+        const cardLinks = document.querySelectorAll('.admin-card[data-target]');
+
+        function showSection(target) {
+            pageSections.forEach(section => {
+                section.classList.toggle('active', section.id === 'section-' + target);
+            });
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.dataset.target === target);
+            });
+        }
+
+        function gotoSection(target) {
+            if (!target) return;
+            window.location.hash = 'section-' + target;
+            showSection(target);
+            closeSidebar();
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', event => {
+                event.preventDefault();
+                const target = event.currentTarget.dataset.target;
+                if (!target) return;
+                gotoSection(target);
+            });
+        });
+
+        cardLinks.forEach(card => {
+            card.addEventListener('click', () => {
+                const target = card.dataset.target;
+                showSection(target);
+                history.replaceState(null, '', '#section-' + target);
+                closeSidebar();
+            });
+        });
+
+        function handleHash() {
+            const hashTarget = window.location.hash.replace('#section-', '');
+            if (hashTarget && document.getElementById('section-' + hashTarget)) {
+                showSection(hashTarget);
+            } else {
+                showSection('dashboard');
+            }
+        }
+
+        document.getElementById('mobileMenuBtn')?.addEventListener('click', toggleSidebar);
+        window.addEventListener('load', handleHash);
+        window.addEventListener('hashchange', handleHash);
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            if (window.innerWidth <= 780) {
+                sidebar?.classList.toggle('active');
+            }
+        }
+
+        function closeSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            if (window.innerWidth <= 780 && sidebar?.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>

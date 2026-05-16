@@ -10,6 +10,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.units import inch
+import smtplib
+from email.message import EmailMessage
 
 app = Flask(__name__,
             template_folder='templates',
@@ -150,7 +152,20 @@ def dashboard():
         return redirect(url_for('login', message='Account disabled. Contact admin.'))
     if session['user'].get('role') == 'admin':
         return redirect(url_for('admin'))
+    if session['user'].get('role') == 'teacher':
+        return redirect(url_for('teacher'))
     return render_template('dashboard.html')
+
+@app.route('/teacher')
+def teacher():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    if get_user_by_session() and get_user_by_session().get('disabled'):
+        session.clear()
+        return redirect(url_for('login', message='Account disabled. Contact admin.'))
+    if session['user'].get('role') != 'teacher':
+        return redirect(url_for('dashboard'))
+    return render_template('teacher.html')
 
 @app.route('/certificates')
 def certificates():
@@ -569,9 +584,41 @@ def admin_update_user(user_id):
         "role": data.get('role', user.get('role')),
         "disabled": parse_bool(data.get('disabled', user.get('disabled', False)))
     })
-    
+    notify_sent = False
+    notify_message = ''
+    if data.get('password'):
+        user['password'] = data['password']
     save_data(USERS_FILE, users)
-    return jsonify({'success': True, 'user': user})
+
+    # Optionally send notification email if requested and mail settings present
+    if data.get('notify'):
+        try:
+            MAIL_HOST = os.environ.get('MAIL_HOST')
+            MAIL_PORT = int(os.environ.get('MAIL_PORT', 587)) if os.environ.get('MAIL_PORT') else None
+            MAIL_USER = os.environ.get('MAIL_USER')
+            MAIL_PASS = os.environ.get('MAIL_PASS')
+            MAIL_FROM = os.environ.get('MAIL_FROM', MAIL_USER)
+
+            if MAIL_HOST and MAIL_USER and MAIL_PASS and MAIL_PORT:
+                msg = EmailMessage()
+                msg['Subject'] = 'Your SkillBridge account password was changed'
+                msg['From'] = MAIL_FROM
+                msg['To'] = user.get('email')
+                msg.set_content(f"Hello {user.get('firstName')},\n\nYour account password was recently updated by an administrator. If you did not request this change, please contact support immediately.\n\n- SkillBridge Team")
+
+                with smtplib.SMTP(MAIL_HOST, MAIL_PORT) as smtp:
+                    smtp.starttls()
+                    smtp.login(MAIL_USER, MAIL_PASS)
+                    smtp.send_message(msg)
+
+                notify_sent = True
+                notify_message = 'Email sent'
+            else:
+                notify_message = 'Mail config missing; not sent'
+        except Exception as e:
+            notify_message = f'Error sending email: {e}'
+
+    return jsonify({'success': True, 'user': user, 'notify_sent': notify_sent, 'notify_message': notify_message})
 
 @app.route('/api/admin/certificates/<int:cert_id>', methods=['PUT'])
 def admin_update_certificate(cert_id):

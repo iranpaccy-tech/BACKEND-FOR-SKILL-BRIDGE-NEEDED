@@ -549,8 +549,8 @@
                     <i class="fas fa-bell"></i>
                 </div>
                 <div class="profile-section">
-                    <div class="profile-avatar">M</div>
-                    <span class="profile-name">Mugisha</span>
+                    <div class="profile-avatar"></div>
+                    <span class="profile-name"></span>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -633,8 +633,8 @@
 
     <script src="js/utils.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
     <script>
-        // Highlight active link
         function markActiveLink() {
             const links = document.querySelectorAll('.sidebar-nav a');
             links.forEach(link => {
@@ -643,20 +643,21 @@
                 }
             });
         }
-
         async function loadSessionUser() {
             try {
                 const response = await fetch('/api/user');
                 const data = await response.json();
                 if (response.ok && data.success && data.user) {
                     const user = data.user;
-                    const displayName = user.firstName ? `${user.firstName}${user.lastName ? ' ' + user.lastName : ''}` : user.email || user.name || 'Learner';
+                    const displayName = user.firstName ? `${user.firstName}${user.lastName ? ' ' + user.lastName : ''}` : (user.email || user.name) || null;
                     const avatarEl = document.querySelector('.profile-avatar');
                     const nameEl = document.querySelector('.profile-name');
                     const emailEl = document.querySelector('.profile-email');
-                    if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
-                    if (nameEl) nameEl.textContent = displayName;
-                    if (emailEl) emailEl.textContent = user.email || '';
+                    if (displayName) {
+                        if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
+                        if (nameEl) nameEl.textContent = displayName;
+                    }
+                    if (emailEl && user.email) emailEl.textContent = user.email;
                     return user;
                 }
             } catch (error) {

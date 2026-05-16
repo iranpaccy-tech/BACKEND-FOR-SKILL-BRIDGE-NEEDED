@@ -153,6 +153,15 @@ body {
     color: var(--black)
 }
 
+.profile-avatar.loading {
+    opacity: 0.75;
+}
+
+.profile-name.loading {
+    color: var(--gray-600);
+    font-style: italic;
+}
+
 .hero {
     background: linear-gradient(135deg, var(--white), var(--gray-50));
     padding: 4rem 2rem;

@@ -719,8 +719,8 @@
                     <i class="fas fa-bell"></i>
                 </div>
                 <div class="profile-section">
-                    <div class="profile-avatar">M</div>
-                    <span class="profile-name">Mugisha</span>
+                    <div class="profile-avatar"></div>
+                    <span class="profile-name"></span>
                     <i class="fas fa-chevron-down"></i>
                 </div>
             </div>
@@ -768,6 +768,7 @@
     <script src="js/utils.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
     <script>
         let currentDate = new Date();
         const today = new Date();
@@ -895,13 +896,6 @@
 
             // mark active
             markActiveLink();
-
-            // Update profile
-            const user = JSON.parse(localStorage.getItem('skillbridge_user') || 'null');
-            if (user && user.name) {
-                document.querySelector('.profile-avatar').textContent = user.name.charAt(0).toUpperCase();
-                document.querySelector('.profile-name').textContent = user.name;
-            }
         });
     </script>
 </body>

@@ -311,8 +311,7 @@
                         class="fas fa-chevron-down"></i></div>
                 <div class="notification-icon"><i class="fas fa-bell"></i></div>
                 <div class="profile-section">
-                    <div class="profile-avatar">M</div><span class="profile-name">Mugisha</span><i
-                        class="fas fa-chevron-down"></i>
+                    <div class="profile-avatar"></div><span class="profile-name"></span><i class="fas fa-chevron-down"></i>
                 </div>
             </div>
         </div>
@@ -325,6 +324,7 @@
             <button class="btn btn-primary" id="submitBtn">Submit</button>
         </div>
     </div>
+    <script src="js/profile.js"></script>
     <script>
         function getParam(name) {
             const url = new URL(window.location.href);
@@ -343,11 +343,6 @@
         let nextAction = getParam('next');
         if (isNaN(groupIndex) || groupIndex < 0 || groupIndex >= groups.length) groupIndex = 0;
         document.getElementById('groupName').textContent = groups[groupIndex].name;
-        const user = JSON.parse(localStorage.getItem('skillbridge_user') || 'null');
-        if (user && user.name) {
-            document.querySelector('.profile-avatar').textContent = user.name.charAt(0).toUpperCase();
-            document.querySelector('.profile-name').textContent = user.name;
-        }
         document.getElementById('submitBtn').addEventListener('click', function () {
             const name = document.getElementById('nameInput').value.trim();
             const skills = document.getElementById('skillsInput').value.trim();

@@ -1,32 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "JavaScript Masters",
-    "description": "Master advanced JavaScript concepts",
-    "category": "programming",
-    "language": "JavaScript",
-    "members": 25,
-    "maxMembers": 30
-  },
-  {
-    "id": 2,
-    "name": "React Developers",
-    "description": "Build modern React applications",
-    "category": "framework",
-    "language": "JavaScript",
-    "members": 18,
-    "maxMembers": 25
-  },
-  {
-    "id": 3,
-    "name": "css  learner",
-    "description": "join this group if you want to master css",
-    "category": "intermediate ",
-    "language": "css",
-    "members": 53,
-    "maxMembers": 52
-  },
-  {
     "id": 4,
     "name": "Iran Paccy",
     "description": "come and learn as you want",
@@ -45,5 +18,15 @@
     "members": 41,
     "maxMembers": 77,
     "image": "uploads/group-images/e61d7b706acd8ad78ea88ab410e2c09e_182610bafeb04df19029bbe10c5642cb.jpg"
+  },
+  {
+    "id": 6,
+    "name": "ugiytrd",
+    "description": ";ihutyjdhfuio;l",
+    "category": "PRO",
+    "language": "python",
+    "members": 3,
+    "maxMembers": 16,
+    "image": "uploads/group-images/e9ff5d89727d63ee01c042d9e90b547c_335b1a35050a475c9116fff23ba07c67.jpg"
   }
 ]
