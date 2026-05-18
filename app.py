@@ -101,6 +101,17 @@ def init_default_data():
                 "disabled": False,
                 "createdAt": "2026-01-01T00:00:00Z"
             }
+            ,
+            {
+                "id": 3,
+                "firstName": "Teacher",
+                "lastName": "User",
+                "email": "teacher@skillbridge.com",
+                "password": "teacher123",
+                "role": "teacher",
+                "disabled": False,
+                "createdAt": "2026-01-01T00:00:00Z"
+            }
         ]
         save_data(USERS_FILE, users)
 
@@ -767,6 +778,148 @@ def admin_delete_group(group_id):
     groups = [g for g in groups if g['id'] != group_id]
     save_data(GROUPS_FILE, groups)
     return jsonify({'success': True})
+
+
+# Teacher API - lightweight endpoints for teacher UI
+def require_teacher():
+    if 'user' not in session or session['user'].get('role') != 'teacher':
+        return False
+    if get_user_by_session() and get_user_by_session().get('disabled'):
+        session.clear()
+        return False
+    return True
+
+
+@app.route('/api/teacher/classes')
+def teacher_classes():
+    if not require_teacher():
+        return jsonify({'success': False, 'message': 'Unauthorized'}), 403
+    courses = load_data(COURSES_FILE)
+    classes = []
+    for c in courses:
+        classes.append({
+            'id': c.get('id'),
+            'title': c.get('title'),
+            'time': c.get('duration', 'TBD'),
+            'format': 'Online',
+            'students': c.get('students', 0)
+        })
+    return jsonify({'success': True, 'classes': classes})
+
+
+@app.route('/api/teacher/grading')
+def teacher_grading():
+    if not require_teacher():
+        return jsonify({'success': False, 'message': 'Unauthorized'}), 403
+    # Try to load from a file if present, otherwise synthesize sample items
+    grading_file = os.path.join(DATA_DIR, 'teacher_grading.json')
+    items = load_data(grading_file, default=None)
+    if items is None:
+        items = [
+            {'id': 1, 'assignment': 'Assignment 1', 'course': 'JavaScript Mastery', 'due': '2026-05-20', 'status': 'Submitted', 'student': 'Demo User'},
+            {'id': 2, 'assignment': 'Quiz 2', 'course': 'HTML & CSS Fundamentals', 'due': '2026-05-18', 'status': 'Needs Review', 'student': 'Student A'},
+            {'id': 3, 'assignment': 'Project', 'course': 'React Development', 'due': '2026-05-25', 'status': 'Late', 'student': 'Student B'}
+        ]
+    return jsonify({'success': True, 'items': items})
+
+
+@app.route('/api/teacher/students')
+def teacher_students():
+    if not require_teacher():
+        return jsonify({'success': False, 'message': 'Unauthorized'}), 403
+    users = load_data(USERS_FILE)
+    students = [
+        { 'id': u.get('id'), 'name': f"{u.get('firstName','')} {u.get('lastName','')}", 'course': 'Various', 'progress': '50%', 'status': 'active'}
+        for u in users if u.get('role') == 'student'
+    ]
+    return jsonify({'success': True, 'students': students})
+
+
+@app.route('/api/teacher/messages')
+def teacher_messages():
+    if not require_teacher():
+        return jsonify({'success': False, 'message': 'Unauthorized'}), 403
+    messages_file = os.path.join(DATA_DIR, 'teacher_messages.json')
+    msgs = load_data(messages_file, default=None)
+    if msgs is None:
+        msgs = [
+            {'id':1, 'from':'Student A', 'course':'JavaScript Mastery', 'lastMessage':'Can you review my submission?', 'unread': True},
+            {'id':2, 'from':'Student B', 'course':'React Development', 'lastMessage':'When is the next live session?', 'unread': False}
+        ]
+    return jsonify({'success': True, 'messages': msgs})
+
+
+@app.route('/api/teacher/resources')
+def teacher_resources():
+    if not require_teacher():
+        return jsonify({'success': False, 'message': 'Unauthorized'}), 403
+    resources_file = os.path.join(DATA_DIR, 'teacher_resources.json')
+    res = load_data(resources_file, default=None)
+    if res is None:
+        res = [
+            {'id':1, 'title':'Syllabus', 'type':'PDF', 'course':'JavaScript Mastery', 'access':'public'},
+            {'id':2, 'title':'Slides Week 1', 'type':'PPT', 'course':'HTML & CSS Fundamentals', 'access':'students'}
+        ]
+    return jsonify({'success': True, 'resources': res})
+
+
+@app.route('/api/teacher/summary')
+def teacher_summary():
+    if not require_teacher():
+        return jsonify({'success': False, 'message': 'Unauthorized'}), 403
+    classes = load_data(COURSES_FILE)
+    users = load_data(USERS_FILE)
+    grading = load_data(os.path.join(DATA_DIR, 'teacher_grading.json'), default=[])
+    messages = load_data(os.path.join(DATA_DIR, 'teacher_messages.json'), default=[])
+    return jsonify({'classes': len(classes), 'students': len([u for u in users if u.get('role')=='student']), 'pendingGrading': len(grading), 'unreadMessages': len([m for m in messages if m.get('unread')])})
+
+
+@app.route('/api/teacher/upcoming')
+def teacher_upcoming():
+    if not require_teacher():
+        return jsonify({'success': False, 'message': 'Unauthorized'}), 403
+    sessions = [
+        {'title':'Live Session: JavaScript Q&A','time':'2026-05-19 10:00'},
+        {'title':'React Workshop','time':'2026-05-21 14:00'}
+    ]
+    return jsonify({'sessions': sessions})
+
+
+@app.route('/api/teacher/recent-submissions')
+def teacher_recent_submissions():
+    if not require_teacher():
+        return jsonify({'success': False, 'message': 'Unauthorized'}), 403
+    subs = [
+        {'assignment':'Assignment 1','student':'Student A'},{'assignment':'Project','student':'Student B'}
+    ]
+    return jsonify({'submissions': subs})
+
+
+@app.route('/api/teacher/profile', methods=['GET','PUT'])
+def teacher_profile():
+    if 'user' not in session:
+        return jsonify({'success': False, 'message': 'Not authenticated'}), 401
+    if session['user'].get('role') != 'teacher':
+        return jsonify({'success': False, 'message': 'Unauthorized'}), 403
+
+    if request.method == 'GET':
+        return jsonify(session['user'])
+
+    # PUT - update profile in session and users.json
+    data = request.get_json() or {}
+    users = load_data(USERS_FILE)
+    user = next((u for u in users if u['id'] == session['user'].get('id')), None)
+    if user:
+        user['firstName'] = data.get('firstName', user.get('firstName'))
+        user['lastName'] = data.get('lastName', user.get('lastName'))
+        user['email'] = data.get('email', user.get('email'))
+        save_data(USERS_FILE, users)
+        # update session
+        session['user']['firstName'] = user.get('firstName')
+        session['user']['lastName'] = user.get('lastName')
+        session['user']['email'] = user.get('email')
+        return jsonify({'success': True, 'user': session['user']})
+    return jsonify({'success': False, 'message': 'User not found'}), 404
 
 @app.route('/api/auth/logout', methods=['GET', 'POST'])
 def api_logout():
